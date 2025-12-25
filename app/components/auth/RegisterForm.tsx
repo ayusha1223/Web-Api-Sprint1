@@ -2,9 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "@/schemas/registerSchema";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
+import { registerSchema } from "@/app/schemas/registerSchema";
 
 export default function RegisterForm() {
   const {

@@ -6,9 +6,9 @@ type InputProps = {
 export default function Input({ label, error, ...props }: InputProps) {
   return (
     <div>
-      <label>{label}</label><br />
-      <input {...props} />
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <label>{label}</label>
+      <input className="input" {...props} />
+      {error && <p className="error">{error}</p>}
     </div>
   );
 }

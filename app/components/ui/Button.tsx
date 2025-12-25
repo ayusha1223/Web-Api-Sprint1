@@ -3,5 +3,5 @@ type ButtonProps = {
 };
 
 export default function Button({ text }: ButtonProps) {
-  return <button type="submit">{text}</button>;
+  return <button className="btn">{text}</button>;
 }
