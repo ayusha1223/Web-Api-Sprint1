@@ -2,11 +2,12 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
 import { loginSchema } from "@/app/schemas/loginSchema";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -16,14 +17,31 @@ export default function LoginForm() {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    console.log("Login Data:", data);
+
+    // ✅ Navigate to dashboard after login
+    router.push("/dashboard");
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Input label="Email" {...register("email")} error={errors.email?.message as string} />
-      <Input label="Password" type="password" {...register("password")} error={errors.password?.message as string} />
-      <Button text="Login" />
+      <label>Email</label>
+      <input className="input" {...register("email")} />
+      {errors.email && (
+        <p className="error">{errors.email.message as string}</p>
+      )}
+
+      <label>Password</label>
+      <input type="password" className="input" {...register("password")} />
+      {errors.password && (
+        <p className="error">{errors.password.message as string}</p>
+      )}
+
+      <div className="forgot">Forgot Password?</div>
+
+      <button className="btn" type="submit">
+        Login
+      </button>
     </form>
   );
 }

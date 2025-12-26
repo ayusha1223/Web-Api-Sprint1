@@ -1,23 +1,40 @@
-import Image from "next/image";
-import RegisterForm from "../components/auth/RegisterForm";
+import RegisterForm from "@/app/components/auth/RegisterForm";
+import Link from "next/link";
 
 export default function RegisterPage() {
   return (
     <div className="auth-container">
       <div className="auth-card">
 
-        {/* Logo */}
-        <div style={{ textAlign: "center", marginBottom: "15px" }}>
-          <Image
-            src="/images/login.png"
-            alt="Naayu Attires Logo"
-            width={80}
-            height={80}
-          />
+        {/* LEFT SIDE */}
+        <div className="auth-left">
+          <h1>Create Account</h1>
+          <p>Please fill the details to register</p>
+
+          <RegisterForm />
+
+          {/* LOGIN LINK */}
+          <p
+            className="center-text"
+            style={{
+              marginTop: "15px",
+              fontSize: "13px",
+            }}
+          >
+            Already have an account?{" "}
+            <Link href="/login">
+              <span style={{ fontWeight: "600", cursor: "pointer" }}>
+                Login
+              </span>
+            </Link>
+          </p>
         </div>
 
-        <h1>Register</h1>
-        <RegisterForm />
+        {/* RIGHT SIDE */}
+        <div className="auth-right">
+          <img src="/images/login.png" alt="Register Illustration" />
+        </div>
+
       </div>
     </div>
   );
