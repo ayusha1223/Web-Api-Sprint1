@@ -21,35 +21,27 @@ export default function RegisterForm() {
     try {
       await registerAction(data);
       alert("Registration successful");
-      router.push("/login"); 
+      router.push("/login");
     } catch (error: any) {
-      alert(error.response?.data?.message || "Registration failed");
+      alert(error.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label>Name</label>
-      <input className="input" {...register("name")} />
-      {errors.name && <p className="error">{errors.name.message as string}</p>}
+      <input {...register("name")} />
+      {errors.name && <p>{errors.name.message as string}</p>}
 
       <label>Email</label>
-      <input className="input" {...register("email")} />
-      {errors.email && <p className="error">{errors.email.message as string}</p>}
-
-      <label>Phone Number</label>
-      <input className="input" {...register("phone")} />
-      {errors.phone && <p className="error">{errors.phone.message as string}</p>}
+      <input {...register("email")} />
+      {errors.email && <p>{errors.email.message as string}</p>}
 
       <label>Password</label>
-      <input type="password" className="input" {...register("password")} />
-      {errors.password && (
-        <p className="error">{errors.password.message as string}</p>
-      )}
+      <input type="password" {...register("password")} />
+      {errors.password && <p>{errors.password.message as string}</p>}
 
-      <button type="submit" className="btn">
-        Register
-      </button>
+      <button type="submit">Register</button>
     </form>
   );
 }
