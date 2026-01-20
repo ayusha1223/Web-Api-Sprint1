@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/app/schemas/loginSchema";
 import { useRouter } from "next/navigation";
-import { loginAction } from "@/app/lib/actions/auth.action";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -19,8 +18,8 @@ export default function LoginForm() {
 
   const onSubmit = async (data: any) => {
     try {
-      await loginAction(data); // 🔥 backend call
-      router.push("/dashboard"); // ✅ redirect after login
+      await loginAction(data); 
+      router.push("/dashboard"); 
     } catch (error: any) {
       alert(error.response?.data?.message || "Login failed");
     }
@@ -48,3 +47,7 @@ export default function LoginForm() {
     </form>
   );
 }
+function loginAction(data: any) {
+  throw new Error("Function not implemented.");
+}
+
