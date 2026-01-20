@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/app/schemas/registerSchema";
 import { useRouter } from "next/navigation";
+import { registerAction } from "@/app/lib/actions/auth.action";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -16,11 +17,14 @@ export default function RegisterForm() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log("Register Data:", data);
-
-    // ✅ After signup, go to login page
-    router.push("/login");
+  const onSubmit = async (data: any) => {
+    try {
+      await registerAction(data);
+      alert("Registration successful");
+      router.push("/login"); 
+    } catch (error: any) {
+      alert(error.response?.data?.message || "Registration failed");
+    }
   };
 
   return (
