@@ -1,14 +1,17 @@
-import { loginApi, registerApi } from '../api/auth';
-import { setAuthCookies } from '../cookie';
+export async function registerAction(data: any) {
+  const res = await fetch("http://localhost:3000/api/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 
-export const loginAction = async (data: any) => {
-  const response = await loginApi(data);
+  const result = await res.json();
 
-  setAuthCookies(response.data.token, response.data.user);
+  if (!res.ok) {
+    throw new Error(result.message || "Registration failed");
+  }
 
-  return response.data;
-};
-
-export const registerAction = async (data: any) => {
-  return await registerApi(data);
-};
+  return result;
+}
