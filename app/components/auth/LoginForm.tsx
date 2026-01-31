@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/app/schemas/loginSchema";
 import { useRouter } from "next/navigation";
-import { loginAction } from "@/app/lib/actions/auth.action"; 
+import { loginAction } from "@/app/lib/actions/auth.action";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -19,10 +19,20 @@ export default function LoginForm() {
 
   const onSubmit = async (data: any) => {
     try {
-      await loginAction(data); 
-      router.push("/dashboard");
+      const result = await loginAction(data);
+
+      // ✅ SAVE TOKEN & ROLE
+      localStorage.setItem("token", result.token);
+      localStorage.setItem("role", result.user.role);
+
+      // ✅ ROLE-BASED REDIRECT
+      if (result.user.role === "admin") {
+        router.push("/admin/users");
+      } else {
+        router.push("/user/profile");
+      }
     } catch (error: any) {
-      alert(error.response?.data?.message || "Login failed");
+      alert(error.message || "Login failed");
     }
   };
 
