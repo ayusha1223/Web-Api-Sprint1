@@ -1,6 +1,10 @@
-export const getAuthUser = () => {
+export function getAuth() {
   if (typeof window === "undefined") return null;
 
-  const user = localStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
-};
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  if (!token) return null;
+
+  return { token, role };
+}
