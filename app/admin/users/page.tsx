@@ -1,22 +1,28 @@
+"use client";
+
+import AdminGuard from "@/app/components/AdminGuard";
+
+
+
 export default function AdminUsersPage() {
   return (
-    <div>
-      <h1>Users Table (Dummy)</h1>
+    <AdminGuard>
+      <h1>Admin Users</h1>
 
       <table border={1}>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Email</th>
+            <th>Name</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>123</td>
-            <td>test@email.com</td>
+            <td>1</td>
+            <td>Dummy User</td>
           </tr>
         </tbody>
       </table>
-    </div>
+    </AdminGuard>
   );
 }

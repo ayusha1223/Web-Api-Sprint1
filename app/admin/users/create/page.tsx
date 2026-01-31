@@ -1,47 +1,50 @@
 "use client";
 
-import axios from "@/app/lib/api/axios";
+import AdminGuard from "@/app/components/AdminGuard";
 import { useState } from "react";
 
 
 export default function CreateUserPage() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "user",
-  });
-  const [image, setImage] = useState<File | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const submitHandler = async () => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
     const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("role", "user");
 
-    Object.entries(form).forEach(([key, value]) =>
-      formData.append(key, value)
-    );
+    await fetch("http://localhost:5050/api/auth/user", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
 
-    if (image) formData.append("image", image);
-
-    await axios.post("/api/auth/user", formData);
     alert("User created");
   };
 
   return (
-    <div>
+    <AdminGuard>
       <h1>Create User</h1>
 
-      <input placeholder="Name" onChange={(e) => setForm({ ...form, name: e.target.value })} />
-      <input placeholder="Email" onChange={(e) => setForm({ ...form, email: e.target.value })} />
-      <input placeholder="Password" type="password" onChange={(e) => setForm({ ...form, password: e.target.value })} />
-
-      <select onChange={(e) => setForm({ ...form, role: e.target.value })}>
-        <option value="user">User</option>
-        <option value="admin">Admin</option>
-      </select>
-
-      <input type="file" onChange={(e) => setImage(e.target.files?.[0] || null)} />
-
-      <button onClick={submitHandler}>Create</button>
-    </div>
+      <form onSubmit={handleSubmit}>
+        <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+        <input
+          placeholder="Password"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Create</button>
+      </form>
+    </AdminGuard>
   );
 }
