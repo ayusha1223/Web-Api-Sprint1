@@ -1,18 +1,11 @@
-"use client";
+import AdminGuard from "@/app/components/AdminGuard";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { getAuthUser } from "@/app/lib/auth";
-
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-
-  useEffect(() => {
-    const user = getAuthUser();
-    if (!user || user.role !== "admin") {
-      router.push("/login");
-    }
-  }, []);
-
-  return <>{children}</>;
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <AdminGuard>{children}</AdminGuard>;
 }
+
+

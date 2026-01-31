@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth } from "../lib/auth";
-
+import { getAuth } from "@/app/lib/auth";
 
 export default function AdminGuard({
   children,
@@ -14,6 +13,7 @@ export default function AdminGuard({
 
   useEffect(() => {
     const auth = getAuth();
+
     if (!auth || auth.role !== "admin") {
       router.push("/login");
     }

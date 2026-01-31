@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth } from "../lib/auth";
-
+import { getAuth } from "@/app/lib/auth";
 
 export default function UserGuard({
   children,
@@ -14,6 +13,7 @@ export default function UserGuard({
 
   useEffect(() => {
     const auth = getAuth();
+
     if (!auth) {
       router.push("/login");
     }

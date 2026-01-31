@@ -4,7 +4,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/app/schemas/loginSchema";
 import { useRouter } from "next/navigation";
-import { loginAction } from "@/app/lib/actions/auth.action";
+
+type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 export default function LoginForm() {
   const router = useRouter();
@@ -13,17 +17,30 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (formData: LoginFormData) => {
+    console.log("LOGIN SUBMITTED", formData);
     try {
-      const result = await loginAction(data);
+      const res = await fetch("http://localhost:5050/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // ✅ SAVE TOKEN & ROLE
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.message || "Login failed");
+      }
+
+      // ✅ SAVE LOGIN STATE (VERY IMPORTANT)
       localStorage.setItem("token", result.token);
-      localStorage.setItem("role", result.user.role);
+      localStorage.setItem("user", JSON.stringify(result.user));
 
       // ✅ ROLE-BASED REDIRECT
       if (result.user.role === "admin") {
@@ -31,23 +48,32 @@ export default function LoginForm() {
       } else {
         router.push("/user/profile");
       }
+
     } catch (error: any) {
-      alert(error.message || "Login failed");
+      alert(error.message || "Something went wrong");
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label>Email</label>
-      <input className="input" {...register("email")} />
+      <input
+        className="input"
+        type="email"
+        {...register("email")}
+      />
       {errors.email && (
-        <p className="error">{errors.email.message as string}</p>
+        <p className="error">{errors.email.message}</p>
       )}
 
       <label>Password</label>
-      <input type="password" className="input" {...register("password")} />
+      <input
+        type="password"
+        className="input"
+        {...register("password")}
+      />
       {errors.password && (
-        <p className="error">{errors.password.message as string}</p>
+        <p className="error">{errors.password.message}</p>
       )}
 
       <div className="forgot">Forgot Password?</div>
