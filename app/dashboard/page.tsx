@@ -7,14 +7,12 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
+    const token = localStorage.getItem("token");
 
-    if (role === "admin") {
-      router.push("/admin/users");
-    } else {
-      router.push("/user/profile");
+    if (!token) {
+      router.replace("/login");
     }
-  }, []);
+  }, [router]);
 
   return (
     <div>

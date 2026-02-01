@@ -1,9 +1,7 @@
 export async function registerAction(data: any) {
   const res = await fetch("http://localhost:5050/api/auth/register", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
 
@@ -16,12 +14,11 @@ export async function registerAction(data: any) {
   return result;
 }
 
+/* ---------------- LOGIN ---------------- */
 export async function loginAction(data: any) {
   const res = await fetch("http://localhost:5050/api/auth/login", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
 
@@ -31,9 +28,21 @@ export async function loginAction(data: any) {
     throw new Error(result.message || "Login failed");
   }
 
+  // ✅ SAVE TOKEN (MOST IMPORTANT)
+  if (result.token) {
+    localStorage.setItem("token", result.token);
+  }
+
+  // ✅ SAVE ROLE (optional but useful)
+  const role = result.user?.role || result.role;
+  if (role) {
+    localStorage.setItem("role", role);
+  }
+
   return result;
 }
 
+/* ---------------- UPDATE PROFILE ---------------- */
 export async function updateProfileAction(data: {
   name?: string;
   image?: File | null;
@@ -46,19 +55,14 @@ export async function updateProfileAction(data: {
 
   const formData = new FormData();
 
-  if (data.name) {
-    formData.append("name", data.name);
-  }
-
-  if (data.image) {
-    formData.append("image", data.image);
-  }
+  if (data.name) formData.append("name", data.name);
+  if (data.image) formData.append("image", data.image);
 
   const res = await fetch("http://localhost:5050/api/auth/update-profile", {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
-      // ❌ DO NOT set Content-Type manually for FormData
+      // ❌ DO NOT set Content-Type for FormData
     },
     body: formData,
   });

@@ -4,11 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/app/schemas/loginSchema";
 import { useRouter } from "next/navigation";
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
+import { loginAction } from "@/app/lib/actions/auth.action"; 
 
 export default function LoginForm() {
   const router = useRouter();
@@ -17,63 +13,40 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (formData: LoginFormData) => {
-    console.log("LOGIN SUBMITTED", formData);
-    try {
-      const res = await fetch("http://localhost:5050/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+ const onSubmit = async (data: any) => {
+  try {
+    const result = await loginAction(data);
 
-      const result = await res.json();
+    // redirect based on role
+    const role = result.user?.role || result.role;
 
-      if (!res.ok) {
-        throw new Error(result.message || "Login failed");
-      }
-
-      // ✅ SAVE LOGIN STATE (VERY IMPORTANT)
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("user", JSON.stringify(result.user));
-
-      // ✅ ROLE-BASED REDIRECT
-      if (result.user.role === "admin") {
-        router.push("/admin/users");
-      } else {
-        router.push("/user/profile");
-      }
-
-    } catch (error: any) {
-      alert(error.message || "Something went wrong");
+    if (role === "admin") {
+      router.push("/admin/users");
+    } else {
+      router.push("/user/profile"); // ✅ NOT /dashboard
     }
-  };
+  } catch (error: any) {
+    alert("Login failed");
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label>Email</label>
-      <input
-        className="input"
-        type="email"
-        {...register("email")}
-      />
+      <input className="input" {...register("email")} />
       {errors.email && (
-        <p className="error">{errors.email.message}</p>
+        <p className="error">{errors.email.message as string}</p>
       )}
 
       <label>Password</label>
-      <input
-        type="password"
-        className="input"
-        {...register("password")}
-      />
+      <input type="password" className="input" {...register("password")} />
       {errors.password && (
-        <p className="error">{errors.password.message}</p>
+        <p className="error">{errors.password.message as string}</p>
       )}
 
       <div className="forgot">Forgot Password?</div>
