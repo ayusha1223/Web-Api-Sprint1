@@ -29,15 +29,24 @@ export async function loginAction(data: any) {
   }
 
   // ✅ SAVE TOKEN (MOST IMPORTANT)
-  if (result.token) {
-    localStorage.setItem("token", result.token);
-  }
+  // ✅ SAVE TOKEN
+if (result.token) {
+  localStorage.setItem("token", result.token);
+}
 
-  // ✅ SAVE ROLE (optional but useful)
-  const role = result.user?.role || result.role;
-  if (role) {
-    localStorage.setItem("role", role);
-  }
+// ✅ SAVE USER (IMPORTANT FOR PROFILE UPDATE)
+if (result.user) {
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      id: result.user._id,     // 👈 REQUIRED
+      name: result.user.name,
+      email: result.user.email,
+      role: result.user.role,
+      image: result.user.image,
+    })
+  );
+}
 
   return result;
 }

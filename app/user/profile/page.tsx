@@ -1,150 +1,145 @@
 "use client";
 
-import axios from "@/app/lib/api/axios";
 import { useEffect, useState } from "react";
+import axios from "@/app/lib/api/axios";
 import { useRouter } from "next/navigation";
 
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  image?: string;
-};
-
-export default function ProfilePage() {
+export default function UserProfilePage() {
   const router = useRouter();
 
-  const [user, setUser] = useState<User | null>(null);
+  // 🔹 State
+  const [userId, setUserId] = useState<string | null>(null);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
 
+  // 🔹 Load user info
   useEffect(() => {
-    const initProfile = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        router.replace("/login");
-        return;
-      }
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
 
-      try {
-        const res = await axios.get("/api/auth/whoami", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+    if (!token || !storedUser) {
+      router.replace("/login");
+      return;
+    }
 
-        const userData = res.data.data;
-        setUser(userData);
-        setName(userData.name);
+    const user = JSON.parse(storedUser);
+    setUserId(user.id);
+    setName(user.name || "");
+    setEmail(user.email || "");
 
-        if (userData.image) {
-          setPreview(`http://localhost:5050${userData.image}`);
-        }
-      } catch {
-        router.replace("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (user.image) {
+      setPreview(`http://localhost:5050${user.image}`);
+    }
 
-    initProfile();
+    setLoading(false);
   }, [router]);
 
-  const submitHandler = async () => {
-    if (!user) return;
+  // 🔹 Update profile
+  const updateProfile = async () => {
+    if (!userId) return;
 
     const token = localStorage.getItem("token");
     if (!token) return;
 
     const formData = new FormData();
     formData.append("name", name);
-    if (image) formData.append("image", image);
 
-    const res = await axios.put(
-  `/api/auth/${user._id}`,
-  formData,
-  { headers: { Authorization: `Bearer ${token}` } }
-);
-
-
-    const updatedUser = res.data.data;
-    setUser(updatedUser);
-    setName(updatedUser.name);
-
-    if (updatedUser.image) {
-      setPreview(`http://localhost:5050${updatedUser.image}`);
+    if (image) {
+      formData.append("image", image);
     }
 
-    alert("Profile updated");
+    try {
+      const res = await axios.put(
+        `/api/auth/${userId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // update localStorage
+      localStorage.setItem("user", JSON.stringify(res.data.data));
+      setSuccess(true);
+    } catch {
+      alert("Profile update failed");
+    }
   };
 
   if (loading) return <p>Loading...</p>;
-  if (!user) return null;
 
   return (
-  <div style={styles.page}>
-    <div style={styles.card}>
-      <h2 style={styles.title}>User Profile</h2>
+    <div style={styles.page}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Account Settings</h2>
+        <p style={styles.subtitle}>Update your profile details</p>
 
-      {/* Avatar */}
-      <div style={styles.avatarWrapper}>
-  <img
-    src={preview || "/images/user-placeholder.png"}
-    alt="Profile"
-    style={styles.avatarImage}
-  />
-</div>
+        {/* Profile Image */}
+        <div style={styles.avatarWrapper}>
+          <img
+            src={preview || "/images/user-placeholder.png"}
+            alt="Profile"
+            style={styles.avatar}
+          />
+        </div>
 
+        <div style={styles.field}>
+          <label>Profile Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              setImage(file);
+              if (file) setPreview(URL.createObjectURL(file));
+            }}
+          />
+        </div>
 
-      {/* Info */}
-      <div style={styles.info}>
-        <p><span>Email:</span> {user.email}</p>
-        <p><span>Role:</span> {user.role}</p>
+        {/* Name */}
+        <div style={styles.field}>
+          <label>Name</label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+
+        {/* Email */}
+        <div style={styles.field}>
+          <label>Email</label>
+          <input value={email} disabled />
+        </div>
+
+        {success && (
+          <p style={styles.success}>✅ Profile updated successfully</p>
+        )}
+
+        <button style={styles.button} onClick={updateProfile}>
+          Save Changes
+        </button>
       </div>
-
-      {/* Name */}
-      <div style={styles.field}>
-        <label>Name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-
-      {/* Image Upload */}
-      <div style={styles.field}>
-        <label>Profile Image</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) =>
-            setImage(e.target.files?.[0] || null)
-          }
-        />
-      </div>
-
-      {/* Button */}
-      <button style={styles.button} onClick={submitHandler}>
-        Update Profile
-      </button>
     </div>
-  </div>
-);
+  );
 }
 
+/* 🎨 STYLES */
 const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: "100vh",
-    background: "#f3f4f6",
+    background: "#f4f5f7",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
 
   card: {
-    width: "380px",
+    width: "420px",
     background: "#ffffff",
     padding: "30px",
     borderRadius: "12px",
@@ -153,55 +148,50 @@ const styles: Record<string, React.CSSProperties> = {
 
   title: {
     textAlign: "center",
-    marginBottom: "20px",
     fontSize: "22px",
     fontWeight: 600,
   },
 
-  avatarWrapper: {
-  width: "100px",
-  height: "100px",
-  borderRadius: "50%",
-  border: "3px solid #2563eb",
-  overflow: "hidden",          // 🔑 VERY IMPORTANT
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  margin: "0 auto 15px auto",
-  background: "#f3f4f6",
-},
-
-avatarImage: {
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",          // 🔑 VERY IMPORTANT
-},
-
-
-  avatar: {
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    border: "3px solid #2563eb",
+  subtitle: {
+    textAlign: "center",
+    fontSize: "13px",
+    color: "#6b7280",
+    marginBottom: "20px",
   },
 
-  info: {
-    fontSize: "14px",
-    marginBottom: "15px",
+  avatarWrapper: {
+    width: "100px",
+    height: "100px",
+    borderRadius: "50%",
+    overflow: "hidden",
+    border: "3px solid #2563eb",
+    margin: "0 auto 15px",
+  },
+
+  avatar: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
   },
 
   field: {
     display: "flex",
     flexDirection: "column",
-    marginBottom: "12px",
+    marginBottom: "14px",
     fontSize: "14px",
+  },
+
+  success: {
+    fontSize: "13px",
+    color: "#16a34a",
+    marginBottom: "10px",
+    textAlign: "center",
   },
 
   button: {
     width: "100%",
-    marginTop: "15px",
-    padding: "10px",
+    marginTop: "10px",
+    padding: "12px",
     background: "#2563eb",
     color: "#fff",
     border: "none",
