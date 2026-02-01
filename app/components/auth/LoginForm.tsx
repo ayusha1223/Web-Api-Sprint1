@@ -21,18 +21,25 @@ export default function LoginForm() {
   try {
     const result = await loginAction(data);
 
-    // redirect based on role
-    const role = result.user?.role || result.role;
+    const { token, user } = result;
 
-    if (role === "admin") {
+    // ✅ STORE AUTH DATA (THIS IS THE FIX)
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", user.role);
+    localStorage.setItem("userId", user._id);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    // ✅ redirect based on role
+    if (user.role === "admin") {
       router.push("/admin/users");
     } else {
-      router.push("/user/profile"); // ✅ NOT /dashboard
+      router.push("/user/profile");
     }
   } catch (error: any) {
     alert("Login failed");
   }
 };
+
 
 
   return (

@@ -62,10 +62,11 @@ export default function ProfilePage() {
     if (image) formData.append("image", image);
 
     const res = await axios.put(
-      "/api/auth/update-profile",
-      formData,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  `/api/auth/${user._id}`,
+  formData,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+
 
     const updatedUser = res.data.data;
     setUser(updatedUser);

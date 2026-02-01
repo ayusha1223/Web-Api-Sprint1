@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth } from "@/app/lib/auth";
 
 export default function AdminGuard({
   children,
@@ -10,14 +9,28 @@ export default function AdminGuard({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const auth = getAuth();
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
-    if (!auth || auth.role !== "admin") {
-      router.push("/login");
+    if (!token) {
+      router.replace("/login");
+      return;
     }
-  }, []);
+
+    if (role !== "admin") {
+      router.replace("/dashboard");
+      return;
+    }
+
+    // ✅ Passed all checks
+    setChecked(true);
+  }, [router]);
+
+  // ⛔ Don't render until check is done
+  if (!checked) return null;
 
   return <>{children}</>;
 }
