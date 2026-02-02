@@ -8,7 +8,7 @@ export default function Navbar() {
       <div className="nav-logo">
         <Link href="/">
           <Image
-            src="/images/logo.png"
+            src="/images/logo1.png"
             alt="KurthaBuy Logo"
             width={140}
             height={40}

@@ -3,12 +3,37 @@
 import { useEffect, useState } from "react";
 
 export default function AccountSettingsPage() {
-  const [name, setName] = useState("Coco");
-  const [email, setEmail] = useState("coco@gmail.com");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [users, setUsers] = useState<any[]>([]);
 
+  /* ================= LOAD LOGGED-IN USER PROFILE ================= */
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("http://localhost:5050/api/auth/whoami", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        const user = res.data;
+
+        setName(user.name || "");
+        setEmail(user.email || "");
+
+        if (user.image) {
+          setPreview(`http://localhost:5050${user.image}`);
+        }
+      })
+      .catch((err) => console.error("Profile load error:", err));
+  }, []);
+
+  /* ================= LOAD ADMIN USERS ================= */
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
@@ -24,7 +49,43 @@ export default function AccountSettingsPage() {
       .then((data) => setUsers(data.data))
       .catch((err) => console.error(err));
   }, []);
-    const handleDeleteUser = async (userId: string) => {
+
+  /* ================= SAVE PROFILE ================= */
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const formData = new FormData();
+    formData.append("name", name);
+
+    if (image) {
+      formData.append("image", image);
+    }
+
+    const res = await fetch(
+      "http://localhost:5050/api/auth/update-profile",
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+
+    if (data?.data?.image) {
+      setPreview(`http://localhost:5050${data.data.image}`);
+    }
+
+    alert("Profile updated successfully");
+  };
+
+  /* ================= ADMIN ACTIONS ================= */
+  const handleDeleteUser = async (userId: string) => {
     const token = localStorage.getItem("token");
 
     if (!confirm("Are you sure you want to delete this user?")) return;
@@ -36,7 +97,6 @@ export default function AccountSettingsPage() {
       },
     });
 
-    // remove deleted user from UI
     setUsers((prev) => prev.filter((u) => u._id !== userId));
   };
 
@@ -55,14 +115,12 @@ export default function AccountSettingsPage() {
       body: JSON.stringify({ role: newRole }),
     });
 
-    // update UI
     setUsers((prev) =>
       prev.map((u) =>
         u._id === userId ? { ...u, role: newRole } : u
       )
     );
   };
-
 
   return (
     <div style={styles.page}>
@@ -84,51 +142,57 @@ export default function AccountSettingsPage() {
         <h2>Account Settings</h2>
         <p style={styles.sub}>Basic info</p>
 
-        {/* Profile Image */}
-        <div style={styles.row}>
-          <div style={styles.label}>Profile Picture</div>
-          <div style={styles.value}>
-            <div style={styles.avatarWrap}>
-              <img
-                src={preview || "/images/user-placeholder.png"}
-                alt="profile"
-                style={styles.avatar}
+        {/* ================= PROFILE FORM ================= */}
+        <form onSubmit={handleSubmit}>
+          {/* Profile Picture */}
+          <div style={styles.row}>
+            <div style={styles.label}>Profile Picture</div>
+            <div style={styles.value}>
+              <div style={styles.avatarWrap}>
+                <img
+                  src={preview || "/user-placeholder.png"}
+                  alt="profile"
+                  style={styles.avatar}
+                />
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  setImage(file);
+                  if (file) {
+                    setPreview(URL.createObjectURL(file));
+                  }
+                }}
               />
             </div>
+          </div>
+
+          {/* Name */}
+          <div style={styles.row}>
+            <div style={styles.label}>Name</div>
             <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0] || null;
-                setImage(file);
-                if (file) setPreview(URL.createObjectURL(file));
-              }}
+              style={styles.input}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
-        </div>
 
-        {/* Name */}
-        <div style={styles.row}>
-          <div style={styles.label}>Name</div>
-          <input
-            style={styles.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+          {/* Email (read-only) */}
+          <div style={styles.row}>
+            <div style={styles.label}>Email</div>
+            <input
+              style={styles.input}
+              value={email}
+              disabled
+            />
+          </div>
 
-        {/* Email */}
-        <div style={styles.row}>
-          <div style={styles.label}>Email</div>
-          <input
-            style={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        {/* Save */}
-        <button style={styles.button}>Save Changes</button>
+          <button type="submit" style={styles.button}>
+            Save Changes
+          </button>
+        </form>
 
         {/* ================= ADMIN USERS LIST ================= */}
         {users.length > 0 && (
@@ -148,29 +212,32 @@ export default function AccountSettingsPage() {
                 </tr>
               </thead>
               <tbody>
-  {users.map((user) => (
-    <tr key={user._id}>
-      <td style={styles.td}>{user.name}</td>
-      <td style={styles.td}>{user.email}</td>
-      <td style={styles.td}>{user.role}</td>
-      <td style={styles.td}>
-        <button
-          style={styles.editBtn}
-          onClick={() => handleEditUser(user._id, user.role)}
-        >
-          Edit
-        </button>
-        <button
-          style={styles.deleteBtn}
-          onClick={() => handleDeleteUser(user._id)}
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+                {users.map((user) => (
+                  <tr key={user._id}>
+                    <td style={styles.td}>{user.name}</td>
+                    <td style={styles.td}>{user.email}</td>
+                    <td style={styles.td}>{user.role}</td>
+                    <td style={styles.td}>
+                      <button
+                        style={styles.editBtn}
+                        onClick={() =>
+                          handleEditUser(user._id, user.role)
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        style={styles.deleteBtn}
+                        onClick={() =>
+                          handleDeleteUser(user._id)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </>
         )}
@@ -179,112 +246,23 @@ export default function AccountSettingsPage() {
   );
 }
 
+/* ================= STYLES ================= */
 const styles: Record<string, React.CSSProperties> = {
-  page: {
-    display: "flex",
-    minHeight: "100vh",
-    background: "#f7f7fb",
-    fontFamily: "sans-serif",
-  },
-
-  sidebar: {
-    width: "220px",
-    background: "#fdecef",
-    padding: "25px",
-  },
-
-  sideTitle: {
-    marginBottom: "20px",
-    fontSize: "18px",
-  },
-
-  menu: {
-    listStyle: "none",
-    padding: 0,
-    lineHeight: "2.2",
-    cursor: "pointer",
-  },
-
-  active: {
-    fontWeight: 600,
-    color: "#ec4899",
-  },
-
-  content: {
-    flex: 1,
-    background: "#fff",
-    padding: "40px",
-  },
-
-  sub: {
-    color: "#6b7280",
-    marginBottom: "25px",
-  },
-
-  row: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "20px",
-    gap: "20px",
-  },
-
-  label: {
-    width: "150px",
-    fontSize: "14px",
-    color: "#6b7280",
-  },
-
-  value: {
-    display: "flex",
-    alignItems: "center",
-    gap: "15px",
-  },
-
-  avatarWrap: {
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    overflow: "hidden",
-    border: "2px solid #ec4899",
-  },
-
-  avatar: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  },
-
-  input: {
-    flex: 1,
-    padding: "8px 10px",
-    borderRadius: "6px",
-    border: "1px solid #e5e7eb",
-  },
-
-  button: {
-    marginTop: "30px",
-    padding: "10px 20px",
-    background: "#ec4899",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-    marginTop: "20px",
-  },
-
-  th: {
-    textAlign: "left",
-    padding: "10px",
-    borderBottom: "2px solid #e5e7eb",
-  },
-
-  td: {
-    padding: "10px",
-    borderBottom: "1px solid #e5e7eb",
-  },
+  page: { display: "flex", minHeight: "100vh", background: "#f7f7fb" },
+  sidebar: { width: "220px", background: "#fdecef", padding: "25px" },
+  sideTitle: { marginBottom: "20px", fontSize: "18px" },
+  menu: { listStyle: "none", padding: 0, lineHeight: "2.2" },
+  active: { fontWeight: 600, color: "#ec4899" },
+  content: { flex: 1, background: "#fff", padding: "40px" },
+  sub: { color: "#6b7280", marginBottom: "25px" },
+  row: { display: "flex", alignItems: "center", marginBottom: "20px", gap: "20px" },
+  label: { width: "150px", fontSize: "14px", color: "#6b7280" },
+  value: { display: "flex", alignItems: "center", gap: "15px" },
+  avatarWrap: { width: "60px", height: "60px", borderRadius: "50%", overflow: "hidden", border: "2px solid #ec4899" },
+  avatar: { width: "100%", height: "100%", objectFit: "cover" },
+  input: { flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #e5e7eb" },
+  button: { marginTop: "30px", padding: "10px 20px", background: "#ec4899", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer" },
+  table: { width: "100%", borderCollapse: "collapse", marginTop: "20px" },
+  th: { textAlign: "left", padding: "10px", borderBottom: "2px solid #e5e7eb" },
+  td: { padding: "10px", borderBottom: "1px solid #e5e7eb" },
 };

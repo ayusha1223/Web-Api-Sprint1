@@ -13,91 +13,153 @@ export default function CreateUserPage() {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Unauthorized");
-      return;
-    }
 
-    // ✅ MUST use FormData (sir requirement)
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("role", role);
 
-    // ✅ image optional but supported
     if (image) {
       formData.append("image", image);
     }
 
-    try {
-      const res = await fetch("http://localhost:5050/api/admin/users", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+    await fetch("http://localhost:5050/api/admin/users", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
 
-      if (!res.ok) {
-        throw new Error("Failed to create user");
-      }
-
-      alert("User created successfully");
-
-      // reset form
-      setName("");
-      setEmail("");
-      setPassword("");
-      setRole("user");
-      setImage(null);
-
-    } catch (err) {
-      alert("Error creating user");
-    }
+    alert("User created successfully!");
   };
 
   return (
-    <div>
-      <h1>Create User</h1>
+    <div style={styles.page}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Create New User</h2>
+        <p style={styles.subTitle}>
+          Add a new user or admin to the system
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <div style={styles.field}>
+            <label>Name</label>
+            <input
+              type="text"
+              placeholder="Full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <div style={styles.field}>
+            <label>Email</label>
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <input
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <div style={styles.field}>
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Temporary password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
+          <div style={styles.field}>
+            <label>Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
 
-        {/* ✅ REQUIRED FOR MULTER */}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
-        />
+          <div style={styles.field}>
+            <label>Profile Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) =>
+                setImage(e.target.files?.[0] || null)
+              }
+            />
+          </div>
 
-        <button type="submit">Create</button>
-      </form>
+          <button type="submit" style={styles.button}>
+            Create User
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
+
+/* ================= STYLES ================= */
+
+const styles: Record<string, React.CSSProperties> = {
+  page: {
+    minHeight: "80vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "#f7f7fb",
+    padding: "40px",
+  },
+
+  card: {
+    width: "100%",
+    maxWidth: "480px",
+    background: "#fff",
+    borderRadius: "12px",
+    padding: "30px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+  },
+
+  title: {
+    fontSize: "24px",
+    marginBottom: "6px",
+  },
+
+  subTitle: {
+    color: "#6b7280",
+    marginBottom: "25px",
+  },
+
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "18px",
+  },
+
+  field: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px",
+    fontSize: "14px",
+  },
+
+  button: {
+    marginTop: "15px",
+    padding: "12px",
+    background: "#ec4899",
+    color: "#fff",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "16px",
+  },
+};
