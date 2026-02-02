@@ -1,12 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AccountSettingsPage() {
   const [name, setName] = useState("Coco");
   const [email, setEmail] = useState("coco@gmail.com");
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [users, setUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (role !== "admin") return;
+
+    fetch("http://localhost:5050/api/admin/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setUsers(data.data))
+      .catch((err) => console.error(err));
+  }, []);
+    const handleDeleteUser = async (userId: string) => {
+    const token = localStorage.getItem("token");
+
+    if (!confirm("Are you sure you want to delete this user?")) return;
+
+    await fetch(`http://localhost:5050/api/admin/users/${userId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // remove deleted user from UI
+    setUsers((prev) => prev.filter((u) => u._id !== userId));
+  };
+
+  const handleEditUser = async (userId: string, currentRole: string) => {
+    const token = localStorage.getItem("token");
+    const newRole = prompt("Enter role (admin/user)", currentRole);
+
+    if (!newRole) return;
+
+    await fetch(`http://localhost:5050/api/admin/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ role: newRole }),
+    });
+
+    // update UI
+    setUsers((prev) =>
+      prev.map((u) =>
+        u._id === userId ? { ...u, role: newRole } : u
+      )
+    );
+  };
+
 
   return (
     <div style={styles.page}>
@@ -15,6 +71,7 @@ export default function AccountSettingsPage() {
         <h3 style={styles.sideTitle}>Settings</h3>
         <ul style={styles.menu}>
           <li style={styles.active}>Account</li>
+          <li>Users</li>
           <li>Notifications</li>
           <li>Privacy</li>
           <li>Languages</li>
@@ -72,10 +129,56 @@ export default function AccountSettingsPage() {
 
         {/* Save */}
         <button style={styles.button}>Save Changes</button>
+
+        {/* ================= ADMIN USERS LIST ================= */}
+        {users.length > 0 && (
+          <>
+            <hr style={{ margin: "50px 0" }} />
+
+            <h2>All Registered Users</h2>
+            <p style={styles.sub}>Admin view</p>
+
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th style={styles.th}>Name</th>
+                  <th style={styles.th}>Email</th>
+                  <th style={styles.th}>Role</th>
+                  <th style={styles.th}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+  {users.map((user) => (
+    <tr key={user._id}>
+      <td style={styles.td}>{user.name}</td>
+      <td style={styles.td}>{user.email}</td>
+      <td style={styles.td}>{user.role}</td>
+      <td style={styles.td}>
+        <button
+          style={styles.editBtn}
+          onClick={() => handleEditUser(user._id, user.role)}
+        >
+          Edit
+        </button>
+        <button
+          style={styles.deleteBtn}
+          onClick={() => handleDeleteUser(user._id)}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+            </table>
+          </>
+        )}
       </main>
     </div>
   );
 }
+
 const styles: Record<string, React.CSSProperties> = {
   page: {
     display: "flex",
@@ -166,5 +269,22 @@ const styles: Record<string, React.CSSProperties> = {
     border: "none",
     borderRadius: "6px",
     cursor: "pointer",
+  },
+
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+    marginTop: "20px",
+  },
+
+  th: {
+    textAlign: "left",
+    padding: "10px",
+    borderBottom: "2px solid #e5e7eb",
+  },
+
+  td: {
+    padding: "10px",
+    borderBottom: "1px solid #e5e7eb",
   },
 };
