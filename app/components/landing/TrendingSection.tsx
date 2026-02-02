@@ -42,7 +42,7 @@ const trendingProducts = [
 export default function TrendingSection() {
   return (
     <section className="trending">
-      <h2 className="section-title">Trending This Season</h2>
+      <h2 className="trending-title">Trending This Season</h2>
 
       <div className="trending-slider">
         {trendingProducts.map((item) => (

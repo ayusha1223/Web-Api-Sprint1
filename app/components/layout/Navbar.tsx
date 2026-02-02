@@ -6,16 +6,11 @@ export default function Navbar() {
     <nav className="navbar">
       {/* LEFT: LOGO */}
       <div className="nav-logo">
-        <Link href="/">
-          <Image
-            src="/images/logo1.png"
-            alt="KurthaBuy Logo"
-            width={140}
-            height={40}
-            priority
-          />
-        </Link>
-      </div>
+  <Link href="/" className="brand-logo">
+    NAAYU<span>Attire</span>
+  </Link>
+</div>
+
 
       {/* CENTER: NAV LINKS */}
       <ul className="nav-links">

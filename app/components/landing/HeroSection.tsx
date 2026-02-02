@@ -3,8 +3,20 @@ import Image from "next/image";
 export default function HeroSection() {
   return (
     <section className="hero">
+      {/* Background Video */}
+      <video
+        className="hero-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source src="/videos/hero.mp4" type="video/mp4" />
+      </video>
+
+      {/* Fallback Image */}
       <Image
-        src="/images/hero.jpg"
+        src="/images/hero1.jpg"
         alt="Hero"
         fill
         priority
@@ -12,9 +24,9 @@ export default function HeroSection() {
       />
 
       {/* Overlay */}
-      <div className="hero-overlay"></div>
+      <div className="hero-overlay" />
 
-      {/* Text */}
+      {/* Text Content */}
       <div className="hero-content">
         <h1>Elevate Your Kurtha Style</h1>
         <p>Elegant kurthas for every occasion</p>

@@ -10,7 +10,7 @@ export default function Footer() {
         <div>
           <h4>Shop</h4>
           <ul>
-            <li>Men Kurtha</li>
+            <li>Casual Kurtha</li>
             <li>Women Kurtha</li>
             <li>Festive Wear</li>
           </ul>

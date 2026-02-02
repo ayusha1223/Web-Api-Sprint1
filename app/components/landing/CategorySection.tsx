@@ -14,7 +14,7 @@ const categories = [
 export default function CategorySection() {
   return (
     <section className="categories">
-      <h2 className="section-title">Shop by Category</h2>
+      <h2 className="category-title">Category</h2>
 
       {/* Slider */}
       <div className="category-slider">

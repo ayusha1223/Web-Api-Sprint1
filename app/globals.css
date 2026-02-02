@@ -4,121 +4,188 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* ===========================
-   AUTH PAGES ONLY
-   =========================== */
-
+/* PAGE BACKGROUND */
 .auth-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f5f5f5;
+  background: #f3f3f3;
 }
 
-/* Card */
-.auth-container .auth-card {
+/* CARD */
+.auth-card {
+  width: 880px;
+  display: flex;
   background: #ffffff;
-  width: 1000px;
-  height: 560px;
-  display: flex;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Left side */
-.auth-container .auth-left {
-  width: 50%;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+/* LEFT SIDE */
+.auth-left {
+  flex: 1;
+  padding: 50px 55px;
 }
 
-/* Headings */
-.auth-container .auth-left h1 {
-  font-size: 32px;
+.auth-left h1 {
+  font-size: 1.7rem;        /* 👈 not too big */
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+  color: #000;
 }
 
-.auth-container .auth-left p {
-  font-size: 14px;
-  font-weight: 500;
+.auth-left p {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 26px;
+}
+
+/* INPUTS (from LoginForm) */
+.auth-left input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 4px;
+  border: 1px solid #dcdcdc;
+  font-size: 0.9rem;
+  margin-bottom: 18px;
+}
+
+.auth-left input:focus {
+  outline: none;
+  border-color: #999;
+}
+
+/* LOGIN BUTTON */
+.auth-left button {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* SIGNUP TEXT */
+.center-text {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 0.85rem;
   color: #555;
-  margin-bottom: 20px;
 }
 
-/* Right side */
-.auth-container .auth-right {
-  width: 50%;
-  background: #fde6d8;
+.center-text span {
+  color: #6a00ff;
+}
+
+/* RIGHT SIDE */
+.auth-right {
+  flex: 1;
+  background: #fde6d8;   /* 👈 peach tone like image */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.auth-container .auth-right img {
-  width: 420px;
-  max-width: 90%;
+.auth-right img {
+  width: 75%;
   height: auto;
 }
 
-/* Inputs */
-.auth-container .input {
+/* MOBILE */
+@media (max-width: 768px) {
+  .auth-card {
+    width: 92%;
+    flex-direction: column;
+  }
+
+  .auth-right {
+    display: none;
+  }
+
+  .auth-left {
+    padding: 40px;
+  }
+}
+
+/* PAGE */
+.login-page {
+  background: #fff;
+}
+
+/* TOP IMAGE */
+.login-banner {
   width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  margin-bottom: 14px;
+  height: 260px;
+  overflow: hidden;
+}
+
+.login-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* LOGIN AREA */
+.login-section {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+/* LOGIN BOX */
+.login-box {
+  width: 420px;
+  text-align: left;
+}
+
+.login-box h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* FORM FIELDS (from LoginForm) */
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-/* Labels */
-.auth-container label {
-  font-weight: 600;
-  display: block;
-  margin-bottom: 4px;
-}
-
-/* Button */
-.auth-container .btn {
+/* LOGIN BUTTON */
+.login-box button {
   width: 100%;
-  padding: 12px;
-  background: black;
-  color: white;
+  padding: 14px;
+  background: #e63973; /* pink like reference */
+  color: #fff;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
   font-weight: 600;
-}
-
-.auth-container .btn:hover {
-  background: #333;
-}
-
-/* Error text */
-.auth-container .error {
-  color: red;
-  font-size: 12px;
-}
-
-/* Forgot password */
-.auth-container .forgot {
-  text-align: right;
-  font-size: 12px;
-  margin-bottom: 15px;
   cursor: pointer;
-  color: #555;
 }
 
-/* Center text (login/signup links) */
-.auth-container .center-text {
+/* TEXT BELOW */
+.center-text {
   text-align: center;
-  margin-top: 15px;
-  font-size: 13px;
+  margin-top: 16px;
+  font-size: 0.9rem;
 }
+
+.center-text span {
+  color: #e63973;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+
+
 
 /* ===========================
    HOME PAGE ONLY
@@ -198,56 +265,66 @@ body {
   object-fit: cover;   /* 🔑 key line */
 }
 
+/*Hero section*/
+
 .hero {
   position: relative;
+  height: 100vh;
   width: 100%;
-  height: 80vh;
   overflow: hidden;
 }
 
-/* Background image */
-.hero-img {
-  object-fit: cover;
-  z-index: -2;
-}
-
-/* Dark overlay */
-.hero-overlay {
+/* Video */
+.hero-video {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Image fallback */
+.hero-img {
+  object-fit: cover;
   z-index: -1;
 }
 
-/* Centered content */
+/* Dark overlay for readability */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+/* Text content */
 .hero-content {
   position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  font-size: 3.5rem;
+  z-index: 2;
+  color: white;
   text-align: center;
-  color: #fff;
-  padding: 0 20px;
-}
-
-.hero-content h1 {
-  font-size: 3rem;
-  font-weight: 700;
-}
-
-.hero-content p {
-  margin-top: 10px;
-  font-size: 1.1rem;
-  opacity: 0.9;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .hero-buttons {
-  margin-top: 25px;
+  margin-top: 28px;
   display: flex;
-  gap: 14px;
+  gap: 24px;
+  justify-content: center;
 }
+
+/* Buttons themselves */
+.hero-buttons button {
+  font-size: 1.2rem;      /* 👈 bigger text */
+  padding: 16px 36px;     /* 👈 bigger buttons */
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+
 
 /* Buttons */
 .primary-btn {
@@ -266,9 +343,6 @@ body {
   cursor: pointer;
 }
 
-
-
-
 .primary-btn {
   background: black;
   color: white;
@@ -282,17 +356,13 @@ body {
   padding: 12px 20px;
 }
 
+/*Category Section*/  
+
 .categories {
-  padding-top: 60px;
+  padding-top: -60px;
   padding-bottom: 0;   /* 👈 KEY FIX */
 }
 
-
-.section-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
 
 /* 🔥 Horizontal carousel */
 .category-slider {
@@ -311,6 +381,8 @@ body {
   background: #ccc;
   border-radius: 10px;
 }
+
+
 
 /* Card */
 .category-card {
@@ -359,10 +431,36 @@ body {
   margin-bottom: 10px;
 }
 
-.trending {
-  padding-top: 0;      /* 👈 KEY FIX */
-  padding-bottom: 60px;
+.category-title {
+  text-align: center;              /* 👈 center */
+  font-size: 2.6rem;               /* 👈 bigger */
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  position: relative;
+  font-family: "Playfair Display", serif; /* fancy font */
 }
+
+/* elegant underline */
+.category-title::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 3px;
+  background: #000;
+  margin: 12px auto 0;             /* 👈 center underline */
+}
+
+
+
+/*trending section*/
+
+.trending {
+  margin-top: 0 !important;
+  padding-top: 0;
+}
+
 
 
 .trending-slider {
@@ -371,6 +469,26 @@ body {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding: 0 40px 10px;
+}
+.trending-title {
+  text-align: center;              /* 👈 center */
+  font-size: 2.6rem;               /* 👈 bigger */
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  position: relative;
+  font-family: "Playfair Display", serif; /* fancy font */
+}
+
+/* elegant underline */
+.trending-title::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 3px;
+  background: #000;
+  margin: 12px auto 0;             /* 👈 center underline */
 }
 
 .trending-slider::-webkit-scrollbar {
@@ -450,6 +568,8 @@ body {
   }
 }
 
+/*Sale Banner Section*/
+
 .sale-banner {
   position: relative;
   width: 100%;
@@ -458,7 +578,6 @@ body {
   padding: 0;
   overflow: hidden;
 }
-
 
 
 /* Video */
@@ -509,13 +628,6 @@ body {
   cursor: pointer;
 }
 
-
-
-
-
-
-
-
 /* Explore button */
 .explore-btn {
   color: #fff;
@@ -538,7 +650,7 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-
+/*Offer Section*/
 
 .offer {
   background: #f5f5f5;
@@ -549,28 +661,39 @@ body {
 /* NAVBAR WRAPPER */
 .navbar {
   display: flex;
+  font-size: 1,15rem;
   align-items: center;
   padding: 18px 80px;
   background: white;
   border-bottom: 1px solid #eee;
 }
-
-/* LOGO */
-.nav-logo {
-  flex: 1;
+.brand-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #000;
+  text-decoration: none;
+  font-family: "Playfair Display", serif; /* luxury vibe */
 }
+
+.brand-logo span {
+  font-weight: 400;
+  margin-left: 4px;
+}
+
 
 /* NAV LINKS (CENTERED & STRETCHED) */
 .nav-links {
   flex: 3;
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 150px;
   list-style: none;
 }
 
 .nav-links a {
-  font-size: 18px;            /* BIGGER TEXT */
+  font-size: 25px;            /* BIGGER TEXT */
   font-weight: 500;
   color: black;
   text-decoration: none;
@@ -583,6 +706,7 @@ body {
 /* SALE SPECIAL STYLE */
 .sale-link a {
   color: #c62828;
+  font-size: 25px;
   font-weight: 700;
 }
 
@@ -596,7 +720,7 @@ body {
 
 /* LOGIN BUTTON */
 .login-btn {
-  font-size: 16px;
+  font-size: 26px;
   padding: 10px 22px;
   border: 2px solid black;
   text-decoration: none;
@@ -606,7 +730,7 @@ body {
 
 /* CART BUTTON */
 .cart-btn {
-  font-size: 16px;
+  font-size: 26px;
   padding: 10px 22px;
   background: black;
   color: white;

@@ -1,37 +1,31 @@
-
 import Link from "next/link";
 import LoginForm from "@/app/components/auth/LoginForm";
 
-
 export default function LoginPage() {
   return (
-    <div className="auth-container">
-      <div className="auth-card">
+    <div className="login-page">
 
-        {/* LEFT SIDE */}
-        <div className="auth-left">
-          <h1>Welcome Back!!</h1>
-          <p>Please login to your account</p>
+      {/* TOP BANNER */}
+      <div className="login-banner">
+        <img src="/images/login-banner.jpg" alt="Login Banner" />
+      </div>
+
+      {/* LOGIN SECTION */}
+      <div className="login-section">
+        <div className="login-box">
+          <h1>Login</h1>
 
           <LoginForm />
 
-          {/* SIGN UP LINK */}
           <p className="center-text">
             Don&apos;t have an account?{" "}
             <Link href="/register">
-              <span style={{ fontWeight: "600", cursor: "pointer" }}>
-                Sign up
-              </span>
+              <span>Register With us</span>
             </Link>
           </p>
         </div>
-
-        {/* RIGHT SIDE */}
-        <div className="auth-right">
-          <img src="/images/login.png" alt="Login Illustration" />
-        </div>
-
       </div>
+
     </div>
   );
 }
