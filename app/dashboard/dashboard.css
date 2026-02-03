@@ -1,0 +1,292 @@
+/* =========================
+   GLOBAL
+========================= */
+html, body {
+  background: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* =========================
+   PAGE WRAPPER
+========================= */
+.dashboard-container {
+  min-height: 100vh;
+  width: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.dashboard-card {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-left: 60px;
+}
+
+.topSearch {
+  margin-left: 300px;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  margin-right: 100px;
+}
+
+.icon {
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.icon:hover {
+  transform: scale(1.15);
+}
+
+/* =========================
+   SEARCH BAR
+========================= */
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f3f3f3;
+  padding: 14px 22px;
+  border-radius: 32px;
+  width: 800px;
+  height: 40px;
+}
+
+.searchIcon,
+.filterIcon {
+  font-size: 14px;
+  color: #777;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  flex: 1;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 60px;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+.sidebar h3 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  font-size: 18px;
+  margin-bottom: 22px;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  color: #ff6a00;
+}
+
+/* LOGO FIX */
+.sidebar-logo img {
+  width: 130px;
+  height: auto;
+  display: block;
+  margin-bottom: 30px;
+  margin-top: -90px;
+}
+
+/* =========================
+   BANNER
+========================= */
+.banner {
+  background: linear-gradient(to right, #e8f0ff, #ffe3cc);
+  padding: 40px;
+  border-radius: 24px;
+  margin-bottom: 40px;
+  height: 200px;
+  width: 350px;
+}
+
+/* =========================
+   PRODUCT GRID
+========================= */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.product-card {
+  background: #fafafa;
+  border-radius: 22px;
+  padding: 24px;
+  text-align: center;
+  position: relative;
+  transition: 0.25s;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* IMAGE FIX */
+.product-image {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.product-img {
+  object-fit: contain;
+  filter: drop-shadow(0 16px 24px rgba(0,0,0,0.12));
+}
+
+
+.product-card p {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* =========================
+   BADGES
+========================= */
+.badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.badge.discount {
+  background: #e6f0ff;
+  color: #3b6cff;
+}
+
+.badge.new {
+  background: #e8f8ec;
+  color: #2a9d55;
+}
+/* =========================
+   CATEGORY SHOWCASE
+========================= */
+
+.category-showcase {
+  margin-top: 80px;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 24px;
+}
+
+/* COMMON CARD */
+.showcase-card {
+  background: #f7f7f7;
+  border-radius: 22px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  width: 500px;
+}
+
+/* BIG LEFT CARD */
+.showcase-card.large {
+  min-height: 220px;
+}
+
+.showcase-right {
+  display: grid;
+  gap: 24px;
+}
+
+.showcase-text {
+  z-index: 2;
+}
+
+.item-count {
+  font-size: 12px;
+  color: #d6a24a;
+  font-weight: 600;
+}
+
+.showcase-text h3 {
+  margin: 8px 0;
+  font-size: 22px;
+}
+
+.showcase-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+
+.showcase-text li {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.showcase-text p {
+  font-size: 24px;
+  color: #555;
+}
+
+/* IMAGE */
+.showcase-image {
+  width: 25%;
+  height: 100%;
+  position: relative;
+}
+
+.showcase-card.large .showcase-image {
+  width: 900%;
+  
+}
+
+.product-img {
+  object-fit: contain;
+  height: 10px;
+}

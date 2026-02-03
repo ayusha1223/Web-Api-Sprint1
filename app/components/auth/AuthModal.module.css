@@ -1,0 +1,224 @@
+/* ===== Modal Layout ===== */
+
+.overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 9999;
+}
+
+.modal{
+  width: min(1080px, 100%);
+  background: #fff;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+}
+
+.close{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  z-index: 5;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  min-height: 560px;
+}
+
+.left{
+  padding: 34px 34px 28px;
+  background: #fff;
+}
+
+.brand{
+  font-size: 46px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  margin-bottom: 18px;
+}
+
+.brand span{
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.illustrationWrap{
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illustrationWrap img{
+  max-width: 520px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.right{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 44px;
+}
+
+.curveBg{
+  position: absolute;
+  inset: -160px -260px -160px -60px;
+  background: #fafafa;
+  border-radius: 999px;
+  z-index: 0;
+}
+
+.rightInner{
+  position: relative;
+  z-index: 1;
+  width: min(310px, 100%); /* smaller form width */
+}
+
+
+.title{
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.switchText{
+  margin-top: 16px;
+  font-size: 14px;
+  color: #6b6b6b;
+  text-align: center;
+}
+
+.switchLink{
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 700;
+  color: #e11d48;
+}
+
+/* ===== IMPORTANT: Style the LoginForm classes from here ===== */
+/* This fixes your “ugly tiny inputs” issue even if LoginForm has its own file */
+
+:global(.authForm){
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch; /* important */
+}
+
+
+:global(.authField){
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+:global(.authInput){
+  width: 100%;
+    box-sizing: border-box;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: 1px solid #d9d9d9;
+  outline: none;
+  font-size: 14px;
+  background: #fff;
+}
+
+:global(.authInput:focus){
+  border-color: #bdbdbd;
+}
+
+:global(.authInputError){
+  border-color: #ef4444;
+}
+
+:global(.authError){
+  color: #ef4444;
+  font-size: 12px;
+  margin: 0;
+}
+
+:global(.authPasswordWrap){
+  position: relative;
+}
+
+:global(.authPasswordInput){
+  padding-right: 52px;
+}
+
+:global(.authEyeBtn){
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #111;      /* black icon */
+  opacity: 1;       /* fully visible */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+:global(.authForgotLink){
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;   /* pushes text to right */
+  background: none;
+  border: none;
+  color: #8a8a8a;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 6px;
+  padding: 0;
+ 
+}
+
+:global(.authSubmitBtn){
+  margin-top: 8px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #ededed;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+:global(.authSubmitBtn:disabled){
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; }
+  .left{ display: none; }
+  .right{ padding: 28px 22px; }
+  .curveBg{ inset: -160px; }
+}

@@ -183,6 +183,94 @@ body {
   cursor: pointer;
 }
 
+/*Authmodel*/
+.authModalOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 9999;
+}
+
+.authModal{
+  width: min(980px, 100%);
+  background: #fff;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.authModalClose{
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 26px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.authModalGrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 520px;
+}
+
+.authModalLeft{
+  background: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.authModalLeft img{
+  max-width: 100%;
+  height: auto;
+}
+
+.authModolRight{
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.authModalTitle{
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+
+.authModalSwitch{
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.authModalLink{
+  background: none;
+  border: none;
+  color: #e11d48;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (max-width: 820px){
+  .authModalGrid{
+    grid-template-columns: 1fr;
+  }
+  .authModalLeft{
+    display: none;
+  }
+}
+
+
+
 
 
 
