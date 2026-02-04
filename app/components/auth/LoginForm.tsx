@@ -38,17 +38,18 @@ export default function LoginForm({
     localStorage.setItem("userId", user._id);
     localStorage.setItem("user", JSON.stringify(user));
 
-    onSuccess?.(); // ✅ CLOSE MODAL FIRST (THIS WAS MISSING)
+    onSuccess?.(); // close modal if used
 
     if (user.role === "admin") {
       router.push("/admin/users");
     } else {
-      router.push("/user/profile");
+      router.push("/dashboard"); // ✅ redirect to dashboard
     }
   } catch (error: any) {
     alert("Login failed");
   }
 };
+
 
 
   return (

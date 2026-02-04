@@ -1,5 +1,6 @@
 import "./dashboard.css";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Dashboard() {
   return (
@@ -23,7 +24,11 @@ export default function Dashboard() {
           <div className="topRight">
             <span className="icon">♡</span>
             <span className="icon">🛒</span>
-            <span className="icon">👤</span>
+
+            {/* ✅ PROFILE ICON → PROFILE PAGE */}
+            <Link href="/user/profile" className="icon">
+              👤
+            </Link>
           </div>
         </div>
 
@@ -55,150 +60,146 @@ export default function Dashboard() {
 
           {/* ===== MAIN CONTENT ===== */}
           <main>
-            <div className="banner">
-              <h1>BIG SALE!</h1>
-              <p>Trending fashion collections</p>
-              <button>Shop Now</button>
-            </div>
 
-            <div className="explore">
-              <h3>Explore popular categories</h3>
+            {/* ===== PROMO ROW ===== */}
+            <div className="promo-row">
 
-              <div className="product-grid">
-
-                {/* PRODUCT 1 (LCP IMAGE) */}
-                <div className="product-card">
-                  <span className="badge discount">-30%</span>
-                  <div className="product-image">
-                    <Image
-                      src="/images/kurtha9.jpg"
-                      alt="Household goods"
-                      fill
-                      sizes="(min-width: 1024px) 25vw, 50vw"
-                      priority
-                      loading="eager"
-                      className="product-img"
-                    />
-                  </div>
-                  <p></p>
+              <div className="banner banner-extended">
+                <div className="banner-text">
+                  <h1>BIG SALE!</h1>
+                  <p>Trending fashion collections</p>
+                  <button>Shop Now</button>
                 </div>
-
-                {/* PRODUCT 2 */}
-                <div className="product-card">
-                  <span className="badge new">New</span>
-                  <div className="product-image">
-                    <Image
-                      src="/images/kurtha10.jpg"
-                      alt="Game controllers"
-                      fill
-                      sizes="(min-width: 1024px) 25vw, 50vw"
-                      className="product-img"
-                    />
-                  </div>
-                  <p></p>
+                <div className="banner-image">
+                  <Image
+                    src="/images/banner.png"
+                    alt="Sale model"
+                    fill
+                    sizes="(min-width: 1024px) 40vw, 100vw"
+                    className="banner-img"
+                    priority
+                  />
                 </div>
+              </div>
 
-                {/* PRODUCT 3 */}
-                <div className="product-card">
-                  <div className="product-image">
-                    <Image
-                      src="/images/kurtha11.jpg"
-                      alt="Accessories"
-                      fill
-                      sizes="(min-width: 1024px) 25vw, 50vw"
-                      className="product-img"
-                    />
-                  </div>
-                  <p></p>
+              <div className="deal-card">
+                <div className="deal-text">
+                  <h4>Great Value Deals</h4>
+                  <p>Find items on sale<br />With 50–75%</p>
+                  <span className="deal-badge">75% off</span>
                 </div>
-
-                {/* PRODUCT 4 */}
-                <div className="product-card">
-                  <div className="product-image">
-                    <Image
-                      src="/images/kurtha12.jpg"
-                      alt="Furniture"
-                      fill
-                      sizes="(min-width: 1024px) 25vw, 50vw"
-                      className="product-img"
-                    />
-                  </div>
-                  <p></p>
+                <div className="deal-image">
+                  <Image
+                    src="/images/deal.png"
+                    alt="Deal product"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    className="deal-img"
+                  />
                 </div>
+              </div>
 
+              <div className="promo-box promo-discount">
+                <h4>Get up to <span>20%</span></h4>
+                <p>OFF Dresses</p>
+              </div>
+
+              <div className="promo-box promo-new">
+                <h4>New Arrivals</h4>
+                <button>Shop now</button>
               </div>
             </div>
-            {/* ===== CATEGORY SHOWCASE (ADDED) ===== */}
-<section className="category-showcase">
 
-  <div className="showcase-grid">
+            {/* ===== CHOOSE BY COLOR SECTION ===== */}
+            <section className="chooseByColorSection">
+              <h2 className="chooseTitle">Choose by color</h2>
 
-    {/* LEFT BIG CARD */}
-    <div className="showcase-card large">
-      <div className="showcase-text">
-        <span className="item-count">1500+ Items</span>
-        <h3>Pakistani Set</h3>
-        <ul>
-          <li>Blue</li>
-          <li>Pink</li>
-          <li>Teal</li>
-          <li>Red</li>
-        </ul>
-      </div>
+              <div className="kurthaCircleSection">
+                {[
+                  { img: "peach.png", label: "Peach" },
+                  { img: "maroon.png", label: "Maroon" },
+                  { img: "mustard.png", label: "Mustard" },
+                  { img: "green.png", label: "Green" },
+                  { img: "beige.png", label: "Beige" },
+                  { img: "black.png", label: "Black" },
+                ].map((item) => (
+                  <div className="kurthaCircle" key={item.label}>
+                    <div className="circle">
+                      <div className="circleImageWrapper">
+                        <img
+                          src={`/images/${item.img}`}
+                          alt={`${item.label} Kurtha`}
+                        />
+                      </div>
+                    </div>
+                    <p>{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
 
-      <div className="showcase-image">
-        <Image
-          src="/images/kurtha13.png"
-          alt="Chairs"
-          fill
-          className="product-img"
-        />
-      </div>
-    </div>
+          <section className="splitHero">
+  <div className="splitHeroLeft">
+    <img src="/images/hero-left.jpg" alt="Left" />
+  </div>
 
-    {/* RIGHT SIDE */}
-    <div className="showcase-right">
+  <div className="splitHeroRight">
+    <img src="/images/hero-right.jpg" alt="Right" />
+  </div>
 
-      <div className="showcase-card">
-        <div className="showcase-text">
-          <span className="item-count">750+ Items</span>
-          <h3>Cotton</h3>
-          <p>Pink • Grey • Red </p>
-        </div>
-
-        <div className="showcase-image">
-          <Image
-            src="/images/kurtha14.png"
-            alt="Sofa"
-            fill
-            className="product-img"
-          />
-        </div>
-      </div>
-
-      <div className="showcase-card">
-        <div className="showcase-text">
-          <span className="item-count">450+ Items</span>
-          <h3>Silk</h3>
-          <p>Pink • Blue • Green</p>
-        </div>
-
-        <div className="showcase-image">
-          <Image
-            src="/images/kurtha15.png"
-            alt="Lighting"
-            fill
-            className="product-img"
-          />
-        </div>
-      </div>
-
-    </div>
+  {/* OVERLAY — MUST BE INSIDE splitHero */}
+  <div className="heroText">
+    <h1>
+      MOVE.<br />
+      REST.<br />
+      RECOVER.
+    </h1>
+    <p>Discover the drop</p>
+    <button>Shop Now</button>
   </div>
 </section>
 
-          </main>
+            {/* ===== TITLE ===== */}
+            <div className="pickTitleWrapper">
+              <h2 className="pickTitle">Pick yours now</h2>
+            </div>
 
+            {/* ===== PRODUCT LIST GRID ===== */}
+            <section className="productListSection">
+              <div className="productGrid">
+                {[
+                  "kurtha9.jpg",
+                  "kurtha10.jpg",
+                  "kurtha11.jpg",
+                  "kurtha12.jpg",
+                  "kurtha13.png",
+                  "kurtha14.png",
+                  "kurtha15.png",
+                  "kurtha16.png",
+                  "kurtha17.png",
+                ].map((img, i) => (
+                  <div className="productCard" key={i}>
+                    <span className="wishlist">♡</span>
+
+                    <div className="productImg">
+                      <img src={`/images/${img}`} alt="Product" />
+                    </div>
+
+                    <div className="productInfo">
+                      <p className="brand">ADIDAS</p>
+                      <p className="name">Puaro Ms Running Shoes</p>
+
+                      <div className="priceRow">
+                        <span className="price">₹1,499</span>
+                        <span className="off">70% off</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+          </main>
         </div>
       </div>
     </div>
