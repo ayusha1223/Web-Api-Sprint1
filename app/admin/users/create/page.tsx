@@ -1,8 +1,9 @@
 "use client";
 
-import AdminGuard from "@/app/components/AdminGuard";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AdminGuard from "../../../components/AdminGuard";
 
 export default function CreateUserPage() {
   const router = useRouter();

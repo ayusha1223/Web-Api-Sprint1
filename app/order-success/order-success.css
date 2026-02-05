@@ -1,0 +1,98 @@
+.orderSuccessWrapper {
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.orderSuccessCard {
+  max-width: 900px;
+  width: 100%;
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
+}
+
+/* Header */
+.successHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.successIcon {
+  font-size: 36px;
+}
+
+.successHeader h2 {
+  margin: 12px 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.successHeader p {
+  color: #666;
+}
+
+/* Products */
+.orderProducts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.orderProduct {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.orderProduct img {
+  width: 110px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.productInfo h4 {
+  margin-bottom: 6px;
+}
+
+.price {
+  font-weight: 700;
+}
+
+/* Footer */
+.orderFooter {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.status {
+  font-weight: 600;
+  color: #1bbf5c;
+}
+
+.orderActions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.primaryBtn {
+  padding: 14px 28px;
+  border-radius: 14px;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondaryBtn {
+  padding: 14px 28px;
+  border-radius: 14px;
+  background: #f2f2f2;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}

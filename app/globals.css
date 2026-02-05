@@ -280,7 +280,7 @@ body {
    =========================== */
 
 .home-container {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -288,8 +288,8 @@ body {
 }
 
 .home-card {
-  width: 1000px;
-  height: 560px;
+  width: 900px;
+  height: 360px;
   background: white;
   display: flex;
   border-radius: 12px;
@@ -323,7 +323,7 @@ body {
 
 /* Start button */
 .home-btn {
-  width: 160px;
+  width: 130px;
   padding: 12px 0;
   background: black;
   color: white;

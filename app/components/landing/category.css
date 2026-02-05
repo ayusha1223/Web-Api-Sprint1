@@ -1,0 +1,23 @@
+/* ===== LUXURY TEXT BANNER ===== */
+
+.luxury-banner {
+  padding: 100px 20px;
+  background: #f7f4ef;
+  text-align: center;
+}
+
+.luxury-title {
+  font-size: 38px;
+  letter-spacing: 3px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 16px;
+}
+
+.luxury-text {
+  max-width: 650px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #555;
+}

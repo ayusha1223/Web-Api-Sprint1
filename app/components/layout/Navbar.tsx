@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import AuthModal from "@/app/components/auth/authmodal";
+import AuthModal from "../auth/AuthModal";
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

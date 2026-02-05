@@ -1,0 +1,140 @@
+/* ===== SUMMER LAUNCH BANNER ===== */
+
+.launch-banner {
+  padding: 80px 40px;
+  background: #f7f4ef;
+  overflow: visible;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.launch-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* LEFT TEXT */
+.launch-text {
+  max-width: 420px;
+}
+
+.launch-tag {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+}
+
+.launch-text h2 {
+  font-size: 36px;
+  margin: 14px 0;
+  letter-spacing: 2px;
+}
+
+.launch-text p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.launch-btn {
+  padding: 10px 28px;
+  border: 1px solid #000;
+  background: transparent;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.launch-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* RIGHT IMAGE BOX */
+.launch-image {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+
+/* MAIN FLOATING MODEL */
+.floating-img {
+  position: absolute;
+  bottom: 0;        /* body stays inside box */
+  right: -60px;
+  height: 240%;     /* big image, head goes out */
+  object-fit: contain;
+  z-index: 3;
+}
+
+/* SIDE IMAGES */
+.side-img {
+  position: absolute;
+  width: 140px;
+  height: 180px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  z-index: 1;
+}
+
+.side-img-inner {
+  object-fit: cover;
+}
+
+/* SIDE IMAGE POSITIONS */
+.side-img-top {
+  top: 30px;
+  right: 220px;
+}
+
+.side-img-bottom {
+  bottom: 30px;
+  right: 200px;
+}
+.image-card {
+  position: relative;       /* REQUIRED for next/image fill */
+  width: 160px;
+  height: 260px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+.image-row {
+  display: flex;
+  flex-direction: row !important; /* 🔥 FORCE SIDE BY SIDE */
+  gap: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .launch-container {
+    grid-template-columns: 1fr;
+  }
+
+  .launch-image {
+    height: 320px;
+  }
+
+  .side-img {
+    display: none;
+  }
+
+  .floating-img {
+    right: 0;
+    height: 140%;
+  }
+}

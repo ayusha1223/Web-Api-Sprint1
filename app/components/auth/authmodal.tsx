@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import LoginForm from "@/app/components/auth/LoginForm";
-import RegisterForm from "@/app/components/auth/RegisterForm";
-import ForgotPasswordForm from "@/app/components/auth/ForgotPasswordForm";
 import styles from "./AuthModal.module.css";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import RegisterForm from "./RegisterForm";
+import LoginForm from "./LoginForm";
 
 type Mode = "login" | "register" | "forgot-password";
 

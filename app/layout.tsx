@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar, Footer } from "./components/layout";
+import { ShopProvider } from "./context/ShopContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,14 +30,16 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* GLOBAL NAVBAR */}
-        <Navbar />
+        <ShopProvider>
+          {/* GLOBAL NAVBAR */}
+          <Navbar />
 
-        {/* PAGE CONTENT */}
-        <main>{children}</main>
+          {/* PAGE CONTENT */}
+          <main>{children}</main>
 
-        {/* GLOBAL FOOTER */}
-        <Footer />
+          {/* GLOBAL FOOTER */}
+          <Footer />
+        </ShopProvider>
       </body>
     </html>
   );

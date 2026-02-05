@@ -1,24 +1,39 @@
+import Image from "next/image";
+import "./OfferBanner.css";
+
 export default function SaleBanner() {
   return (
-    <section className="sale-banner">
-      {/* Video Background */}
-      <video
-        className="sale-video"
-        src="/videos/sale-bg.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+    <section className="launch-banner">
+      <div className="launch-container">
+        {/* LEFT CONTENT */}
+        <div className="launch-text">
+          <span className="launch-tag">JUST LAUNCHED</span>
+          <h2>SUMMER 2025</h2>
 
-      {/* Dark overlay */}
-      <div className="sale-overlay"></div>
+          <p>
+            Discover elegant silhouettes designed for warm days and timeless
+            style. Crafted with care, inspired by modern femininity.
+          </p>
 
-      {/* Content */}
-      <div className="sale-content">
-        <h2>Flat 30% OFF</h2>
-        <p>On selected kurthas this season</p>
-        <button className="sale-btn">Shop Offers</button>
+          <button className="launch-btn">SHOP NOW</button>
+        </div>
+
+        {/* RIGHT IMAGE */}
+        <div className="launch-image">
+  <div className="image-row">
+    <div className="image-card">
+      <Image src="/images/look-1.jpg" alt="Look 1" fill />
+    </div>
+
+    <div className="image-card">
+      <Image src="/images/look-2.jpg" alt="Look 2" fill />
+    </div>
+
+    <div className="image-card">
+      <Image src="/images/look-3.jpg" alt="Look 3" fill />
+    </div>
+  </div>
+</div>
       </div>
     </section>
   );

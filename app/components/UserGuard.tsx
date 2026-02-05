@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
+import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth } from "@/app/lib/auth";
+import { getAuth } from "../lib/auth";
+
 
 export default function UserGuard({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const router = useRouter();
 
@@ -17,7 +19,7 @@ export default function UserGuard({
     if (!auth) {
       router.push("/login");
     }
-  }, []);
+  }, [router]);
 
   return <>{children}</>;
 }

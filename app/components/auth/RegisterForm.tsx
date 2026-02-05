@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "@/app/schemas/registerSchema";
-import { registerAction } from "@/app/lib/actions/auth.action";
+import { registerSchema } from "../../schemas/registerSchema";
+import { registerAction } from "../../lib/actions/auth.action";
+
 
 export default function RegisterForm({
   onSuccess,

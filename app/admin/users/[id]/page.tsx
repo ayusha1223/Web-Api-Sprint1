@@ -1,8 +1,9 @@
 "use client";
 
-import AdminGuard from "@/app/components/AdminGuard";
+
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AdminGuard from "../../../components/AdminGuard";
 
 type User = {
   _id: string;
