@@ -788,6 +788,62 @@ html, body {
 .tryonArrow.right {
   right: -18px;
 }
+/* =========================
+   TRY ON SMOOTH ANIMATION
+========================= */
+
+/* wrapper for dress animation */
+.tryonDress {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.tryonDress.fade {
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+/* ACTION BUTTONS */
+.tryonActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.tryonAddCart,
+.tryonBuyNow {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 24px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tryonAddCart {
+  background: #000;
+  color: #fff;
+   position: relative;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.tryonBuyNow {
+  background: #ff6a00;
+  color: #fff;
+}
+/* FIX: Dress should not block arrow clicks */
+.tryonDress {
+  pointer-events: none;
+}
+
+/* Ensure arrows always clickable */
+.tryonArrow {
+  pointer-events: auto;
+  z-index: 10;
+}
+
+
 
 
 /* animation */
@@ -802,17 +858,3 @@ html, body {
   }
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

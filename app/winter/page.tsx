@@ -1,17 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import ProductCard from "../../../components/ProductCard";
-import { useShop } from "../../../context/ShopContext";
-import { products } from "../../../data/products";
 
-export default function CasualPage() {
+import { useRouter } from "next/navigation";
+import ProductCard from "../components/ProductCard";
+import { products } from "../data/products";
+import { useShop } from "../context/ShopContext";
+
+export default function WinterPage() {
   const { favorites, toggleFavorite, addToCart } = useShop();
   const router = useRouter();
 
   return (
     <>
-      <h2 className="pickTitle">Casual Wear</h2>
+      <h2 className="pickTitle">Winter Wear</h2>
 
       <div className="productGrid">
         {products.map((p) => (
@@ -19,7 +20,7 @@ export default function CasualPage() {
             key={p.id}
             image={p.image}
             title={p.title}
-            category="CASUAL"
+            category="WINTER"
             price={p.price}
             oldPrice={p.oldPrice}
             rating={p.rating}

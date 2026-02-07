@@ -4,13 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 
 const dresses = [
-  "/images/dresses/dress-1.png",
-  "/images/dresses/dress-2.png",
-  "/images/dresses/dress-3.png",
-  "/images/dresses/dress-4.png",
-  "/images/dresses/dress-5.png",
-  "/images/dresses/dress-6.png",
-  "/images/dresses/dress-7.png",
+  "/images/dresses/dress-8.png",
+  "/images/dresses/dress-10.png",
+  "/images/dresses/dress-11.png",
+  "/images/dresses/dress-12.png",
+  "/images/dresses/dress-13.png",
+  "/images/dresses/dress-14.png",
+  "/images/dresses/dress-15.png",
 ];
 
 export default function TryOnViewer() {

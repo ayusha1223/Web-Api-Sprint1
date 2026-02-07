@@ -8,6 +8,12 @@ type ProductCardProps = {
   oldPrice: number;
   rating: number;
   discount: string;
+
+  // 👇 ADD THESE
+  isFav: boolean;
+  onToggleFav: () => void;
+  onAddToCart: () => void;
+  onOpenDetails: () => void;
 };
 
 export default function ProductCard({
@@ -18,10 +24,14 @@ export default function ProductCard({
   oldPrice,
   rating,
   discount,
+  isFav,
+  onToggleFav,
+  onAddToCart,
+  onOpenDetails,
 }: ProductCardProps) {
   return (
     <div className="productCard">
-      <div className="imageWrapper">
+      <div className="imageWrapper" onClick={onOpenDetails}>
         <span className="discountBadge">{discount}</span>
         <Image
           src={image}
@@ -39,8 +49,16 @@ export default function ProductCard({
         <div className="rating">⭐ {rating}</div>
 
         <div className="priceRow">
-          <span className="price">${price}</span>
-          <span className="oldPrice">${oldPrice}</span>
+          <span className="price">₹{price}</span>
+          <span className="oldPrice">₹{oldPrice}</span>
+        </div>
+
+        <div className="cardActions">
+          <button onClick={onToggleFav}>
+            {isFav ? "❤️" : "♡"}
+          </button>
+
+          <button onClick={onAddToCart}>🛒</button>
         </div>
       </div>
     </div>

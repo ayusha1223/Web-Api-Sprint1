@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useShop } from "../context/ShopContext";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 
 
@@ -140,6 +141,7 @@ export default function Dashboard() {
   const [activeCategory, setActiveCategory] = useState<
     "home" | "casual" | "coord" | "party" | "winter" | "wedding" | "onepiece"
   >("home");
+  const router = useRouter();
 
   const [minPrice, setMinPrice] = useState<number | "">("");
   const [maxPrice, setMaxPrice] = useState<number | "">("");
@@ -147,10 +149,13 @@ export default function Dashboard() {
   const [showCartToast, setShowCartToast] = useState(false);
  const [showTryOn, setShowTryOn] = useState(false);
   const [tryOnIndex, setTryOnIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false);
+  
 
   const tryOnDresses = [
   {
     src: "/images/dresses/dress-8.png",
+    price: 1899,
     top: 123,      // where neckline should start
     width: 260,
     offsetX: 10,
@@ -158,42 +163,49 @@ export default function Dashboard() {
   },
   {
     src: "/images/dresses/dress-15.png",
+    price: 2199,
     top: -10,
     width: 350,
   },
   {
     src: "/images/dresses/dress-10.png",
+    price: 1899,
     top: 30,
     width: 265,
     offsetX: -8,
   },
   {
     src: "/images/dresses/dress-11.png",
+    price: 1899,
     top: 122,
     width: 245,
     offsetX: -3,
   },
   {
     src: "/images/dresses/dress-12.png",
+    price: 1899,
     top: 123,      // long dress → push down
     width: 245, 
     offsetX: -5,  // slimmer
   },
   {
     src: "/images/dresses/dress-13.png",
+    price: 1899,
     top: 100,
     width: 200,
   },
   {
     src: "/images/dresses/dress-14.png",
+    price: 1899,
     top: 116,
     width: 290,
     offsetX: -5,
   },
 ];
-
-
-
+  const handleTryOnAddToCart = () => {
+  console.log("TRY ON ADD:", tryOnDresses[tryOnIndex].src);
+  addToCart(tryOnDresses[tryOnIndex].src);
+};
   return (
     <div className="dashboard-container">
       <div className="dashboard-card">
@@ -459,7 +471,8 @@ export default function Dashboard() {
 
         {/* DRESS IMAGE (PER-IMAGE ADJUSTMENT) */}
   {/* DRESS IMAGE (WIDTH + TOP ANCHOR FIX) */}
- <div
+<div
+  className={`tryonDress ${isFading ? "fade" : ""}`}
   style={{
     position: "absolute",
     top: `${tryOnDresses[tryOnIndex].top}px`,
@@ -471,27 +484,55 @@ export default function Dashboard() {
 >
 
     <Image
-      src={tryOnDresses[tryOnIndex].src}
-      alt="Dress"
-      width={tryOnDresses[tryOnIndex].width}
-      height={500}
-      style={{
-        objectFit: "contain",
-        height: "auto",
-      }}
-    />
+  key={tryOnIndex}   // 🔥 THIS IS THE MAGIC
+  src={tryOnDresses[tryOnIndex].src}
+  alt="Dress"
+  width={tryOnDresses[tryOnIndex].width}
+  height={500}
+  style={{
+    objectFit: "contain",
+    height: "auto",
+  }}
+/>
+
   </div>
+  <div className="tryonActions">
+  <button
+  className="tryonAddCart"
+  onClick={() => {
+    handleTryOnAddToCart();
+    setShowCartToast(true);
+  }}
+>
+  🛒 Add to Cart
+</button>
+  <button
+    className="tryonBuyNow"
+    onClick={() => {
+      addToCart(tryOnDresses[tryOnIndex].src);
+      window.location.href = "/checkout";
+    }}
+  >
+    Buy Now
+  </button>
+</div>
 
   {/* LEFT ARROW */}
   <button
     className="tryonArrow left"
-    onClick={() =>
-      setTryOnIndex(
-        (prev) =>
-          (prev - 1 + tryOnDresses.length) %
-          tryOnDresses.length
-      )
-    }
+    onClick={() => {
+  setIsFading(true);
+  setTimeout(() => {
+    setTryOnIndex((prev) => {
+      const next =
+        (prev - 1 + tryOnDresses.length) % tryOnDresses.length;
+      return tryOnDresses[next]?.src ? next : prev;
+    });
+    setIsFading(false);
+  }, 200);
+}}
+
+
   >
     ◀
   </button>
@@ -499,11 +540,18 @@ export default function Dashboard() {
   {/* RIGHT ARROW */}
   <button
     className="tryonArrow right"
-    onClick={() =>
-      setTryOnIndex(
-        (prev) => (prev + 1) % tryOnDresses.length
-      )
-    }
+    onClick={() => {
+  setIsFading(true);
+  setTimeout(() => {
+    setTryOnIndex((prev) => {
+      const next = (prev + 1) % tryOnDresses.length;
+      return tryOnDresses[next]?.src ? next : prev;
+    });
+    setIsFading(false);
+  }, 200);
+}}
+
+
   >
     ▶
   </button>
