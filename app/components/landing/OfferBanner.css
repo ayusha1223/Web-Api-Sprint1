@@ -7,6 +7,7 @@
   background: #ffffff;
   border-radius: 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  height: 350px;
 }
 
 .launch-container {
@@ -21,6 +22,7 @@
 /* LEFT TEXT */
 .launch-text {
   max-width: 420px;
+  margin-bottom: 200px;
 }
 
 .launch-tag {
@@ -62,9 +64,9 @@
   background: none;
   box-shadow: none;
   border-radius: 0;
-
   display: flex;
   justify-content: center;
+  overflow: visible;
 }
 
 
@@ -72,22 +74,24 @@
 .floating-img {
   position: absolute;
   bottom: 0;        /* body stays inside box */
-  right: -60px;
-  height: 240%;     /* big image, head goes out */
+  right: -90px;
+  height: 340%;     /* big image, head goes out */
   object-fit: contain;
   z-index: 3;
+  background: none;
 }
 
 /* SIDE IMAGES */
 .side-img {
   position: absolute;
-  width: 140px;
+  width: 180px;
   height: 180px;
   border-radius: 18px;
   overflow: hidden;
-  background: #fff;
+
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
   z-index: 1;
+
 }
 
 .side-img-inner {
@@ -96,7 +100,7 @@
 
 /* SIDE IMAGE POSITIONS */
 .side-img-top {
-  top: 30px;
+  top: 40px;
   right: 220px;
 }
 
@@ -105,19 +109,22 @@
   right: 200px;
 }
 .image-card {
-  position: relative;       /* REQUIRED for next/image fill */
-  width: 160px;
-  height: 260px;
-  border-radius: 18px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  position: relative;
+  width: 400px;        /* 🔥 wider */
+  height: 700px;       /* 🔥 taller */
+  overflow: visible;   /* allow floating */
+    transform: translateY(-150px);
 }
+
 .image-row {
   display: flex;
-  flex-direction: row !important; /* 🔥 FORCE SIDE BY SIDE */
-  gap: 20px;
+  gap: 100px;          /* 🔥 real spacing */
+  align-items: flex-end;
+  transform: translateY(-150px);
+  margin-left: 290px;
+  
 }
+
 
 /* RESPONSIVE */
 @media (max-width: 900px) {

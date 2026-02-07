@@ -291,6 +291,7 @@ html, body {
 .product-img {
   object-fit: contain;
   filter: drop-shadow(0 16px 24px rgba(0,0,0,0.12));
+  position: relative;
 }
 
 /* =========================
@@ -392,63 +393,6 @@ html, body {
   width: 90%;
 }
 /* ===== KURTHA IMAGE CIRCLES ===== */
-.kurthaCircleSection {
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-  margin: 50px 0;
-}
-
-.kurthaCircle {
-  text-align: center;
-}
-
-.circle {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: #f6f6f6;
-  border: 1px solid #e2e2e2;
-  position: relative;
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.circleImageWrapper {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 180px;   /* taller than circle */
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-}
-
-
-
-.circle:hover {
-  transform: scale(1.08);
-}
-
-.imageCircle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top; /* 🔥 IMAGE FITS PERFECTLY */
-  border-radius: 50%;
-}
-
-.kurthaCircle p {
-  margin-top: 10px;
-  font-size: 14px;
-}
-/* ===== CHOOSE BY COLOR ===== */
-.chooseByColorSection {
-  margin-top: 60px;     /* pushes section down */
-  margin-bottom: 70px;
-  text-align: center;
-}
 
 .chooseTitle {
   font-size: 26px;
@@ -688,32 +632,179 @@ html, body {
   margin-top: 8px;
 }
 
+.productImg {
+  position: relative;
+}
+
+/* CART ICON BUTTON */
 .cartIconBtn {
-  border: none;
-  background: #000;
-  color: #fff;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  cursor: pointer;
-  font-size: 18px;
+
+  border: none;
+  background: #464444;
+  color: #212121;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease, background 0.2s ease;
-  margin-bottom: 10px;
-  margin-left: auto; /* ✅ pushes it to LEFT */
+
+  font-size: 18px;
+  cursor: pointer;
+
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-
 .cartIconBtn:hover {
-  background: #222;
-  transform: scale(1.08);
+  background: #3549e5;
+  transform: scale(1.1);
 }
 
 .cartIconBtn:active {
   transform: scale(0.95);
 }
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 👈 THIS creates space */
+}
+
+.price {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.off {
+  color: #e53935;
+  font-size: 14px;
+}
+
+/* ❤️ FAVORITE ICON */
+.wishlistIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  background: #fff;
+  color: #e53935;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;   /* 👈 BIGGER HEART */
+  cursor: pointer;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 3;
+
+  transition: transform 0.2s ease;
+}
+
+.wishlistIcon:hover {
+  transform: scale(1.15);
+}
+/* =========================
+   CART TOAST MESSAGE
+========================= */
+.cartToast {
+  position: fixed;
+  top: 80px;
+  right: 50%;
+  transform: translateX(50%);
+
+  background: #f5f1f1;
+  color: #0e0e0e;
+
+  padding: 14px 26px;
+  border-radius: 30px;
+
+  font-size: 24px;
+  font-weight: 500;
+
+  z-index: 9999;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+
+  animation: slideDown 0.3s ease;
+}
+
+/*try on*/
+
+.tryonOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.tryonModal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 360px;
+  max-width: 90%;
+  position: relative;
+}
+
+.closeTryon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.tryonArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+}
+
+.tryonArrow.left {
+  left: -18px;
+}
+
+.tryonArrow.right {
+  right: -18px;
+}
+
+
+/* animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(50%, 0);
+  }
+  
+}
+
+
+
 
 
 

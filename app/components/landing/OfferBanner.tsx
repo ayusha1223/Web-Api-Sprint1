@@ -22,18 +22,16 @@ export default function SaleBanner() {
         <div className="launch-image">
   <div className="image-row">
     <div className="image-card">
-      <Image src="/images/look-1.jpg" alt="Look 1" fill />
-    </div>
-
-    <div className="image-card">
-      <Image src="/images/look-2.jpg" alt="Look 2" fill />
-    </div>
-
-    <div className="image-card">
-      <Image src="/images/look-3.jpg" alt="Look 3" fill />
+      <Image
+        src="/images/model.png"
+        alt="Model"
+        fill
+        className="launch-img"
+      />
     </div>
   </div>
 </div>
+
       </div>
     </section>
   );

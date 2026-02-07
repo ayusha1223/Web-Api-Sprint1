@@ -545,28 +545,28 @@ body {
 /*trending section*/
 
 .trending {
-  margin-top: 0 !important;
-  padding-top: 0;
+  width: 100%;
+  padding: 0 80px;          /* ✅ LEFT + RIGHT GAP */
+  box-sizing: border-box;
 }
-
-
+.trending-row {
+  display: flex;
+  gap: 24px;              /* space BETWEEN cards */
+  padding: 0 80px;        /* 🔥 equal left & right gap */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
 
 .trending-slider {
   display: flex;
-  gap: 20px;
+  gap: 40px;                /* space BETWEEN cards */
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 0 40px 10px;
+  padding-bottom: 10px;
 }
 .trending-title {
-  text-align: center;              /* 👈 center */
-  font-size: 2.6rem;               /* 👈 bigger */
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  text-align: center;
   margin-bottom: 30px;
-  position: relative;
-  font-family: "Playfair Display", serif; /* fancy font */
 }
 
 /* elegant underline */
@@ -591,6 +591,7 @@ body {
   min-width: 280px;
   scroll-snap-align: start;
   text-decoration: none;
+  border-top-left-radius: 20px;
 }
 
 /* Image box */
@@ -752,7 +753,7 @@ body {
   font-size: 1,15rem;
   align-items: center;
   padding: 18px 80px;
-  background: white;
+  background: #d4d2d2;
   border-bottom: 1px solid #eee;
 }
 .brand-logo {
@@ -814,22 +815,24 @@ body {
   text-decoration: none;
   color: black;
   font-weight: 600;
+  border-radius: 20px;
 }
 
 /* CART BUTTON */
 .cart-btn {
   font-size: 26px;
   padding: 10px 22px;
-  background: black;
+  background: rgb(101, 101, 230);
   color: white;
   text-decoration: none;
   font-weight: 600;
+  border-radius: 20px;
 }
 
 
 .footer {
-  background: #111;
-  color: white;
+   background: #d4d2d2;
+  color: rgb(6, 6, 6);
   padding: 60px 80px 30px;
 }
 
@@ -842,6 +845,7 @@ body {
 .footer h3,
 .footer h4 {
   margin-bottom: 12px;
+  font-size: 20;
 }
 
 .footer ul {
@@ -859,7 +863,7 @@ body {
   padding-top: 20px;
   text-align: center;
   font-size: 13px;
-  color: #aaa;
+  color: #0a0909;
 }
 
 
