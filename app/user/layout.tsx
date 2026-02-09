@@ -1,6 +1,7 @@
 "use client";
 
-import UserGuard from "@/app/components/UserGuard";
+import UserGuard from "../components/UserGuard";
+
 
 export default function UserLayout({
   children,

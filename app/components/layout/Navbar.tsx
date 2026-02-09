@@ -2,17 +2,21 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation"; // ✅ added
 import AuthModal from "../auth/AuthModal";
-
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-const [mode, setMode] = useState<"login" | "register" | "forgot-password">("login");
+  const [mode, setMode] = useState<
+    "login" | "register" | "forgot-password"
+  >("login");
 
-useEffect(() => {
+  const pathname = usePathname(); // ✅ added
+  const isDashboard = pathname.startsWith("/dashboard"); // ✅ added
+
+  useEffect(() => {
     console.log("MODAL OPEN:", open);
   }, [open]);
-
 
   return (
     <>
@@ -26,15 +30,39 @@ useEffect(() => {
 
         {/* CENTER: NAV LINKS */}
         <ul className="nav-links">
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/about">About Us</Link></li>
-          <li><Link href="/contact">Contact Us</Link></li>
-          <li className="sale-link"><Link href="/sale">Sale</Link></li>
+          <li>
+            <Link href={isDashboard ? "/dashboard" : "/"}>
+              Home
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href={isDashboard ? "/dashboard/about" : "/about"}
+            >
+              About Us
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href={isDashboard ? "/dashboard/contact" : "/contact"}
+            >
+              Contact Us
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href={isDashboard ? "/dashboard/sale" : "/sale"}
+            >
+              Sale
+            </Link>
+          </li>
         </ul>
 
         {/* RIGHT: ACTION BUTTONS */}
         <div className="nav-actions">
-          {/* Instead of going to /login, open modal */}
           <button
             className="login-btn"
             onClick={() => {
@@ -46,7 +74,9 @@ useEffect(() => {
             Login
           </button>
 
-          <Link href="/cart" className="cart-btn">Cart</Link>
+          <Link href="/cart" className="cart-btn">
+            Cart
+          </Link>
         </div>
       </nav>
 

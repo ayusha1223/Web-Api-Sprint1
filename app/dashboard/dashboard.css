@@ -21,11 +21,78 @@ html, body {
 .dashboard-card {
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
+   background: var(--bg-card);
   border-radius: 24px;
   padding: 30px;
   box-sizing: border-box;
+  overflow: visible;
 }
+/* =========================================
+   🔥 PRODUCT SCALE FIX (FINAL)
+   DOES NOT REMOVE ANY EXISTING CODE
+========================================= */
+
+/* 1️⃣ Give more room to product area */
+.dashboard-layout {
+  grid-template-columns: 260px 1fr !important; /* sidebar slightly smaller */
+  gap: 40px !important;
+}
+
+/* 2️⃣ Make product grid use space better */
+.productGrid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  gap: 32px !important;
+}
+
+/* 3️⃣ Bigger product card */
+.productCard {
+  padding: 22px !important;
+  border-radius: 18px !important;
+}
+
+/* 4️⃣ Bigger image area */
+.productImg {
+  height: 520px !important;   /* ⬆ taller */
+}
+
+/* 5️⃣ Image fills card more */
+.productImg img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+/* 6️⃣ Bigger typography */
+.productInfo .name {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+.productInfo .brand {
+  font-size: 13px !important;
+}
+
+.price {
+  font-size: 18px !important;
+}
+
+.off {
+  font-size: 15px !important;
+}
+
+/* 7️⃣ Bigger action icons */
+.wishlistIcon {
+  width: 46px !important;
+  height: 46px !important;
+  font-size: 24px !important;
+}
+
+.cartIconBtn {
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 20px !important;
+}
+
 
 /* =========================
    TOP BAR
@@ -65,7 +132,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #f3f3f3;
+  background: var(--bg-muted);
   padding: 14px 22px;
   border-radius: 32px;
   width: 800px;
@@ -317,50 +384,6 @@ html, body {
   background: #e8f8ec;
   color: #2a9d55;
 }
-
-/* =========================
-   CATEGORY SHOWCASE
-========================= */
-.category-showcase {
-  margin-top: 80px;
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: 2fr 1.2fr;
-  gap: 24px;
-}
-
-.showcase-card {
-  background: #f7f7f7;
-  border-radius: 22px;
-  padding: 24px;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-  width: 500px;
-}
-
-.showcase-card.large {
-  min-height: 220px;
-}
-
-.showcase-right {
-  display: grid;
-  gap: 24px;
-}
-
-.showcase-text {
-  z-index: 2;
-}
-
-.item-count {
-  font-size: 12px;
-  color: #d6a24a;
-  font-weight: 600;
-}
-
 .showcase-text h3 {
   margin: 8px 0;
   font-size: 22px;
@@ -457,7 +480,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafafa; /* subtle contrast */
+  background: var(--bg-soft); /* subtle contrast */
   border-radius: 12px;
   margin-bottom: 14px;
 }
@@ -842,7 +865,175 @@ html, body {
   pointer-events: auto;
   z-index: 10;
 }
+.colorFilter {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 10px;
+}
 
+.colorDot {
+  display: inline-flex !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  border-radius: 50% !important;
+  background-clip: padding-box;
+  cursor: pointer;
+  border: 1.5px solid #ccc;
+}
+.colorRow.active .colorDot {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.colorName {
+  text-transform: capitalize;
+}
+
+.colorDot.active {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+.colorFilterVertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.colorRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #222;
+}
+
+.colorRow:hover {
+  opacity: 0.8;
+}
+
+.colorDot:hover {
+  transform: scale(1.15);
+}
+/* ================= PRICE SLIDER ================= */
+
+.priceSliderBox {
+  margin-top: 12px;
+}
+
+.priceSlider {
+  width: 100%;
+  accent-color: #6b4fe6;
+  cursor: pointer;
+}
+
+.priceRangeText {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ================= COLOR FILTER ================= */
+
+.colorFilterVertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.colorRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.colorDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.colorRow.active .colorDot {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+.profileWrapper {
+  position: relative;
+}
+
+.profileDropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  width: 220px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+  z-index: 100;
+  animation: dropdownFade 0.2s ease;
+}
+.dark .profileDropdown {
+  background: #1c1c1c;
+}
+
+
+/* smooth pop */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.menuItem span {
+  font-weight: 500;
+}
+
+.menuItem:hover {
+  background: rgba(0,0,0,0.06);
+  transform: translateX(2px);
+}
+
+.menuDivider {
+  height: 1px;
+  background: rgba(0,0,0,0.1);
+  margin: 10px 0;
+}
+
+.menuItem.logout {
+  color: #e53935;
+}
+
+.menuItem.logout:hover {
+  background: rgba(229,57,53,0.12);
+}
 
 
 

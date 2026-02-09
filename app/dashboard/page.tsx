@@ -5,224 +5,105 @@ import Image from "next/image";
 import Link from "next/link";
 import { useShop } from "../context/ShopContext";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-
-
-const casualWearProducts = [
-  {
-    id: 1,
-    image: "/images/casual-wear/casual1.png",
-    name: "Floral Casual Kurti",
-    price: 1399,
-  },
-  {
-    id: 2,
-    image: "/images/casual-wear/casual2.png",
-    name: "Printed Cotton Kurti",
-    price: 1499,
-  },
-  {
-    id: 3,
-    image: "/images/casual-wear/casual3.png",
-    name: "Straight Fit Kurti",
-    price: 1399,
-  },
-  {
-    id: 4,
-    image: "/images/casual-wear/casual4.png",
-    name: "Daily Wear Kurti",
-    price: 1299,
-  },
-  {
-    id: 5,
-    image: "/images/casual-wear/casual5.png",
-    name: "Casual Kurti",
-    price: 1599,
-  },
-   {
-    id: 6,
-    image: "/images/casual-wear/casual6.png",
-    name: "Tee and Pants",
-    price: 1699,
-  },
-   {
-    id: 7,
-    image: "/images/casual-wear/casual7.png",
-    name: "Straight Kurthi",
-    price: 1299,
-  },
-   {
-    id: 8,
-    image: "/images/casual-wear/casual8.png",
-    name: "Red Kurhit",
-    price: 1099,
-  },
-   {
-    id: 9,
-    image: "/images/casual-wear/casual9.png",
-    name: "Straight Kurti",
-    price: 1499,
-  },
-   {
-    id: 10,
-    image: "/images/casual-wear/casual10.png",
-    name: "Yellow Straight Kurthi",
-    price: 1299,
-  },
-   {
-    id: 11,
-    image: "/images/casual-wear/casual11.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 12,
-    image: "/images/casual-wear/casual12.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 13,
-    image: "/images/casual-wear/casual3.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 14,
-    image: "/images/casual-wear/casual14.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 15,
-    image: "/images/casual-wear/casual15.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 16,
-    image: "/images/casual-wear/casual16.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 17,
-    image: "/images/casual-wear/casual17.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 18,
-    image: "/images/casual-wear/casual18.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 19,
-    image: "/images/casual-wear/casual19.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-   {
-    id: 20,
-    image: "/images/casual-wear/casual20.png",
-    name: "Casual Ethnic Kurti",
-    price: 1699,
-  },
-  
-];
-
-
 
 export default function Dashboard() {
   const { favorites, toggleFavorite, addToCart } = useShop();
 
-  const [activeCategory, setActiveCategory] = useState<
-    "home" | "casual" | "coord" | "party" | "winter" | "wedding" | "onepiece"
-  >("home");
-  const router = useRouter();
 
-  const [minPrice, setMinPrice] = useState<number | "">("");
-  const [maxPrice, setMaxPrice] = useState<number | "">("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [showCartToast, setShowCartToast] = useState(false);
- const [showTryOn, setShowTryOn] = useState(false);
+  const [showTryOn, setShowTryOn] = useState(false);
   const [tryOnIndex, setTryOnIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
-  
+  const [minPrice, setMinPrice] = useState<number | "">("");
+const [maxPrice, setMaxPrice] = useState<number | "">("");
+const [searchQuery, setSearchQuery] = useState("");
+const [showProfileMenu, setShowProfileMenu] = useState(false);
+const [darkMode, setDarkMode] = useState(false);
+
+// Load saved theme
+useState(() => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark") {
+      document.body.classList.add("dark");
+      setDarkMode(true);
+    }
+  }
+});
+
+// Toggle dark mode
+const toggleDarkMode = () => {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  setDarkMode(isDark);
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+};
 
   const tryOnDresses = [
-  {
-    src: "/images/dresses/dress-8.png",
-    price: 1899,
-    top: 123,      // where neckline should start
-    width: 260,
-    offsetX: 10,
-       // controls slimness
-  },
-  {
-    src: "/images/dresses/dress-15.png",
-    price: 2199,
-    top: -10,
-    width: 350,
-  },
-  {
-    src: "/images/dresses/dress-10.png",
-    price: 1899,
-    top: 30,
-    width: 265,
-    offsetX: -8,
-  },
-  {
-    src: "/images/dresses/dress-11.png",
-    price: 1899,
-    top: 122,
-    width: 245,
-    offsetX: -3,
-  },
-  {
-    src: "/images/dresses/dress-12.png",
-    price: 1899,
-    top: 123,      // long dress → push down
-    width: 245, 
-    offsetX: -5,  // slimmer
-  },
-  {
-    src: "/images/dresses/dress-13.png",
-    price: 1899,
-    top: 100,
-    width: 200,
-  },
-  {
-    src: "/images/dresses/dress-14.png",
-    price: 1899,
-    top: 116,
-    width: 290,
-    offsetX: -5,
-  },
-];
-  const handleTryOnAddToCart = () => {
-  console.log("TRY ON ADD:", tryOnDresses[tryOnIndex].src);
-  addToCart(tryOnDresses[tryOnIndex].src);
-};
+    {
+      src: "/images/dresses/dress-8.png",
+      price: 1899,
+      top: 123,
+      width: 260,
+      offsetX: 10,
+    },
+    {
+      src: "/images/dresses/dress-15.png",
+      price: 2199,
+      top: -10,
+      width: 350,
+    },
+    {
+      src: "/images/dresses/dress-10.png",
+      price: 1899,
+      top: 30,
+      width: 265,
+      offsetX: -8,
+    },
+    {
+      src: "/images/dresses/dress-11.png",
+      price: 1899,
+      top: 122,
+      width: 245,
+      offsetX: -3,
+    },
+    {
+      src: "/images/dresses/dress-12.png",
+      price: 1899,
+      top: 123,
+      width: 245,
+      offsetX: -5,
+    },
+    {
+      src: "/images/dresses/dress-13.png",
+      price: 1899,
+      top: 100,
+      width: 200,
+    },
+    {
+      src: "/images/dresses/dress-14.png",
+      price: 1899,
+      top: 116,
+      width: 290,
+      offsetX: -5,
+    },
+  ];
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-card">
-
-        {/* ===== TOP BAR ===== */}
+        {/* ================= TOP BAR ================= */}
         <div className="topBar">
           <div className="topSearch">
             <div className="searchWrapper">
               <span className="searchIcon">🔍</span>
               <input
-  type="text"
-  placeholder="Search for dresses, co-ord sets, party wear..."
-  className="searchInput"
-  value={searchQuery}
-  onChange={(e) => setSearchQuery(e.target.value)}
-/>
-
+                type="text"
+                placeholder="Search for dresses, co-ord sets, party wear..."
+                className="searchInput"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
               <span className="filterIcon">⚙️</span>
             </div>
           </div>
@@ -230,397 +111,354 @@ export default function Dashboard() {
           <div className="topRight">
             <span
               className="icon"
-              style={{ cursor: "pointer" }}
               onClick={() => setShowTryOn(true)}
               title="Try On"
+              style={{ cursor: "pointer" }}
             >
               👗
             </span>
-            <Link href="/favorites" className="icon">♡</Link>
-            <Link href="/cart" className="icon">🛒</Link>
-            <Link href="/user/profile" className="icon">👤</Link>
+            <Link href="/favorites" className="icon">
+              ♡
+            </Link>
+            <Link href="/cart" className="icon">
+              🛒
+            </Link>
+            <div className="profileWrapper">
+  <span
+    className="icon"
+    onClick={() => setShowProfileMenu(!showProfileMenu)}
+    style={{ cursor: "pointer" }}
+  >
+    👤
+  </span>
+
+  {showProfileMenu && (
+  <div className="profileDropdown">
+    <Link
+      href="/user/profile"
+      className="menuItem"
+      onClick={() => setShowProfileMenu(false)}
+    >
+      ✏️ <span>Edit Profile</span>
+    </Link>
+
+    <button className="menuItem">
+      ⚙️ <span>Settings</span>
+    </button>
+
+    <button className="menuItem" onClick={toggleDarkMode}>
+      🌙 <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
+    </button>
+
+    <div className="menuDivider" />
+
+    <button className="menuItem logout">
+      🚪 <span>Logout</span>
+    </button>
+  </div>
+)}
+</div>
+
           </div>
         </div>
 
         <div className="dashboard-layout">
-
-          {/* ===== SIDEBAR ===== */}
+          {/* ================= SIDEBAR ================= */}
           <aside className="sidebar">
-            <div
-              className="sidebar-logo"
-              onClick={() => setActiveCategory("home")}
-              style={{ cursor: "pointer" }}
-            >
+            <div className="sidebar-logo">
               <Image
                 src="/images/logo.png"
-                alt="Naayu Attire Logo"
+                alt="Naayu Attire"
                 width={130}
                 height={50}
                 priority
               />
+
             </div>
 
-            <h3>Categories</h3>
-            <ul>
-              <li className={activeCategory === "home" ? "active" : ""} onClick={() => setActiveCategory("home")}>Home</li>
-              <li className={activeCategory === "casual" ? "active" : ""} onClick={() => setActiveCategory("casual")}>Casual Wear</li>
-              <li className={activeCategory === "coord" ? "active" : ""} onClick={() => setActiveCategory("coord")}>Co-ord Set</li>
-              <li className={activeCategory === "party" ? "active" : ""} onClick={() => setActiveCategory("party")}>Party Wear</li>
-              <li className={activeCategory === "winter" ? "active" : ""} onClick={() => setActiveCategory("winter")}>Winter Wear</li>
-              <li className={activeCategory === "wedding" ? "active" : ""} onClick={() => setActiveCategory("wedding")}>Wedding Wear</li>
-              <li className={activeCategory === "onepiece" ? "active" : ""} onClick={() => setActiveCategory("onepiece")}>1 Piece Set</li>
-            </ul>
+           <h3>Categories</h3>
+<ul>
+  <li>
+    <Link href="/dashboard">Home</Link>
+  </li>
 
-            <h3 style={{ marginTop: "24px" }}>Filter by Price</h3>
-            <div className="priceFilter">
-              <input
-                type="number"
-                placeholder="Min"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value === "" ? "" : Number(e.target.value))}
-              />
-              <input
-                type="number"
-                placeholder="Max"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))}
-              />
-            </div>
-          </aside>
+  <li>
+    <Link href="/dashboard/category/casual">Casual Wear</Link>
+  </li>
 
-          {/* ===== MAIN CONTENT ===== */}
+  <li>
+    <Link href="/dashboard/category/coord">Co-ord Set</Link>
+  </li>
+
+  <li>
+    <Link href="/dashboard/category/party">Party Wear</Link>
+  </li>
+
+  <li>
+    <Link href="/dashboard/category/winter">Winter Wear</Link>
+  </li>
+
+  <li>
+    <Link href="/dashboard/category/wedding">Wedding Wear</Link>
+  </li>
+
+  <li>
+    <Link href="/dashboard/category/onepiece">1 Piece Set</Link>
+  </li>
+</ul>
+
+
+          <h3 style={{ marginTop: "24px" }}>Filter by Price</h3>
+  <div className="priceFilter">
+    <input
+      type="number"
+      placeholder="Min"
+      value={minPrice}
+      onChange={(e) =>
+        setMinPrice(e.target.value === "" ? "" : Number(e.target.value))
+      }
+    />
+    <input
+      type="number"
+      placeholder="Max"
+      value={maxPrice}
+      onChange={(e) =>
+        setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))
+      }
+    />
+  </div>
+</aside>
+
+          {/* ================= MAIN ================= */}
           <main>
-
-            {/* ================= HOME ================= */}
-            {activeCategory === "home" && (
-              <>
-                {/* PROMO ROW */}
-                <div className="promo-row">
-                  <div className="banner banner-extended">
-                    <div className="banner-text">
-                      <h1>BIG SALE!</h1>
-                      <p>Trending fashion collections</p>
-                      <button>Shop Now</button>
-                    </div>
-                    <div className="banner-image">
-                      <Image src="/images/banner.png" alt="Sale model" fill className="banner-img" priority />
-                    </div>
-                  </div>
-
-                  <div className="deal-card">
-                    <div className="deal-text">
-                      <h4>Great Value Deals</h4>
-                      <p>Find items on sale<br />With 50–75%</p>
-                      <span className="deal-badge">75% off</span>
-                    </div>
-                    <div className="deal-image">
-                      <Image src="/images/deal.png" alt="Deal product" fill className="deal-img" />
-                    </div>
-                  </div>
-
-                  <div className="promo-box promo-discount">
-                    <h4>Get up to <span>20%</span></h4>
-                    <p>OFF Dresses</p>
-                  </div>
-
-                  <div className="promo-box promo-new">
-                    <h4>New Arrivals</h4>
-                    <button>Shop now</button>
-                  </div>
-                </div>
-
-                {/* SPLIT HERO */}
-                <section className="splitHero">
-                  <div className="splitHeroLeft"><img src="/images/hero-left.jpg" /></div>
-                  <div className="splitHeroRight"><img src="/images/hero-right.jpg" /></div>
-                  <div className="heroText">
-                    <h1>MOVE.<br />REST.<br />RECOVER.</h1>
-                    <p>Discover the drop</p>
+            {/* ===== PROMO ROW ===== */}
+            <div className="promo-row">
+              <div className="banner banner-extended">
+                <div className="banner-text">
+                  <h1>BIG SALE!</h1>
+                  <p>Trending fashion collections</p>
+                  <Link href="/dashboard/category/casual">
                     <button>Shop Now</button>
-                  </div>
-                </section>
+                  </Link>
+                </div>
+                <div className="banner-image">
+                  <Image src="/images/banner.png" alt="Sale" fill priority />
+                </div>
+              </div>
 
-                {/* PICK YOURS NOW */}
-                <h2 className="pickTitle">Pick yours now</h2>
-                <section className="productListSection">
-                  <div className="productGrid">
-                    {Array.from({ length: 24 })
-  .map((_, i) => {
-  const img = `/images/kurtha${(i % 6) + 1}.jpg`;
-  const price = 1000 + i * 50;
+              <div className="deal-card">
+                <div className="deal-text">
+                  <h4>Great Value Deals</h4>
+                  <p>50–75% OFF</p>
+                  <span className="deal-badge">75%</span>
+                </div>
+                <div className="deal-image">
+                  <Image src="/images/deal.png" alt="Deal" fill />
+                </div>
+              </div>
 
-  return {
-    id: i,
-    img,
-    price,
-    name: `Popular kurti ${i + 1}`,
-    brand: "FEATURED",
-  };
-})
+              <div className="promo-box promo-discount">
+                <h4>
+                  Get up to <span>20%</span>
+                </h4>
+                <p>OFF Dresses</p>
+              </div>
 
+              <div className="promo-box promo-new">
+                <h4>New Arrivals</h4>
+                <Link href="/party">
+                  <button>Shop now</button>
+                </Link>
+              </div>
+            </div>
 
-  // ✅ SEARCH FILTER
-  .filter((product) => {
-    if (!searchQuery) return true;
-    return product.name.toLowerCase().includes(searchQuery.toLowerCase());
-  })
+            {/* ===== SPLIT HERO ===== */}
+            <section className="splitHero">
+              <div className="splitHeroLeft">
+                <img src="/images/hero-left.jpg" alt="hero left" />
+              </div>
+              <div className="splitHeroRight">
+                <img src="/images/hero-right.jpg" alt="hero right" />
+              </div>
+              <div className="heroText">
+                <h1>
+                  MOVE.
+                  <br />
+                  REST.
+                  <br />
+                  RECOVER.
+                </h1>
+                <p>Discover the drop</p>
+                <Link href="/wedding">
+                  <button>Shop Now</button>
+                </Link>
+              </div>
+            </section>
 
-  // ✅ PRICE FILTER
-  .filter((product) => {
-    if (minPrice !== "" && product.price < minPrice) return false;
-    if (maxPrice !== "" && product.price > maxPrice) return false;
-    return true;
-  })
+            {/* ===== FEATURED ===== */}
+            <h2 className="pickTitle">Pick yours now</h2>
 
-  // ✅ FINAL RENDER
-  .map((product) => {
-    const isFav = favorites.includes(product.img);
+<section className="productListSection">
+  <div className="productGrid">
+    {Array.from({ length: 12 })
+      .map((_, i) => {
+        const img = `/images/kurtha${(i % 6) + 1}.jpg`;
+        const price = 1299 + i * 80;
 
-    return (
-      <div className="productCard" key={product.id}>
-        <span
-  className="wishlistIcon"
-  onClick={() => toggleFavorite(product.img)}
->
-  {favorites.includes(product.img) ? "❤️" : "♡"}
-</span>
+        return {
+          id: i,
+          img,
+          price,
+          name: `Featured Kurti ${i + 1}`,
+        };
+      })
 
+      /* 🔍 SEARCH FILTER */
+      .filter((p) => {
+        if (!searchQuery) return true;
+        return p.name.toLowerCase().includes(searchQuery.toLowerCase());
+      })
 
-        <div className="productImg">
-          <img src={product.img} />
-        </div>
+      /* 💰 PRICE FILTER */
+      .filter((p) => {
+        if (minPrice !== "" && p.price < minPrice) return false;
+        if (maxPrice !== "" && p.price > maxPrice) return false;
+        return true;
+      })
 
-        <div className="productInfo">
-          <p className="brand">{product.brand}</p>
-          <p className="name">{product.name}</p>
+      /* 🎨 RENDER */
+      .map((p) => (
+        <div className="productCard" key={p.id}>
+          <span
+            className="wishlistIcon"
+            onClick={() => toggleFavorite(p.img)}
+          >
+            {favorites.includes(p.img) ? "❤️" : "♡"}
+          </span>
 
-          <div className="priceRow">
-            <span className="price">₹{product.price}</span>
-            <span className="off">50% off</span>
+          <div className="productImg">
+            <img src={p.img} alt={p.name} />
           </div>
 
-          <button
-  className="cartIconBtn"
-  onClick={() => {
-    addToCart(product.img);
-    setShowCartToast(true);
+          <div className="productInfo">
+            <p className="brand">FEATURED</p>
+            <p className="name">{p.name}</p>
 
-    setTimeout(() => {
-      setShowCartToast(false);
-    }, 2000);
-  }}
->
-  🛒
-</button>
+            <div className="priceRow">
+              <span className="price">₹{p.price}</span>
+              <span className="off">50% off</span>
+            </div>
+
+            <button
+              className="cartIconBtn"
+              onClick={() => {
+                addToCart(p.img);
+                setShowCartToast(true);
+                setTimeout(() => setShowCartToast(false), 2000);
+              }}
+            >
+              🛒
+            </button>
+          </div>
         </div>
-      </div>
-    );
-  })}
-                  </div>
-                </section>
-              </>
-            )}
-
-            {activeCategory === "casual" && renderCategory("CASUAL", "Printed Casual Kurti")}
-            {activeCategory === "coord" && renderCategory("CO-ORD", "Co-ord Set")}
-            {activeCategory === "party" && renderCategory("PARTY", "Party Kurti")}
-            {activeCategory === "winter" && renderCategory("WINTER", "Winter Kurti")}
-            {activeCategory === "wedding" && renderCategory("WEDDING", "Wedding Kurti")}
-            {activeCategory === "onepiece" && renderCategory("ONE PIECE", "One Piece Kurti")}
+      ))}
+  </div>
+</section>
 
           </main>
         </div>
-         {showCartToast && (
-        <div className="cartToastOverlay">
-          <div className="cartToast">
-            ✅ Added to cart successfully
+
+        {/* ================= CART TOAST ================= */}
+        {showCartToast && (
+          <div className="cartToastOverlay">
+            <div className="cartToast">✅ Added to cart</div>
           </div>
-        </div>
-      )}
-              {showTryOn && (
-  <div className="tryonOverlay">
-    <div className="tryonModal">
-      <button
-        className="closeTryon"
-        onClick={() => setShowTryOn(false)}
-      >
-        ✕
-      </button>
+        )}
 
-      <h2>Select Kurtha</h2>
+        {/* ================= TRY ON MODAL ================= */}
+        {showTryOn && (
+          <div className="tryonOverlay">
+            <div className="tryonModal">
+              <button className="closeTryon" onClick={() => setShowTryOn(false)}>
+                ✕
+              </button>
 
-      <div
-        style={{
-          position: "relative",
-          width: 300,
-          height: 520,
-          margin: "auto",
-          cursor: "pointer",
-        }}
-      >
-        {/* BODY IMAGE */}
-        <Image
-          src="/images/body1.png"
-          alt="Body"
-          fill
-          style={{
-            objectFit: "contain",
-            zIndex: 1,
-          }}
-        />
+              <h2>Select Kurtha</h2>
 
-        {/* DRESS IMAGE (PER-IMAGE ADJUSTMENT) */}
-  {/* DRESS IMAGE (WIDTH + TOP ANCHOR FIX) */}
-<div
-  className={`tryonDress ${isFading ? "fade" : ""}`}
-  style={{
-    position: "absolute",
-    top: `${tryOnDresses[tryOnIndex].top}px`,
-    left: "50%",
-    transform: `translateX(calc(-50% + ${tryOnDresses[tryOnIndex].offsetX || 0}px))`,
-    width: `${tryOnDresses[tryOnIndex].width}px`,
-    zIndex: 2,
-  }}
->
+              <div
+                style={{
+                  position: "relative",
+                  width: 300,
+                  height: 520,
+                  margin: "auto",
+                }}
+              >
+                {/* BODY */}
+                <Image
+                  src="/images/body1.png"
+                  alt="Body"
+                  fill
+                  style={{ objectFit: "contain", zIndex: 1 }}
+                />
 
-    <Image
-  key={tryOnIndex}   // 🔥 THIS IS THE MAGIC
-  src={tryOnDresses[tryOnIndex].src}
-  alt="Dress"
-  width={tryOnDresses[tryOnIndex].width}
-  height={500}
-  style={{
-    objectFit: "contain",
-    height: "auto",
-  }}
-/>
+                {/* DRESS */}
+                <div
+                  className={`tryonDress ${isFading ? "fade" : ""}`}
+                  style={{
+                    position: "absolute",
+                    top: `${tryOnDresses[tryOnIndex].top}px`,
+                    left: "50%",
+                    transform: `translateX(calc(-50% + ${
+                      tryOnDresses[tryOnIndex].offsetX || 0
+                    }px))`,
+                    width: `${tryOnDresses[tryOnIndex].width}px`,
+                    zIndex: 2,
+                  }}
+                >
+                  <Image
+                    key={tryOnIndex}
+                    src={tryOnDresses[tryOnIndex].src}
+                    alt="Dress"
+                    width={tryOnDresses[tryOnIndex].width}
+                    height={500}
+                    style={{ objectFit: "contain", height: "auto" }}
+                  />
+                </div>
 
-  </div>
-  <div className="tryonActions">
-  <button
-  className="tryonAddCart"
-  onClick={() => {
-    handleTryOnAddToCart();
-    setShowCartToast(true);
-  }}
->
-  🛒 Add to Cart
-</button>
-  <button
-    className="tryonBuyNow"
-    onClick={() => {
-      addToCart(tryOnDresses[tryOnIndex].src);
-      window.location.href = "/checkout";
-    }}
-  >
-    Buy Now
-  </button>
-</div>
+                {/* LEFT */}
+                <button
+                  className="tryonArrow left"
+                  onClick={() => {
+                    setIsFading(true);
+                    setTimeout(() => {
+                      setTryOnIndex(
+                        (prev) => (prev - 1 + tryOnDresses.length) % tryOnDresses.length
+                      );
+                      setIsFading(false);
+                    }, 200);
+                  }}
+                >
+                  ◀
+                </button>
 
-  {/* LEFT ARROW */}
-  <button
-    className="tryonArrow left"
-    onClick={() => {
-  setIsFading(true);
-  setTimeout(() => {
-    setTryOnIndex((prev) => {
-      const next =
-        (prev - 1 + tryOnDresses.length) % tryOnDresses.length;
-      return tryOnDresses[next]?.src ? next : prev;
-    });
-    setIsFading(false);
-  }, 200);
-}}
-
-
-  >
-    ◀
-  </button>
-
-  {/* RIGHT ARROW */}
-  <button
-    className="tryonArrow right"
-    onClick={() => {
-  setIsFading(true);
-  setTimeout(() => {
-    setTryOnIndex((prev) => {
-      const next = (prev + 1) % tryOnDresses.length;
-      return tryOnDresses[next]?.src ? next : prev;
-    });
-    setIsFading(false);
-  }, 200);
-}}
-
-
-  >
-    ▶
-  </button>
-</div>
-
-      <p style={{ marginTop: 10 }}>
-        Dress {tryOnIndex + 1} / {tryOnDresses.length}
-      </p>
-    </div>
-  </div>
-)}
+                {/* RIGHT */}
+                <button
+                  className="tryonArrow right"
+                  onClick={() => {
+                    setIsFading(true);
+                    setTimeout(() => {
+                      setTryOnIndex((prev) => (prev + 1) % tryOnDresses.length);
+                      setIsFading(false);
+                    }, 200);
+                  }}
+                >
+                  ▶
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
-
-  function renderCategory(brand: string, title: string) {
-  // for now, only CASUAL has products
-  if (brand !== "CASUAL") {
-    return (
-      <h2 className="pickTitle" style={{ marginTop: "40px" }}>
-        {title} (Coming Soon)
-      </h2>
-    );
-  }
-
-  return (
-    <>
-      <h2 className="pickTitle">{title}</h2>
-
-      <section className="productListSection">
-        <div className="productGrid">
-          {casualWearProducts.map((product) => {
-            const isFav = favorites.includes(product.image);
-
-            return (
-              <div className="productImg" key={product.id}>
-                <span
-                  className="wishlistIcon"
-                  onClick={() => toggleFavorite(product.image)}
-                >
-                  {isFav ? "❤️" : "♡"}
-                </span>
-
-                <div className="productImg">
-                  <img src={product.image} alt={product.name} />
-                </div>
-
-                <div className="productInfo">
-                  <p className="brand">{brand}</p>
-                  <p className="name">{product.name}</p>
-
-                  <div className="priceRow">
-                    <span className="price">₹{product.price}</span>
-                    <span className="off">50% off</span>
-                  </div>
-
-                  <button
-                    className="addToCartBtn"
-                    onClick={() => addToCart(product.image)}
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-    </>
-  );
-}
 }
