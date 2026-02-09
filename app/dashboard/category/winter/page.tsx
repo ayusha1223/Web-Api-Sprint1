@@ -172,9 +172,14 @@ export default function WinterPage() {
               {filteredProducts.map((p) => (
                 <div key={p.id} className={styles.categoryCard}>
 
-                  <div className={styles.categoryImage}>
-                    <img src={p.image} alt={p.title} />
-                  </div>
+                  <div
+  className={styles.categoryImage}
+  onClick={() => router.push(`/product/${p.slug}`)}
+  style={{ cursor: "pointer" }}
+>
+  <img src={p.image} alt={p.title} />
+</div>
+
 
                   <div className={styles.categoryInfo}>
                     <div className={styles.categoryTag}>WINTER</div>

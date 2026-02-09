@@ -5,9 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useShop } from "../context/ShopContext";
 import { useState } from "react";
+import { featuredProducts } from "./data/featured";
+import { useRouter } from "next/navigation";
+
 
 export default function Dashboard() {
   const { favorites, toggleFavorite, addToCart } = useShop();
+  const router = useRouter();
 
 
   const [showCartToast, setShowCartToast] = useState(false);
@@ -300,62 +304,46 @@ const toggleDarkMode = () => {
 
 <section className="productListSection">
   <div className="productGrid">
-    {Array.from({ length: 12 })
-      .map((_, i) => {
-        const img = `/images/kurtha${(i % 6) + 1}.jpg`;
-        const price = 1299 + i * 80;
-
-        return {
-          id: i,
-          img,
-          price,
-          name: `Featured Kurti ${i + 1}`,
-        };
-      })
-
-      /* 🔍 SEARCH FILTER */
+    {featuredProducts
       .filter((p) => {
         if (!searchQuery) return true;
-        return p.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return p.title.toLowerCase().includes(searchQuery.toLowerCase());
       })
-
-      /* 💰 PRICE FILTER */
       .filter((p) => {
         if (minPrice !== "" && p.price < minPrice) return false;
         if (maxPrice !== "" && p.price > maxPrice) return false;
         return true;
       })
-
-      /* 🎨 RENDER */
       .map((p) => (
         <div className="productCard" key={p.id}>
           <span
             className="wishlistIcon"
-            onClick={() => toggleFavorite(p.img)}
+            onClick={() => toggleFavorite(p.image)}
           >
-            {favorites.includes(p.img) ? "❤️" : "♡"}
+            {favorites.includes(p.image) ? "❤️" : "♡"}
           </span>
 
-          <div className="productImg">
-            <img src={p.img} alt={p.name} />
-          </div>
+          <div
+  className="productImg"
+  onClick={() => router.push(`/product/${p.slug}`)}
+  style={{ cursor: "pointer" }}
+>
+  <img src={p.image} alt={p.title} />
+</div>
+
 
           <div className="productInfo">
-            <p className="brand">FEATURED</p>
-            <p className="name">{p.name}</p>
+            <p className="brand">{p.category}</p>
+            <p className="name">{p.title}</p>
 
             <div className="priceRow">
               <span className="price">₹{p.price}</span>
-              <span className="off">50% off</span>
+              <span className="off">{p.discount}</span>
             </div>
 
             <button
               className="cartIconBtn"
-              onClick={() => {
-                addToCart(p.img);
-                setShowCartToast(true);
-                setTimeout(() => setShowCartToast(false), 2000);
-              }}
+              onClick={() => addToCart(p.image)}
             >
               🛒
             </button>
@@ -364,6 +352,7 @@ const toggleDarkMode = () => {
       ))}
   </div>
 </section>
+
 
           </main>
         </div>

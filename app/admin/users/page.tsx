@@ -131,8 +131,10 @@ export default function AccountSettingsPage() {
       </aside>
 
       {/* Main Content */}
+      
       <main style={styles.content}>
-        <h2>Account Settings</h2>
+        
+    <h2>Account Settings</h2>
         <p style={styles.sub}>Basic info</p>
 
         {/* ================= PROFILE FORM ================= */}
