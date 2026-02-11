@@ -120,3 +120,60 @@
   background: #fff;
   font-weight: 600;
 }
+/* ===== SIMILAR SECTION ===== */
+.similarSection {
+  max-width: 1200px;
+  margin: 100px auto 60px auto;
+  padding: 0 24px;
+}
+
+.similarTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+}
+
+.similarGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 30px;
+}
+
+.similarCard {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.similarCard:hover {
+  transform: translateY(-6px);
+}
+
+.similarImgWrapper {
+  width: 100%;
+  height: 320px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.similarImgWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.similarName {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}
+
+.similarPrice {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff3f6c;
+}
+

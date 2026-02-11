@@ -118,72 +118,9 @@ export default function AccountSettingsPage() {
   return (
     <div style={styles.page}>
       {/* Sidebar */}
-      <aside style={styles.sidebar}>
-        <h3 style={styles.sideTitle}>Settings</h3>
-        <ul style={styles.menu}>
-          <li style={styles.active}>Account</li>
-          <li>Users</li>
-          <li>Notifications</li>
-          <li>Privacy</li>
-          <li>Languages</li>
-          <li>Help</li>
-        </ul>
-      </aside>
-
       {/* Main Content */}
-      
-      <main style={styles.content}>
-        
-    <h2>Account Settings</h2>
-        <p style={styles.sub}>Basic info</p>
-
-        {/* ================= PROFILE FORM ================= */}
-        <form onSubmit={handleSubmit}>
-          {/* Profile Picture */}
-          <div style={styles.row}>
-            <div style={styles.label}>Profile Picture</div>
-            <div style={styles.value}>
-              <div style={styles.avatarWrap}>
-                <img
-                  src={preview || "/user-placeholder.png"}
-                  alt="profile"
-                  style={styles.avatar}
-                />
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0] || null;
-                  setImage(file);
-                  if (file) setPreview(URL.createObjectURL(file));
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Name */}
-          <div style={styles.row}>
-            <div style={styles.label}>Name</div>
-            <input
-              style={styles.input}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-
-          {/* Email (read-only) */}
-          <div style={styles.row}>
-            <div style={styles.label}>Email</div>
-            <input style={styles.input} value={email} disabled />
-          </div>
-
-          <button type="submit" style={styles.button}>
-            Save Changes
-          </button>
-        </form>
-
-        {/* ================= ADMIN USERS LIST ================= */}
+ <main style={styles.content}>
+              {/* ================= ADMIN USERS LIST ================= */}
         {users.length > 0 && (
           <>
             <hr style={{ margin: "50px 0" }} />

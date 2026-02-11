@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import { useShop } from "../../context/ShopContext";
@@ -12,9 +12,8 @@ import { partyProducts } from "../../dashboard/data/party";
 import { winterProducts } from "../../dashboard/data/winter";
 import { weddingProducts } from "../../dashboard/data/wedding";
 import { onePieceProducts } from "../../dashboard/data/onepiece";
-import { featuredProducts } from "../../dashboard/data/featured";   
+import { featuredProducts } from "../../dashboard/data/featured";
 
-// ===== MERGE ALL PRODUCTS =====
 const allProducts = [
   ...casualProducts,
   ...coordProducts,
@@ -22,25 +21,30 @@ const allProducts = [
   ...winterProducts,
   ...weddingProducts,
   ...onePieceProducts,
-  featuredProducts,
+  ...featuredProducts,
 ];
 
 export default function ProductDetailsPage() {
   const { slug } = useParams();
+  const router = useRouter();
   const { addToCart, toggleFavorite, favorites } = useShop();
-
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
-  // ✅ FIND PRODUCT FROM ALL CATEGORIES
   const product = allProducts.find((p) => p.slug === slug);
 
   if (!product) {
     return <h2 style={{ padding: 40 }}>Product not found</h2>;
   }
 
+  const mixedProducts = allProducts
+    .filter((p) => p.slug !== product.slug)
+    .slice(0, 6);
+
   return (
     <div style={{ background: "#fff", padding: "40px 0" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
+
+        {/* ===== PRODUCT SECTION ===== */}
         <div
           style={{
             display: "grid",
@@ -48,11 +52,11 @@ export default function ProductDetailsPage() {
             gap: 60,
           }}
         >
-          {/* ================= LEFT : IMAGE ================= */}
+
+          {/* LEFT IMAGE */}
           <div style={{ position: "relative", paddingTop: 20 }}>
-            {/* BACK BUTTON */}
             <button
-              onClick={() => window.history.back()}
+              onClick={() => router.back()}
               style={{
                 position: "absolute",
                 top: 0,
@@ -64,7 +68,6 @@ export default function ProductDetailsPage() {
                 background: "#333",
                 color: "#fff",
                 cursor: "pointer",
-                zIndex: 2,
               }}
             >
               ←
@@ -75,6 +78,7 @@ export default function ProductDetailsPage() {
               alt={product.title}
               width={700}
               height={900}
+              priority
               style={{
                 width: "100%",
                 maxHeight: "78vh",
@@ -83,82 +87,31 @@ export default function ProductDetailsPage() {
             />
           </div>
 
-          {/* ================= RIGHT : DETAILS ================= */}
-          <div style={{ position: "sticky", top: 120 }}>
-            {/* BRAND */}
+          {/* RIGHT DETAILS */}
+          <div>
+
             <h1 style={{ fontSize: 22, fontWeight: 700 }}>
               NAAYU ATTIRE
             </h1>
 
-            {/* TITLE */}
             <h2 style={{ fontSize: 18, color: "#555", marginTop: 6 }}>
               {product.title}
             </h2>
 
-            {/* RATING */}
-            <div
-              style={{
-                marginTop: 12,
-                fontSize: 14,
-                color: "#388e3c",
-              }}
-            >
+            <div style={{ marginTop: 12 }}>
               ⭐ {product.rating ?? 4.2} | 527 Ratings
             </div>
 
-            {/* PRICE */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                marginTop: 18,
-              }}
-            >
+            <div style={{ marginTop: 18 }}>
               <span style={{ fontSize: 28, fontWeight: 700 }}>
                 ₹{product.price}
               </span>
-
-              <span
-                style={{
-                  textDecoration: "line-through",
-                  color: "#999",
-                }}
-              >
-                ₹{product.oldPrice}
-              </span>
-
-              <span
-                style={{
-                  color: "#ff905a",
-                  fontWeight: 600,
-                }}
-              >
-                {product.discount}
-              </span>
             </div>
 
-            <div
-              style={{
-                fontSize: 13,
-                color: "#03a685",
-                marginTop: 4,
-              }}
-            >
-              inclusive of all taxes
-            </div>
-
-            {/* ================= SIZE ================= */}
+            {/* SIZE */}
             <div style={{ marginTop: 30 }}>
               <strong>Select Size</strong>
-
-              <div
-                style={{
-                  display: "flex",
-                  gap: 12,
-                  marginTop: 12,
-                }}
-              >
+              <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
                 {["S", "M", "L", "XL", "XXL"].map((size) => (
                   <button
                     key={size}
@@ -171,9 +124,7 @@ export default function ProductDetailsPage() {
                         selectedSize === size
                           ? "2px solid #ff3f6c"
                           : "1px solid #ccc",
-                      background: "#fff",
                       cursor: "pointer",
-                      fontWeight: 600,
                     }}
                   >
                     {size}
@@ -182,21 +133,16 @@ export default function ProductDetailsPage() {
               </div>
             </div>
 
-            {/* ================= ACTIONS ================= */}
-            <div
-              style={{
-                display: "flex",
-                gap: 16,
-                marginTop: 32,
-              }}
-            >
+            {/* ACTIONS */}
+            <div style={{ display: "flex", gap: 16, marginTop: 32 }}>
               <button
                 onClick={() => {
                   if (!selectedSize) {
-                    alert("Please select a size");
+                    alert("Please select size");
                     return;
                   }
-                  addToCart(product.image);
+                  addToCart(product.image, selectedSize);
+                  router.push("/cart");
                 }}
                 style={{
                   flex: 1,
@@ -210,61 +156,27 @@ export default function ProductDetailsPage() {
               >
                 ADD TO BAG
               </button>
+              
 
               <button
-                onClick={() => toggleFavorite(product.image)}
+                onClick={() => {
+                  toggleFavorite(product.image);
+                  router.push("/favorites");
+                }}
                 style={{
                   width: 160,
                   height: 52,
                   border: "1px solid #ccc",
                   background: "#fff",
-                  fontWeight: 600,
                   cursor: "pointer",
                 }}
               >
                 {favorites.includes(product.image) ? "❤️" : "🤍"} WISHLIST
               </button>
             </div>
-
-            {/* ================= DELIVERY ================= */}
-            <div style={{ marginTop: 30 }}>
-              <strong>Delivery Options</strong>
-
-              <div
-                style={{
-                  marginTop: 10,
-                  display: "flex",
-                  gap: 10,
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="Enter Pincode"
-                  style={{
-                    padding: 10,
-                    border: "1px solid #ccc",
-                    width: 160,
-                  }}
-                />
-                <button
-                  style={{
-                    background: "transparent",
-                    color: "#ff3f6c",
-                    border: "none",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
-                >
-                  CHECK
-                </button>
-              </div>
-
-              <p style={{ fontSize: 13, marginTop: 8, color: "#666" }}>
-                100% Original Products
-              </p>
-            </div>
           </div>
-        </div>
+          
+        </div>      
       </div>
     </div>
   );

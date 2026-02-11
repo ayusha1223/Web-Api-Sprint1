@@ -14,15 +14,16 @@ type CartItem = {
   img: string;
   qty: number;
   price: number;
+  size: string;
 };
 
 type ShopContextType = {
   favorites: string[];
   cart: CartItem[];
   toggleFavorite: (img: string) => void;
-  addToCart: (img: string) => void;
-  removeFromCart: (img: string) => void;
-  updateQty: (img: string, qty: number) => void;
+  addToCart: (img: string, size: string) => void;
+  removeFromCart: (img: string, size: string) => void;
+  updateQty: (img: string, qty: number, size: string) => void;
   clearCart: () => void;
   totalPrice: number;
 };
@@ -82,30 +83,39 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const addToCart = (img: string) => {
-    setCart((prev) => {
-      const item = prev.find((p) => p.img === img);
-      if (item) {
-        return prev.map((p) =>
-          p.img === img ? { ...p, qty: p.qty + 1 } : p
-        );
-      }
-      return [...prev, { img, qty: 1, price: 1499 }];
-    });
-  };
-
-  const removeFromCart = (img: string) => {
-    setCart((prev) => prev.filter((p) => p.img !== img));
-  };
-
-  const updateQty = (img: string, qty: number) => {
-    setCart((prev) =>
-      prev.map((p) =>
-        p.img === img ? { ...p, qty: Math.max(1, qty) } : p
-      )
+  const addToCart = (img: string, size: string) => {
+  setCart((prev) => {
+    const existingItem = prev.find(
+      (p) => p.img === img && p.size === size
     );
-  };
 
+    if (existingItem) {
+      return prev.map((p) =>
+        p.img === img && p.size === size
+          ? { ...p, qty: p.qty + 1 }
+          : p
+      );
+    }
+
+    return [...prev, { img, qty: 1, price: 1499, size }];
+  });
+};
+
+  const removeFromCart = (img: string, size: string) => {
+  setCart((prev) =>
+    prev.filter((p) => !(p.img === img && p.size === size))
+  );
+};
+
+  const updateQty = (img: string, size: string, qty: number) => {
+  setCart((prev) =>
+    prev.map((p) =>
+      p.img === img && p.size === size
+        ? { ...p, qty: Math.max(1, qty) }
+        : p
+    )
+  );
+};
   const clearCart = useCallback(() => {
     setCart([]);
     localStorage.removeItem("cart");

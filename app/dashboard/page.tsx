@@ -35,6 +35,10 @@ useState(() => {
   }
 });
 
+const [priceRange, setPriceRange] = useState(5000);
+const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+
 // Toggle dark mode
 const toggleDarkMode = () => {
   document.body.classList.toggle("dark");
@@ -92,7 +96,23 @@ const toggleDarkMode = () => {
       offsetX: -5,
     },
   ];
+ const filteredProducts = featuredProducts
+  .filter((p) => {
+    if (!searchQuery) return true;
+    return p.title.toLowerCase().includes(searchQuery.toLowerCase());
+  })
+  .filter((p) => {
+    const price = Number(p.price);
 
+    if (minPrice !== "" && price < Number(minPrice)) return false;
+    if (maxPrice !== "" && price > Number(maxPrice)) return false;
+    if (price > priceRange) return false;
+
+    if (selectedColor && p.color?.toLowerCase() !== selectedColor.toLowerCase())
+      return false;
+
+    return true;
+  });
   return (
     <div className="dashboard-container">
       <div className="dashboard-card">
@@ -230,6 +250,55 @@ const toggleDarkMode = () => {
         setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))
       }
     />
+    <div className="priceSliderBox">
+  <input
+    type="range"
+    min={500}
+    max={5000}
+    step={100}
+    value={priceRange}
+    onChange={(e) => setPriceRange(Number(e.target.value))}
+    className="priceSlider"
+  />
+  <div className="priceRangeText">
+    ₹500 – ₹{priceRange.toLocaleString()}
+  </div>
+  <h3 style={{ marginTop: 24 }}>Choose by Color</h3>
+
+<div className="colorFilterVertical">
+  {[
+    "black",
+    "white",
+    "red",
+    "blue",
+    "green",
+    "pink",
+    "yellow",
+    "brown",
+    "maroon",
+    "orange",
+  ].map((color) => (
+    <div
+      key={color}
+      className={`colorRow ${selectedColor === color ? "active" : ""}`}
+      onClick={() =>
+        setSelectedColor(selectedColor === color ? null : color)
+      }
+    >
+      <span
+        className="colorDot"
+        style={{
+          backgroundColor: color === "white" ? "#fff" : color,
+          border: color === "white" ? "1.5px solid #ccc" : undefined,
+        }}
+      />
+      <span className="colorName">
+        {color.charAt(0).toUpperCase() + color.slice(1)}
+      </span>
+    </div>
+  ))}
+</div>
+</div>
   </div>
 </aside>
 
@@ -277,27 +346,7 @@ const toggleDarkMode = () => {
             </div>
 
             {/* ===== SPLIT HERO ===== */}
-            <section className="splitHero">
-              <div className="splitHeroLeft">
-                <img src="/images/hero-left.jpg" alt="hero left" />
-              </div>
-              <div className="splitHeroRight">
-                <img src="/images/hero-right.jpg" alt="hero right" />
-              </div>
-              <div className="heroText">
-                <h1>
-                  MOVE.
-                  <br />
-                  REST.
-                  <br />
-                  RECOVER.
-                </h1>
-                <p>Discover the drop</p>
-                <Link href="/wedding">
-                  <button>Shop Now</button>
-                </Link>
-              </div>
-            </section>
+            
 
             {/* ===== FEATURED ===== */}
             <h2 className="pickTitle">Pick yours now</h2>

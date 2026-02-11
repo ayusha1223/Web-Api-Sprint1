@@ -31,7 +31,7 @@ export const featuredProducts = [
   },
   {
     id: 4,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-3",
     image: "/images/coord/coord2.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -41,7 +41,7 @@ export const featuredProducts = [
   },
   {
     id: 5,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-4",
     image: "/images/winter/winter1.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -51,7 +51,7 @@ export const featuredProducts = [
   },
   {
     id: 6,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-5",
     image: "/images/onepiece/onepiece1.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -61,7 +61,7 @@ export const featuredProducts = [
   },
   {
     id: 7,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-6",
     image: "/images/party/party3.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -71,7 +71,7 @@ export const featuredProducts = [
   },
   {
     id: 8,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-7",
     image: "/images/wedding/wedding2.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -81,7 +81,7 @@ export const featuredProducts = [
   },
   {
     id: 9,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-8",
     image: "/images/wedding/wedding10.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -91,7 +91,7 @@ export const featuredProducts = [
   },
   {
     id: 10,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-9",
     image: "/images/winter/winter9.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -101,7 +101,7 @@ export const featuredProducts = [
   },
   {
     id: 11,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-10",
     image: "/images/winter/winter15.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -111,7 +111,7 @@ export const featuredProducts = [
   },
   {
     id: 12,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-11",
     image: "/images/party/party10.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -121,7 +121,7 @@ export const featuredProducts = [
   },
   {
     id: 13,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-12",
     image: "/images/wedding/wedding12.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -131,7 +131,7 @@ export const featuredProducts = [
   },
   {
     id: 14,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-13",
     image: "/images/casual-wear/casual2.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -141,7 +141,7 @@ export const featuredProducts = [
   },
   {
     id: 15,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-14",
     image: "/images/casual-wear/casual20.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -151,7 +151,7 @@ export const featuredProducts = [
   },
   {
     id: 16,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-15",
     image: "/images/onepiece/onepiece5.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -161,7 +161,7 @@ export const featuredProducts = [
   },
   {
     id: 17,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-16",
     image: "/images/wedding/wedding6.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -171,7 +171,7 @@ export const featuredProducts = [
   },
   {
     id: 18,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-17",
     image: "/images/casual-wear/casual25.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -181,7 +181,7 @@ export const featuredProducts = [
   },
   {
     id: 19,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-18",
     image: "/images/wedding/wedding17.png",
     title: "Featured Kurti 2",
     price: 1379,
@@ -191,7 +191,7 @@ export const featuredProducts = [
   },
   {
     id: 20,
-    slug: "featured-kurti-2",
+    slug: "featured-kurti-19",
     image: "/images/party/party20.png",
     title: "Featured Kurti 2",
     price: 1379,

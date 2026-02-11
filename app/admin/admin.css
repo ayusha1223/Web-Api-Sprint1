@@ -1,0 +1,51 @@
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6f9;
+}
+
+.adminSidebar {
+  width: 240px;
+  background: #111827;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.adminSidebar h2 {
+  margin-bottom: 40px;
+}
+
+.adminLink {
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #cbd5e1;
+  transition: 0.2s;
+}
+
+.adminLink:hover {
+  background: #1f2937;
+  color: white;
+}
+
+.adminLink.active {
+  background: #ff3f6c;
+  color: white;
+}
+
+.logoutBtn {
+  margin-top: auto;
+  padding: 12px;
+  background: #dc2626;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.adminContent {
+  flex: 1;
+  padding: 40px;
+}

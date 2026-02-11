@@ -52,7 +52,10 @@ export default function CartPage() {
         {/* LEFT */}
         <div className="cartItems">
   {cart.map((item) => (
-    <div className="cartItem" key={item.img}>
+    <div
+      className="cartItem"
+      key={`${item.img}-${item.size}`}
+    >
       <img
         src={item.img}
         alt="Product"
@@ -61,7 +64,7 @@ export default function CartPage() {
 
       <div className="cartItemInfo">
         <h4>Kurtha Set</h4>
-        <p>Color: Mixed | Size: Free</p>
+        <p>Color: Mixed | Size: {item.size}</p>
 
         <div className="priceRow">
           <span className="oldPrice">₹2,999</span>
@@ -71,21 +74,36 @@ export default function CartPage() {
       </div>
 
       <div className="qtyBox">
-        <button onClick={() => updateQty(item.img, item.qty - 1)}>-</button>
+        <button
+          onClick={() =>
+            updateQty(item.img, item.size, item.qty - 1)
+          }
+        >
+          -
+        </button>
+
         <span>{item.qty}</span>
-        <button onClick={() => updateQty(item.img, item.qty + 1)}>+</button>
+
+        <button
+          onClick={() =>
+            updateQty(item.img, item.size, item.qty + 1)
+          }
+        >
+          +
+        </button>
       </div>
 
       <button
         className="removeBtn"
-        onClick={() => removeFromCart(item.img)}
+        onClick={() =>
+          removeFromCart(item.img, item.size)
+        }
       >
         ✕ Remove
       </button>
     </div>
   ))}
 </div>
-
 
         {/* RIGHT */}
         <div className="orderSummary">
@@ -240,7 +258,6 @@ export default function CartPage() {
     </div>
   </>
 )}
-
 
               {/* CARD */}
               {checkoutStep === "card" && (
