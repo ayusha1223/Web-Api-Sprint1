@@ -22,18 +22,34 @@ export default function ForgotPasswordForm({
   });
 
   const onSubmit = async (data: any) => {
-    try {
-      // 🔹 connect backend later
-      console.log("Forgot password:", data.email);
+  try {
+    const res = await fetch(
+      "http://localhost:5050/api/auth/forgot-password",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+        }),
+      }
+    );
 
-      alert("Reset link sent to your email");
+    const result = await res.json();
 
-      onSuccess?.(); // ✅ THIS LINE FIXES THE ERROR
-    } catch {
-      alert("Something went wrong");
+    if (!res.ok) {
+      throw new Error(result.message || "Something went wrong");
     }
-  };
 
+    alert(result.message || "Reset link sent");
+
+    onSuccess?.();
+
+  } catch (err: any) {
+    alert(err.message || "Something went wrong");
+  }
+};
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="authForm">
       <div className="authField">
