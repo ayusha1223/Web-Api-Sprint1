@@ -12,6 +12,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
+    
 
     fetch("http://localhost:5050/api/auth/whoami", {
       headers: { Authorization: `Bearer ${token}` },

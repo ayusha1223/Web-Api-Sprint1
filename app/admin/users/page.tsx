@@ -11,25 +11,28 @@ export default function AccountSettingsPage() {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [users, setUsers] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
+
 
   /* ================= LOAD LOGGED-IN USER PROFILE ================= */
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+ useEffect(() => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
 
-    fetch("http://localhost:5050/api/auth/whoami", {
-      headers: { Authorization: `Bearer ${token}` },
+  if (role !== "admin") return;
+
+  fetch(`http://localhost:5050/api/admin/users?page=${page}&limit=5`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setUsers(data.data);
+      setTotalPages(data.pagination.totalPages);
     })
-      .then((res) => res.json())
-      .then((res) => {
-        const user = res.data;
-        setName(user.name || "");
-        setEmail(user.email || "");
+    .catch((err) => console.error(err));
+}, [page]);
 
-        if (user.image) setPreview(`http://localhost:5050${user.image}`);
-      })
-      .catch((err) => console.error("Profile load error:", err));
-  }, []);
 
   /* ================= LOAD ADMIN USERS ================= */
   useEffect(() => {
@@ -183,6 +186,26 @@ export default function AccountSettingsPage() {
                 ))}
               </tbody>
             </table>
+            <div style={{ marginTop: 20, display: "flex", gap: 15 }}>
+  <button
+    disabled={page === 1}
+    onClick={() => setPage(page - 1)}
+  >
+    Prev
+  </button>
+
+  <span>
+    Page {page} of {totalPages}
+  </span>
+
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage(page + 1)}
+  >
+    Next
+  </button>
+</div>
+
           </>
         )}
       </main>

@@ -23,7 +23,7 @@ type ShopContextType = {
   toggleFavorite: (img: string) => void;
   addToCart: (img: string, size: string) => void;
   removeFromCart: (img: string, size: string) => void;
-  updateQty: (img: string, qty: number, size: string) => void;
+ updateQty: (img: string, size: string, qty: number) => void;
   clearCart: () => void;
   totalPrice: number;
 };

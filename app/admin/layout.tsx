@@ -16,10 +16,7 @@ export default function AdminLayout({
     { name: "Products", path: "/admin/products" },
     { name: "Orders", path: "/admin/orders" },
     { name: "Users", path: "/admin/users" },
-    { name: "Coupons", path: "/admin/coupons" },
-    { name: "Inventory", path: "/admin/inventory" },
     { name: "Payments", path: "/admin/payments" },
-    { name: "Reports", path: "/admin/reports" },
     { name: "Settings", path: "/admin/settings" },
   ];
 

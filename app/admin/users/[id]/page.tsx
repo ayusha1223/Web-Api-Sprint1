@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AdminGuard from "../../../components/AdminGuard";
@@ -10,7 +9,7 @@ type User = {
   name: string;
   email: string;
   role: string;
-  image?: string; // backend may return "/uploads/...."
+  image?: string;
 };
 
 export default function AdminUserDetailPage() {
@@ -19,6 +18,8 @@ export default function AdminUserDetailPage() {
   const id = params.id as string;
 
   const [user, setUser] = useState<User | null>(null);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,9 +31,9 @@ export default function AdminUserDetailPage() {
     })
       .then((res) => res.json())
       .then((res) => {
-        // support both: {data: user} or {user: user}
-        const u = res.data || res.user;
-        setUser(u);
+        setUser(res.data.user);
+        setOrders(res.data.orders || []);
+        setPayments(res.data.payments || []);
       })
       .catch((err) => {
         console.error(err);
@@ -53,6 +54,7 @@ export default function AdminUserDetailPage() {
             <p style={styles.text}>User not found.</p>
           ) : (
             <>
+              {/* Avatar */}
               <div style={styles.avatarWrap}>
                 <img
                   src={
@@ -65,6 +67,7 @@ export default function AdminUserDetailPage() {
                 />
               </div>
 
+              {/* User Info */}
               <div style={styles.detailBox}>
                 <div style={styles.line}>
                   <b>Name:</b> {user.name}
@@ -75,13 +78,43 @@ export default function AdminUserDetailPage() {
                 <div style={styles.line}>
                   <b>Role:</b> {user.role}
                 </div>
-
                 <div style={{ marginTop: 10 }}>
                   <div style={styles.text}>User ID:</div>
                   <div style={styles.idBox}>{user._id}</div>
                 </div>
               </div>
 
+              {/* Orders Section */}
+              <h3 style={styles.sectionTitle}>Order History</h3>
+
+              {orders.length === 0 ? (
+                <p style={styles.text}>No orders found</p>
+              ) : (
+                orders.map((order) => (
+                  <div key={order._id} style={styles.sectionBox}>
+                    <div><b>Order ID:</b> {order._id}</div>
+                    <div><b>Total:</b> Rs {order.totalAmount}</div>
+                    <div><b>Status:</b> {order.paymentStatus}</div>
+                  </div>
+                ))
+              )}
+
+              {/* Payments Section */}
+              <h3 style={styles.sectionTitle}>Payment History</h3>
+
+              {payments.length === 0 ? (
+                <p style={styles.text}>No payments found</p>
+              ) : (
+                payments.map((payment) => (
+                  <div key={payment._id} style={styles.sectionBox}>
+                    <div><b>Amount:</b> Rs {payment.amount}</div>
+                    <div><b>Method:</b> {payment.method}</div>
+                    <div><b>Status:</b> {payment.status}</div>
+                  </div>
+                ))
+              )}
+
+              {/* Buttons */}
               <div style={styles.btnRow}>
                 <button
                   style={styles.backBtn}
@@ -91,7 +124,9 @@ export default function AdminUserDetailPage() {
                 </button>
                 <button
                   style={styles.editBtn}
-                  onClick={() => router.push(`/admin/users/edit/${user._id}`)}
+                  onClick={() =>
+                    router.push(`/admin/users/edit/${user._id}`)
+                  }
                 >
                   Edit
                 </button>
@@ -116,7 +151,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   card: {
-    width: "460px",
+    width: "600px",
     background: "#ffffff",
     padding: "30px",
     borderRadius: "12px",
@@ -128,6 +163,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "22px",
     fontWeight: 600,
     marginBottom: "18px",
+  },
+
+  sectionTitle: {
+    marginTop: "25px",
+    fontSize: "16px",
+    fontWeight: 600,
+    textAlign: "left",
   },
 
   text: {
@@ -159,6 +201,15 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid #e5e7eb",
   },
 
+  sectionBox: {
+    textAlign: "left",
+    background: "#f3f4f6",
+    padding: "12px",
+    borderRadius: "8px",
+    marginTop: "8px",
+    border: "1px solid #e5e7eb",
+  },
+
   line: {
     padding: "6px 0",
     fontSize: "14px",
@@ -178,7 +229,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     justifyContent: "center",
     gap: 10,
-    marginTop: 18,
+    marginTop: 25,
   },
 
   backBtn: {
