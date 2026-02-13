@@ -1,4 +1,4 @@
-import { CategorySection, HeroSection, OfferBanner, TrendingSection } from "./components/landing";
+import { CategorySection, HeroSection, OfferBanner, FeatureSection, TrendingSection } from "./components/landing";
 
 export default function Home() {
   return (
@@ -6,6 +6,7 @@ export default function Home() {
       <HeroSection />
       <CategorySection />
       <OfferBanner />
+      <FeatureSection />
       <TrendingSection />
     </>
   );

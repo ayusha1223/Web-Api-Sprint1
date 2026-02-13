@@ -5,49 +5,6 @@ import Link from "next/link";
 import styles from "./TrendingSection.module.css";
 import { useEffect, useState } from "react";
 
-const trendingProducts = [
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha10.jpg",
-    slug: "premium-kurtha-10",
-  },
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha2.jpg",
-    slug: "premium-kurtha-2",
-  },
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha12.jpg",
-    slug: "premium-kurtha-12",
-  },
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha8.jpg",
-    slug: "premium-kurtha-8",
-  },
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha7.jpg",
-    slug: "premium-kurtha-7",
-  },
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha5.jpg",
-    slug: "premium-kurtha-5",
-  },
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha6.jpg",
-    slug: "premium-kurtha-6",
-  },
-  {
-    title: "Premium Kurtha",
-    image: "/images/kurtha9.jpg",
-    slug: "premium-kurtha-9",
-  },
-];
-
 export default function TrendingSection() {
   /* ================= COUNTDOWN LOGIC ================= */
  const targetDate = new Date("2026-03-01T23:59:59").getTime();
@@ -92,37 +49,7 @@ export default function TrendingSection() {
   }, []);
 
   return (
-    <>
-      {/* ================= TRENDING SECTION ================= */}
-      <section className="trending">
-        <h2 className="trending-title">Trending This Season</h2>
-
-        <div className="trending-slider">
-          {trendingProducts.map((item) => (
-            <Link
-              href={`/product/${item.slug}`}
-              key={item.slug}
-              className="trending-card"
-            >
-              <div className="trending-image">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="trending-img"
-                />
-
-                <div className="trending-overlay">
-                  <h3>{item.title}</h3>
-                  <span className="explore-btn">View Product</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ================= PROMO BANNER ================= */}
+    <>      {/* ================= PROMO BANNER ================= */}
       <section className={styles.promoBanner}>
         <div className={styles.promoInner}>
           {/* LEFT IMAGE */}

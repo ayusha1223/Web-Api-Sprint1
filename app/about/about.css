@@ -1,0 +1,180 @@
+.aboutPage {
+  background: #f6f3ef;
+  font-family: "Poppins", sans-serif;
+  color: #1d1d1d;
+}
+
+/* ================= HERO ================= */
+
+.heroSection {
+  background: #e2dae0;
+  text-align: center;
+  padding: 100px 20px 120px;
+  border-bottom-left-radius: 60px;
+  border-bottom-right-radius: 60px;
+}
+
+.heroSection h1 {
+  font-size: 44px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.heroSection p {
+  max-width: 600px;
+  margin: 0 auto 40px auto;
+  font-size: 16px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+
+/* HERO IMAGE STRIP */
+
+.heroImages {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 50px;
+}
+
+.heroImages img {
+  border-radius: 20px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.heroImages img:hover {
+  transform: translateY(-10px);
+}
+
+/* ================= SECTION 1 ================= */
+
+.contentSection {
+  max-width: 1200px;
+  margin: 140px auto;
+  padding: 0 60px;
+}
+
+.textBlock h2 {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.textBlock p {
+  font-size: 16px;
+  opacity: 0.75;
+  line-height: 1.8;
+  margin-bottom: 15px;
+}
+
+/* ================= SPLIT SECTION ================= */
+
+.splitSection {
+  max-width: 1200px;
+  margin: 120px auto;
+  display: flex;
+  align-items: center;
+  gap: 120px;
+  padding: 0 60px;
+}
+
+.imageCard {
+  position: relative;
+}
+
+.imageCard img {
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* Floating Quote Card */
+
+.quoteCard {
+  position: absolute;
+  bottom: -25px;
+  left: 40px;
+  background: white;
+  padding: 20px 24px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+/* ================= GROWTH SECTION ================= */
+
+.growthSection {
+  text-align: center;
+  padding: 120px 20px 60px;
+  background: linear-gradient(to bottom, #f6f3ef 0%, #fff 100%);
+}
+
+.growthSection h2 {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.growthSection p {
+  font-size: 18px;
+  opacity: 0.75;
+  max-width: 700px;
+  margin: auto;
+  line-height: 1.8;
+}
+
+/* ================= FEATURE CARDS ================= */
+
+.features {
+  max-width: 1100px;
+  margin: 60px auto 160px;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 0 40px;
+}
+
+.featureItem {
+  flex: 1;
+  background: white;
+  padding: 40px 30px;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+  transition: all 0.4s ease;
+}
+
+.featureItem:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 35px 80px rgba(0,0,0,0.12);
+}
+
+.circle {
+  width: 90px;
+  height: 90px;
+  background: #f4c542;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 25px;
+  font-size: 30px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+}
+
+.featureItem h4 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.featureItem p {
+  font-size: 15px;
+  opacity: 0.75;
+  line-height: 1.6;
+}
+

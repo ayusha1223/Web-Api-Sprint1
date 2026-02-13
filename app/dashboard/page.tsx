@@ -7,45 +7,24 @@ import { useShop } from "../context/ShopContext";
 import { useState } from "react";
 import { featuredProducts } from "./data/featured";
 import { useRouter } from "next/navigation";
+import TopBar from "../components/TopBar";
+import AddToCartModal from "../components/AddToCartModal";
 
 
 export default function Dashboard() {
   const { favorites, toggleFavorite, addToCart } = useShop();
   const router = useRouter();
-
-
-  const [showCartToast, setShowCartToast] = useState(false);
   const [showTryOn, setShowTryOn] = useState(false);
   const [tryOnIndex, setTryOnIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [minPrice, setMinPrice] = useState<number | "">("");
-const [maxPrice, setMaxPrice] = useState<number | "">("");
-const [searchQuery, setSearchQuery] = useState("");
-const [showProfileMenu, setShowProfileMenu] = useState(false);
-const [darkMode, setDarkMode] = useState(false);
+  const [maxPrice, setMaxPrice] = useState<number | "">("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [priceRange, setPriceRange] = useState(5000);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
-// Load saved theme
-useState(() => {
-  if (typeof window !== "undefined") {
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark") {
-      document.body.classList.add("dark");
-      setDarkMode(true);
-    }
-  }
-});
-
-const [priceRange, setPriceRange] = useState(5000);
-const [selectedColor, setSelectedColor] = useState<string | null>(null);
-
-
-// Toggle dark mode
-const toggleDarkMode = () => {
-  document.body.classList.toggle("dark");
-  const isDark = document.body.classList.contains("dark");
-  setDarkMode(isDark);
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-};
 
   const tryOnDresses = [
     {
@@ -96,95 +75,33 @@ const toggleDarkMode = () => {
       offsetX: -5,
     },
   ];
- const filteredProducts = featuredProducts
-  .filter((p) => {
-    if (!searchQuery) return true;
-    return p.title.toLowerCase().includes(searchQuery.toLowerCase());
-  })
-  .filter((p) => {
-    const price = Number(p.price);
 
-    if (minPrice !== "" && price < Number(minPrice)) return false;
-    if (maxPrice !== "" && price > Number(maxPrice)) return false;
-    if (price > priceRange) return false;
+  const filteredProducts = featuredProducts
+    .filter((p) => {
+      if (!searchQuery) return true;
+      return p.title.toLowerCase().includes(searchQuery.toLowerCase());
+    })
+    .filter((p) => {
+      const price = Number(p.price);
 
-    if (selectedColor && p.color?.toLowerCase() !== selectedColor.toLowerCase())
-      return false;
+      if (minPrice !== "" && price < Number(minPrice)) return false;
+      if (maxPrice !== "" && price > Number(maxPrice)) return false;
+      if (price > priceRange) return false;
 
-    return true;
-  });
+      if (selectedColor && p.color?.toLowerCase() !== selectedColor.toLowerCase())
+        return false;
+
+      return true;
+    });
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-card">
         {/* ================= TOP BAR ================= */}
-        <div className="topBar">
-          <div className="topSearch">
-            <div className="searchWrapper">
-              <span className="searchIcon">🔍</span>
-              <input
-                type="text"
-                placeholder="Search for dresses, co-ord sets, party wear..."
-                className="searchInput"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <span className="filterIcon">⚙️</span>
-            </div>
-          </div>
-
-          <div className="topRight">
-            <span
-              className="icon"
-              onClick={() => setShowTryOn(true)}
-              title="Try On"
-              style={{ cursor: "pointer" }}
-            >
-              👗
-            </span>
-            <Link href="/favorites" className="icon">
-              ♡
-            </Link>
-            <Link href="/cart" className="icon">
-              🛒
-            </Link>
-            <div className="profileWrapper">
-  <span
-    className="icon"
-    onClick={() => setShowProfileMenu(!showProfileMenu)}
-    style={{ cursor: "pointer" }}
-  >
-    👤
-  </span>
-
-  {showProfileMenu && (
-  <div className="profileDropdown">
-    <Link
-      href="/user/profile"
-      className="menuItem"
-      onClick={() => setShowProfileMenu(false)}
-    >
-      ✏️ <span>Edit Profile</span>
-    </Link>
-
-    <button className="menuItem">
-      ⚙️ <span>Settings</span>
-    </button>
-
-    <button className="menuItem" onClick={toggleDarkMode}>
-      🌙 <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
-    </button>
-
-    <div className="menuDivider" />
-
-    <button className="menuItem logout">
-      🚪 <span>Logout</span>
-    </button>
-  </div>
-)}
-</div>
-
-          </div>
-        </div>
+        <TopBar
+          showTryOn={true}
+          onTryOnClick={() => setShowTryOn(true)}
+        />
 
         <div className="dashboard-layout">
           {/* ================= SIDEBAR ================= */}
@@ -197,110 +114,108 @@ const toggleDarkMode = () => {
                 height={50}
                 priority
               />
-
             </div>
 
-           <h3>Categories</h3>
-<ul>
-  <li>
-    <Link href="/dashboard">Home</Link>
-  </li>
+            <h3>Categories</h3>
+            <ul>
+              <li>
+                <Link href="/dashboard">Home</Link>
+              </li>
 
-  <li>
-    <Link href="/dashboard/category/casual">Casual Wear</Link>
-  </li>
+              <li>
+                <Link href="/dashboard/category/casual">Casual Wear</Link>
+              </li>
 
-  <li>
-    <Link href="/dashboard/category/coord">Co-ord Set</Link>
-  </li>
+              <li>
+                <Link href="/dashboard/category/coord">Co-ord Set</Link>
+              </li>
 
-  <li>
-    <Link href="/dashboard/category/party">Party Wear</Link>
-  </li>
+              <li>
+                <Link href="/dashboard/category/party">Party Wear</Link>
+              </li>
 
-  <li>
-    <Link href="/dashboard/category/winter">Winter Wear</Link>
-  </li>
+              <li>
+                <Link href="/dashboard/category/winter">Winter Wear</Link>
+              </li>
 
-  <li>
-    <Link href="/dashboard/category/wedding">Wedding Wear</Link>
-  </li>
+              <li>
+                <Link href="/dashboard/category/wedding">Wedding Wear</Link>
+              </li>
 
-  <li>
-    <Link href="/dashboard/category/onepiece">1 Piece Set</Link>
-  </li>
-</ul>
+              <li>
+                <Link href="/dashboard/category/onepiece">1 Piece Set</Link>
+              </li>
+            </ul>
 
+            <h3 style={{ marginTop: "24px" }}>Filter by Price</h3>
+            <div className="priceFilter">
+              <input
+                type="number"
+                placeholder="Min"
+                value={minPrice}
+                onChange={(e) =>
+                  setMinPrice(e.target.value === "" ? "" : Number(e.target.value))
+                }
+              />
+              <input
+                type="number"
+                placeholder="Max"
+                value={maxPrice}
+                onChange={(e) =>
+                  setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))
+                }
+              />
+              <div className="priceSliderBox">
+                <input
+                  type="range"
+                  min={500}
+                  max={5000}
+                  step={100}
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(Number(e.target.value))}
+                  className="priceSlider"
+                />
+                <div className="priceRangeText">
+                  ₹500 – ₹{priceRange.toLocaleString()}
+                </div>
+                <h3 style={{ marginTop: 24 }}>Choose by Color</h3>
 
-          <h3 style={{ marginTop: "24px" }}>Filter by Price</h3>
-  <div className="priceFilter">
-    <input
-      type="number"
-      placeholder="Min"
-      value={minPrice}
-      onChange={(e) =>
-        setMinPrice(e.target.value === "" ? "" : Number(e.target.value))
-      }
-    />
-    <input
-      type="number"
-      placeholder="Max"
-      value={maxPrice}
-      onChange={(e) =>
-        setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))
-      }
-    />
-    <div className="priceSliderBox">
-  <input
-    type="range"
-    min={500}
-    max={5000}
-    step={100}
-    value={priceRange}
-    onChange={(e) => setPriceRange(Number(e.target.value))}
-    className="priceSlider"
-  />
-  <div className="priceRangeText">
-    ₹500 – ₹{priceRange.toLocaleString()}
-  </div>
-  <h3 style={{ marginTop: 24 }}>Choose by Color</h3>
-
-<div className="colorFilterVertical">
-  {[
-    "black",
-    "white",
-    "red",
-    "blue",
-    "green",
-    "pink",
-    "yellow",
-    "brown",
-    "maroon",
-    "orange",
-  ].map((color) => (
-    <div
-      key={color}
-      className={`colorRow ${selectedColor === color ? "active" : ""}`}
-      onClick={() =>
-        setSelectedColor(selectedColor === color ? null : color)
-      }
-    >
-      <span
-        className="colorDot"
-        style={{
-          backgroundColor: color === "white" ? "#fff" : color,
-          border: color === "white" ? "1.5px solid #ccc" : undefined,
-        }}
-      />
-      <span className="colorName">
-        {color.charAt(0).toUpperCase() + color.slice(1)}
-      </span>
-    </div>
-  ))}
-</div>
-</div>
-  </div>
-</aside>
+                <div className="colorFilterVertical">
+                  {[
+                    "black",
+                    "white",
+                    "red",
+                    "blue",
+                    "green",
+                    "pink",
+                    "yellow",
+                    "brown",
+                    "maroon",
+                    "orange",
+                  ].map((color) => (
+                    <div
+                      key={color}
+                      className={`colorRow ${selectedColor === color ? "active" : ""}`}
+                      onClick={() =>
+                        setSelectedColor(selectedColor === color ? null : color)
+                      }
+                    >
+                      <span
+                        className="colorDot"
+                        style={{
+                          backgroundColor: color === "white" ? "#fff" : color,
+                          border: color === "white" ? "1.5px solid #ccc" : undefined,
+                        }}
+                      />
+                      <span className="colorName">
+                        {color.charAt(0).toUpperCase() + color.slice(1)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
 
           {/* ================= MAIN ================= */}
           <main>
@@ -345,73 +260,54 @@ const toggleDarkMode = () => {
               </div>
             </div>
 
-            {/* ===== SPLIT HERO ===== */}
-            
-
             {/* ===== FEATURED ===== */}
             <h2 className="pickTitle">Pick yours now</h2>
 
-<section className="productListSection">
-  <div className="productGrid">
-    {featuredProducts
-      .filter((p) => {
-        if (!searchQuery) return true;
-        return p.title.toLowerCase().includes(searchQuery.toLowerCase());
-      })
-      .filter((p) => {
-        if (minPrice !== "" && p.price < minPrice) return false;
-        if (maxPrice !== "" && p.price > maxPrice) return false;
-        return true;
-      })
-      .map((p) => (
-        <div className="productCard" key={p.id}>
-          <span
-            className="wishlistIcon"
-            onClick={() => toggleFavorite(p.image)}
-          >
-            {favorites.includes(p.image) ? "❤️" : "♡"}
-          </span>
+            <section className="productListSection">
+              <div className="productGrid">
+                {filteredProducts.map((p) => (
+                  <div className="productCard" key={p.id}>
+                    <span
+                      className="wishlistIcon"
+                      onClick={() => toggleFavorite(p.image)}
+                    >
+                      {favorites.includes(p.image) ? "❤️" : "♡"}
+                    </span>
 
-          <div
-  className="productImg"
-  onClick={() => router.push(`/product/${p.slug}`)}
-  style={{ cursor: "pointer" }}
+                    <div
+                      className="productImg"
+                      onClick={() => router.push(`/product/${p.slug}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img src={p.image} alt={p.title} />
+                    </div>
+
+                    <div className="productInfo">
+                      <p className="brand">{p.color || "NAAYU"}</p>
+                      <p className="name">{p.title}</p>
+
+                      <div className="priceRow">
+                        <span className="price">₹{p.price}</span>
+                        <span className="off">{p.discount}</span>
+                      </div>
+
+                     <button
+  className="cartIconBtn"
+  onClick={(e) => {
+  e.stopPropagation();
+  setSelectedProduct(p);
+  setSelectedSize(null);
+}}
 >
-  <img src={p.image} alt={p.title} />
-</div>
-
-
-          <div className="productInfo">
-            <p className="brand">{p.category}</p>
-            <p className="name">{p.title}</p>
-
-            <div className="priceRow">
-              <span className="price">₹{p.price}</span>
-              <span className="off">{p.discount}</span>
-            </div>
-
-            <button
-              className="cartIconBtn"
-              onClick={() => addToCart(p.image)}
-            >
-              🛒
-            </button>
-          </div>
-        </div>
-      ))}
-  </div>
-</section>
-
-
+  🛒
+</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           </main>
         </div>
-
-        {/* ================= CART TOAST ================= */}
-        {showCartToast && (
-          <div className="cartToastOverlay">
-            <div className="cartToast">✅ Added to cart</div>
-          </div>
-        )}
 
         {/* ================= TRY ON MODAL ================= */}
         {showTryOn && (
@@ -496,6 +392,12 @@ const toggleDarkMode = () => {
             </div>
           </div>
         )}
+        {selectedProduct && (
+  <AddToCartModal
+    product={selectedProduct}
+    onClose={() => setSelectedProduct(null)}
+  />
+)}
       </div>
     </div>
   );

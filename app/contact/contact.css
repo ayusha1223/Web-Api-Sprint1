@@ -1,0 +1,119 @@
+.contactPage {
+  background: #f3f1ed;
+  font-family: "Poppins", sans-serif;
+}
+
+/* HERO */
+.contactHero {
+  background: #e6efe2;
+  text-align: center;
+  padding: 70px 20px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+}
+
+.contactHero h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.contactHero p {
+  max-width: 500px;
+  margin: auto;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* MAIN CONTAINER */
+.contactContainer {
+  max-width: 1100px;
+  margin: 80px auto;
+  display: flex;
+  gap: 60px;
+  padding: 0 40px;
+}
+
+/* LEFT SIDE */
+.contactLeft {
+  flex: 1;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.infoCard {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.infoCard span {
+  font-size: 22px;
+}
+
+.infoCard h4 {
+  margin: 10px 0 5px;
+}
+
+.infoCard p {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.mapBox {
+  margin-top: 30px;
+}
+
+/* RIGHT SIDE FORM */
+.contactForm {
+  flex: 1;
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.06);
+}
+
+.contactForm h2 {
+  margin-bottom: 8px;
+}
+
+.contactForm p {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.contactForm form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contactForm input,
+.contactForm textarea {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.contactForm button {
+  background: #c97a4c;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.contactForm button:hover {
+  background: #b5653f;
+}

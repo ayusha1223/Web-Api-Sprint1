@@ -4,14 +4,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
 import "../../dashboard.css";
 import styles from "../../CategoryGrid.module.css";
-
 import { useShop } from "../../../context/ShopContext";
-
 import TryOnViewer from "../../../components/TryOnViewer";
 import { winterProducts } from "../../data/winter";
+import AddToCartModal from "../../../components/AddToCartModal";
 
 export default function WinterPage() {
   const { favorites, toggleFavorite, addToCart } = useShop();
@@ -24,6 +22,7 @@ export default function WinterPage() {
   const [priceRange, setPriceRange] = useState(5000);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [showTryOn, setShowTryOn] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   /* ================= FILTER ================= */
   const filteredProducts = winterProducts
@@ -199,13 +198,16 @@ export default function WinterPage() {
                         >
                           {favorites.includes(p.image) ? "❤️" : "🤍"}
                         </div>
+                      <button
+  className={styles.cartBtn}
+  onClick={(e) => {
+    e.stopPropagation();
+    setSelectedProduct(p);
+  }}
+>
+  🛒
+</button>
 
-                        <button
-                          className={styles.cartBtn}
-                          onClick={() => addToCart(p.image)}
-                        >
-                          🛒
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -230,7 +232,12 @@ export default function WinterPage() {
             </div>
           </div>
         )}
-
+        {selectedProduct && (
+  <AddToCartModal
+    product={selectedProduct}
+    onClose={() => setSelectedProduct(null)}
+  />
+)}
       </div>
     </div>
   );

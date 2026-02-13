@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 import { Navbar, Footer } from "./components/layout";
 import { ShopProvider } from "./context/ShopContext";
+import GlobalToast from "./components/ui/GlobalToast"; // 👈 ADD THIS
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +23,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
@@ -31,6 +33,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ShopProvider>
+
+          {/* 🔥 GLOBAL TOAST (VERY IMPORTANT) */}
+          <GlobalToast />
+
           {/* GLOBAL NAVBAR */}
           <Navbar />
 
@@ -39,6 +45,7 @@ export default function RootLayout({
 
           {/* GLOBAL FOOTER */}
           <Footer />
+
         </ShopProvider>
       </body>
     </html>

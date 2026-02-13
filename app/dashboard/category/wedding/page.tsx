@@ -4,14 +4,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
 import "../../dashboard.css";
 import styles from "../../CategoryGrid.module.css";
-
 import { useShop } from "../../../context/ShopContext";
-
 import TryOnViewer from "../../../components/TryOnViewer";
 import { weddingProducts } from "../../data/wedding";
+import AddToCartModal from "../../../components/AddToCartModal";
 
 export default function WeddingPage() {
   const { favorites, toggleFavorite, addToCart } = useShop();
@@ -24,6 +22,7 @@ export default function WeddingPage() {
   const [priceRange, setPriceRange] = useState(7000);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [showTryOn, setShowTryOn] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   /* ================= FILTER ================= */
  const filteredProducts = weddingProducts
@@ -203,12 +202,15 @@ export default function WeddingPage() {
                           {favorites.includes(p.image) ? "❤️" : "🤍"}
                         </div>
 
-                        <button
-                          className={styles.cartBtn}
-                          onClick={() => addToCart(p.image)}
-                        >
-                          🛒
-                        </button>
+                       <button
+  className={styles.cartBtn}
+  onClick={(e) => {
+    e.stopPropagation();
+    setSelectedProduct(p);
+  }}
+>
+  🛒
+</button>
                       </div>
                     </div>
                   </div>
@@ -233,7 +235,12 @@ export default function WeddingPage() {
             </div>
           </div>
         )}
-
+        {selectedProduct && (
+  <AddToCartModal
+    product={selectedProduct}
+    onClose={() => setSelectedProduct(null)}
+  />
+)}
       </div>
     </div>
   );

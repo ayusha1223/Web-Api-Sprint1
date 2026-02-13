@@ -9,7 +9,7 @@ import styles from "../../CategoryGrid.module.css";
 import TryOnViewer from "../../../components/TryOnViewer";
 import { useShop } from "../../../context/ShopContext";
 import { casualProducts } from "../../data/casual";
-
+import AddToCartModal from "../../../components/AddToCartModal";
 
 export default function CasualPage() {
   const { favorites, toggleFavorite, addToCart } = useShop();
@@ -22,6 +22,7 @@ export default function CasualPage() {
   const [priceRange, setPriceRange] = useState(5000); // 🆕 slider state
   const [showTryOn, setShowTryOn] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   /* ================= FILTER ================= */
   const filteredProducts = casualProducts
@@ -188,8 +189,6 @@ export default function CasualPage() {
     }}
   />
 </div>
-
-
                   <div className={styles.categoryInfo}>
                     <div className={styles.categoryTag}>CASUAL</div>
                     <div className={styles.categoryTitle}>{p.title}</div>
@@ -210,11 +209,15 @@ export default function CasualPage() {
                         </div>
 
                         <button
-                          className={styles.cartBtn}
-                          onClick={() => addToCart(p.image)}
-                        >
-                          🛒
-                        </button>
+  className={styles.cartBtn}
+  onClick={(e) => {
+    e.stopPropagation();
+    setSelectedProduct(p);
+  }}
+>
+  🛒
+</button>
+
                       </div>
                     </div>
                   </div>
@@ -238,6 +241,13 @@ export default function CasualPage() {
             </div>
           </div>
         )}
+        {selectedProduct && (
+  <AddToCartModal
+    product={selectedProduct}
+    onClose={() => setSelectedProduct(null)}
+  />
+)}
+
       </div>
     </div>
   );

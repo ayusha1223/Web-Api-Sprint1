@@ -9,6 +9,7 @@ import styles from "../../CategoryGrid.module.css";
 import { useShop } from "../../../context/ShopContext";
 import TryOnViewer from "../../../components/TryOnViewer";
 import { partyProducts } from "../../data/party";
+import AddToCartModal from "../../../components/AddToCartModal";
 
 export default function PartyWearPage() {
   const { favorites, toggleFavorite, addToCart } = useShop();
@@ -21,6 +22,7 @@ export default function PartyWearPage() {
   const [priceRange, setPriceRange] = useState(5000);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [showTryOn, setShowTryOn] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   /* ================= FILTER ================= */
   const filteredProducts = partyProducts
@@ -197,12 +199,16 @@ export default function PartyWearPage() {
                           {favorites.includes(p.image) ? "❤️" : "🤍"}
                         </div>
 
-                        <button
-                          className={styles.cartBtn}
-                          onClick={() => addToCart(p.image)}
-                        >
-                          🛒
-                        </button>
+                       <button
+  className={styles.cartBtn}
+  onClick={(e) => {
+    e.stopPropagation();
+    setSelectedProduct(p);
+  }}
+>
+  🛒
+</button>
+
                       </div>
                     </div>
                   </div>
@@ -227,6 +233,13 @@ export default function PartyWearPage() {
             </div>
           </div>
         )}
+        {selectedProduct && (
+  <AddToCartModal
+    product={selectedProduct}
+    onClose={() => setSelectedProduct(null)}
+  />
+)}
+
 
       </div>
     </div>

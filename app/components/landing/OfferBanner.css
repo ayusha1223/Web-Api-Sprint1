@@ -1,147 +1,61 @@
-/* ===== SUMMER LAUNCH BANNER ===== */
-
-.launch-banner {
-  padding: 80px 40px;
-  background: #f7f4ef;
-  overflow: visible;
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-  height: 350px;
+.property-types {
+  padding: 90px 20px;
+  text-align: center;
+  background: #f8f9fb;
 }
 
-.launch-container {
-  max-width: 1200px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 40px;
-  align-items: center;
+.property-header {
+  margin-bottom: 50px;
 }
 
-/* LEFT TEXT */
-.launch-text {
-  max-width: 420px;
-  margin-bottom: 200px;
-}
-
-.launch-tag {
+.property-subtitle {
   font-size: 12px;
+  font-weight: 600;
   letter-spacing: 2px;
-  color: #777;
+  color: #9aa0a6;
 }
 
-.launch-text h2 {
-  font-size: 36px;
-  margin: 14px 0;
-  letter-spacing: 2px;
+.property-header h2 {
+  font-size: 34px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-top: 10px;
 }
 
-.launch-text p {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #555;
-  margin-bottom: 24px;
-}
-
-.launch-btn {
-  padding: 10px 28px;
-  border: 1px solid #000;
-  background: transparent;
-  font-size: 12px;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.launch-btn:hover {
-  background: #000;
-  color: #fff;
-}
-
-/* RIGHT IMAGE BOX */
-.launch-image {
-  background: none;
-  box-shadow: none;
-  border-radius: 0;
+.property-grid {
   display: flex;
   justify-content: center;
-  overflow: visible;
+  gap: 25px;
+  flex-wrap: wrap;
 }
 
-
-/* MAIN FLOATING MODEL */
-.floating-img {
-  position: absolute;
-  bottom: 0;        /* body stays inside box */
-  right: -90px;
-  height: 340%;     /* big image, head goes out */
-  object-fit: contain;
-  z-index: 3;
-  background: none;
-}
-
-/* SIDE IMAGES */
-.side-img {
-  position: absolute;
+.property-card {
   width: 180px;
-  height: 180px;
-  border-radius: 18px;
-  overflow: hidden;
-
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-  z-index: 1;
-
+  background: white;
+  padding: 30px 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: 0.3s ease;
+  border-bottom: 3px solid #d27d2d;
 }
 
-.side-img-inner {
-  object-fit: cover;
+.property-card:hover {
+  transform: translateY(-6px);
 }
 
-/* SIDE IMAGE POSITIONS */
-.side-img-top {
-  top: 40px;
-  right: 220px;
+.property-card svg {
+  margin-bottom: 15px;
+  color: #2c3e50;
 }
 
-.side-img-bottom {
-  bottom: 30px;
-  right: 200px;
-}
-.image-card {
-  position: relative;
-  width: 400px;        /* 🔥 wider */
-  height: 700px;       /* 🔥 taller */
-  overflow: visible;   /* allow floating */
-    transform: translateY(-150px);
+.property-card h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.image-row {
-  display: flex;
-  gap: 100px;          /* 🔥 real spacing */
-  align-items: flex-end;
-  transform: translateY(-150px);
-  margin-left: 290px;
-  
-}
-
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .launch-container {
-    grid-template-columns: 1fr;
-  }
-
-  .launch-image {
-    height: 320px;
-  }
-
-  .side-img {
-    display: none;
-  }
-
-  .floating-img {
-    right: 0;
-    height: 140%;
-  }
+.property-card p {
+  font-size: 13px;
+  color: #9aa0a6;
 }

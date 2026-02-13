@@ -135,6 +135,59 @@
 .categoryImage:hover img {
   transform: scale(1.05);
 }
+.sizeOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.sizeModal {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 360px;
+  text-align: center;
+  animation: pop 0.25s ease;
+}
+
+.sizeOptions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.sizeBtn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.activeSize {
+  border: 2px solid #ff3f6c;
+}
+
+.confirmBtn {
+  width: 100%;
+  height: 48px;
+  background: #ff3f6c;
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 
 
 

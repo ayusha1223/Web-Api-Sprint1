@@ -271,7 +271,7 @@ export const casualProducts = [
   },
   {
     id: 22,
-    slug: "red-kurhit",
+    slug: "red-kurthi5",
     image: "/images/casual-wear/casual22.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -284,7 +284,7 @@ export const casualProducts = [
   },
   {
     id: 23,
-    slug: "red-kurhit",
+    slug: "red-kurthi6",
     image: "/images/casual-wear/casual23.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -297,7 +297,7 @@ export const casualProducts = [
   },
   {
     id: 24,
-    slug: "red-kurhit",
+    slug: "red-kurthi7",
     image: "/images/casual-wear/casual24.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -310,7 +310,7 @@ export const casualProducts = [
   },
   {
     id: 25,
-    slug: "red-kurhit",
+    slug: "red-kurthi8",
     image: "/images/casual-wear/casual25.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -323,7 +323,7 @@ export const casualProducts = [
   },
   {
     id: 26,
-    slug: "red-kurhit",
+    slug: "red-kurthi9",
     image: "/images/casual-wear/casual26.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -336,7 +336,7 @@ export const casualProducts = [
   },
   {
     id: 27,
-    slug: "red-kurhit",
+    slug: "red-kurthi10",
     image: "/images/casual-wear/casual27.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -348,7 +348,7 @@ export const casualProducts = [
   },
   {
    id: 28,
-    slug: "red-kurhit",
+    slug: "red-kurthi11",
     image: "/images/casual-wear/casual28.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -361,7 +361,7 @@ export const casualProducts = [
   },
   {
    id: 29,
-    slug: "red-kurhit",
+    slug: "red-kurthi12",
     image: "/images/casual-wear/casual29.png",
     title: "Red Kurhit",
     category: "CASUAL",
@@ -374,7 +374,7 @@ export const casualProducts = [
   },
   {
    id: 30,
-    slug: "red-kurhit",
+    slug: "red-kurthi13",
     image: "/images/casual-wear/casual30.png",
     title: "Red Kurhit",
     category: "CASUAL",

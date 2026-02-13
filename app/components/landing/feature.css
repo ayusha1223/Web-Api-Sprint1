@@ -1,0 +1,99 @@
+.popular {
+  padding: 60px 20px; /* less top space */
+  background: #f7f4ef;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center everything */
+}
+
+
+.popular-header {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.popular-sub {
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: #9aa0a6;
+}
+
+.popular-header h2 {
+  font-size: 32px;
+  margin-top: 5px;
+}
+
+.explore-link {
+  font-weight: 600;
+  color: #000;
+  text-decoration: none;
+}
+
+.popular-grid {
+  display: flex;
+  gap: 30px;
+  justify-content: center; /* center cards */
+  flex-wrap: wrap;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.popular-card {
+  background: white;
+  width: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.popular-card:hover {
+  transform: translateY(-8px);
+}
+
+.card-image {
+  position: relative;
+  height: 220px;
+}
+
+.card-image .img {
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-content h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.card-content p {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-bottom button {
+  background: black;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.card-bottom span {
+  font-weight: 700;
+}

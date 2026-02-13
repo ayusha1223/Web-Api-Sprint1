@@ -1034,8 +1034,75 @@ html, body {
 .menuItem.logout:hover {
   background: rgba(229,57,53,0.12);
 }
+.cartOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(98, 108, 190, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+.cartModal {
+  background: #fff;
+  width: 350px;
+  padding: 25px;
+  border-radius: 12px;
+  position: relative;
+  text-align: center;
+  animation: pop 0.25s ease;
+}
 
+@keyframes pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.closeBtn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.cartModalImage {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.sizeOptions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.sizeBtn {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: #f8f8f8;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.sizeBtn.activeSize {
+  background: rgb(85, 83, 204);
+  color: white;
+}
+
+.confirmBtn {
+  width: 100%;
+  padding: 10px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
 /* animation */
 @keyframes slideDown {
