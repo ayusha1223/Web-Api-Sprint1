@@ -1,14 +1,19 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./TrendingSection.module.css";
-import { useEffect, useState } from "react";
+import AuthModal from "../auth/AuthModal"; // adjust path if needed
+
+type Mode = "login" | "register" | "forgot-password";
 
 export default function TrendingSection() {
-  /* ================= COUNTDOWN LOGIC ================= */
- const targetDate = new Date("2026-03-01T23:59:59").getTime();
+  const router = useRouter();
 
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<Mode>("login");
+
+  const targetDate = new Date("2026-03-01T23:59:59").getTime();
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -17,6 +22,19 @@ export default function TrendingSection() {
     seconds: 0,
   });
 
+  // 🔐 Require Auth Helper
+  const requireAuth = (callback?: () => void) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setAuthMode("login");
+      setAuthOpen(true);
+    } else {
+      callback?.();
+    }
+  };
+
+  // ⏳ Countdown
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -24,12 +42,6 @@ export default function TrendingSection() {
 
       if (distance <= 0) {
         clearInterval(timer);
-        setTimeLeft({
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        });
         return;
       }
 
@@ -49,52 +61,65 @@ export default function TrendingSection() {
   }, []);
 
   return (
-    <>      {/* ================= PROMO BANNER ================= */}
+    <>
       <section className={styles.promoBanner}>
-        <div className={styles.promoInner}>
-          {/* LEFT IMAGE */}
-          <div className={styles.promoImage}>
-            <Image
-              src="/images/promo-model.jpg"
-              alt="Weekly Offer"
-              fill
-              className={styles.promoImg}
-            />
-          </div>
+        {/* VIDEO BACKGROUND */}
+        <video
+          className={styles.promoVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/videos/sale.mp4" type="video/mp4" />
+        </video>
 
-          {/* RIGHT CONTENT */}
-          <div className={styles.promoContent}>
-            <p className={styles.promoSmall}>
-              This week only! Ends 9/25.
-            </p>
+        {/* DARK OVERLAY */}
+        <div className={styles.overlay} />
 
-            <div className={styles.promoTimer}>
-              <div>
-                <h3>{timeLeft.days}</h3>
-                <span>Days</span>
-              </div>
-              <div>
-                <h3>{timeLeft.hours}</h3>
-                <span>Hours</span>
-              </div>
-              <div>
-                <h3>{timeLeft.minutes}</h3>
-                <span>Minutes</span>
-              </div>
-              <div>
-                <h3>{timeLeft.seconds}</h3>
-                <span>Seconds</span>
-              </div>
+        {/* CONTENT */}
+        <div className={styles.promoContent}>
+          <p className={styles.promoSmall}>
+            This week only! Ends 9/25.
+          </p>
+
+          <div className={styles.promoTimer}>
+            <div>
+              <h3>{timeLeft.days}</h3>
+              <span>Days</span>
             </div>
-
-            <Link href="/shop">
-              <button className={styles.promoBtn}>
-                Get it now
-              </button>
-            </Link>
+            <div>
+              <h3>{timeLeft.hours}</h3>
+              <span>Hours</span>
+            </div>
+            <div>
+              <h3>{timeLeft.minutes}</h3>
+              <span>Minutes</span>
+            </div>
+            <div>
+              <h3>{timeLeft.seconds}</h3>
+              <span>Seconds</span>
+            </div>
           </div>
+
+          <button
+            className={styles.promoBtn}
+            onClick={() =>
+              requireAuth(() => router.push("/shop"))
+            }
+          >
+            Get it now
+          </button>
         </div>
       </section>
+
+      {/* AUTH MODAL */}
+      <AuthModal
+        open={authOpen}
+        mode={authMode}
+        onClose={() => setAuthOpen(false)}
+        onSwitchMode={(m) => setAuthMode(m)}
+      />
     </>
   );
 }

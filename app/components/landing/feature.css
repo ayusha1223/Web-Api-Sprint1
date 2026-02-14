@@ -58,11 +58,13 @@
 
 .card-image {
   position: relative;
-  height: 220px;
+  width: 100%;
+  aspect-ratio: 4 / 5;   /* premium ratio */
 }
 
 .card-image .img {
   object-fit: cover;
+  object-position: top;
 }
 
 .card-content {

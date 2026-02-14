@@ -67,9 +67,11 @@ export async function getProfileAction() {
   });
 
   const result = await res.json();
+
   if (!res.ok) throw new Error(result.message);
 
-  return result.data;
+  // 🔥 FIX HERE
+  return result.data.user;
 }
 
 /* ---------------- UPDATE PROFILE ---------------- */

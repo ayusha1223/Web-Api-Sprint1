@@ -1,87 +1,71 @@
-/* ================= PROMO BANNER ================= */
-
 .promoBanner {
-  width: 100%;
-  padding: 70px 80px;
-  background: #fff;
-}
-
-.promoInner {
-  display: grid;
-  grid-template-columns: minmax(420px, 520px) 1fr;
-  align-items: stretch; /* IMPORTANT */
-  background: #f6f2ef;
-  border-radius: 22px;
-  padding: 0; /* remove inner padding */
-  gap: 0;
-}
-
-/* IMAGE */
-.promoImage {
   position: relative;
   width: 100%;
-  height: 150%;
-  min-height: 320px; /* full height */
-  border-radius: 22px 0 0 22px;
-  overflow: visible ;
-  margin-bottom: 40px;
+  height: 80vh;
+  overflow: hidden;
 }
 
-.promoImg {
-  object-fit: contain; /* fills fully */
- transform: translateX(500px) translateY(-70px);
+/* VIDEO FULL COVER */
+.promoVideo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 120%;
 }
 
+/* DARK OVERLAY */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
 
-/* CONTENT */
+/* CONTENT CENTERED */
 .promoContent {
+  position: relative;
+  z-index: 2;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;   /* 🔥 vertical center */
-  align-items: center;       /* 🔥 horizontal center */
-  text-align: center;        /* center text */
-  gap: 24px;
-  padding: 40px 60px;
-  width: 100%;
-}
-
-
-.promoSmall {
-  font-size: 44px;
-  color: #555;
-}
-
-/* TIMER */
-.promoTimer {
-  display: flex;
-  gap: 38px;
-  font-size: 32px;
-  margin-bottom: 30PX;
-}
-
-.promoTimer div {
+  justify-content: center;
+  align-items: center;
+  color: white;
   text-align: center;
 }
 
+.promoSmall {
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.promoTimer {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
 .promoTimer h3 {
-  font-size: 26px;
+  font-size: 48px;
   margin: 0;
 }
 
 .promoTimer span {
-  font-size: 12px;
-  color: #777;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
-/* BUTTON */
 .promoBtn {
-  width: fit-content;
-  padding: 12px 26px;
-  background: #000;
-  color: #fff;
+  padding: 14px 34px;
+  background: white;
+  color: black;
   border: none;
-  cursor: pointer;
   border-radius: 6px;
-  font-size: 14px;
-  margin-top: -25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.promoBtn:hover {
+  background: #ddd;
 }

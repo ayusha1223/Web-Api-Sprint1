@@ -238,8 +238,6 @@ export default function OnePiecePage() {
     onClose={() => setSelectedProduct(null)}
   />
 )}
-
-
       </div>
     </div>
   );

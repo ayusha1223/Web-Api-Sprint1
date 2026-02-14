@@ -4,6 +4,8 @@ import "./cart.css";
 import { useShop } from "../context/ShopContext";
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import TopBar from "../components/TopBar";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const {
@@ -18,6 +20,8 @@ export default function CartPage() {
     useState<
       "none" | "details" | "payment" | "esewaDetails" | "card" | "cod" | "success"
     >("none");
+    const router = useRouter();
+
 
   // 🔥 CREATE ORDER FUNCTION
   const createOrder = async (paymentMethod: string, paymentStatus: string) => {
@@ -44,9 +48,13 @@ export default function CartPage() {
     clearCart();
   };
 
-  return (
-    <div className="cartPage">
-      <h1 className="cartTitle">My Cart</h1>
+ return (
+  <div className="cartPage">
+
+    <TopBar showTryOn={true} />
+
+    <h1 className="cartTitle">My Cart</h1>
+
 
       <div className="cartLayout">
         {/* LEFT */}
@@ -132,7 +140,7 @@ export default function CartPage() {
 
             <button
               className="checkoutBtn"
-              onClick={() => setCheckoutStep("details")}
+              onClick={() => router.push("/checkout")}
             >
               PROCEED TO CHECKOUT
             </button>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface TopBarProps {
   showTryOn?: boolean;
@@ -12,6 +13,19 @@ export default function TopBar({ showTryOn = true, onTryOnClick }: TopBarProps) 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+const handleLogout = () => {
+  // Clear auth
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  // Close dropdown
+  setShowProfileMenu(false);
+
+  // Redirect to landing page and trigger auth modal
+  router.push("/?auth=login");
+};
 
   const toggleDarkMode = () => {
     document.body.classList.toggle("dark");
@@ -82,9 +96,13 @@ export default function TopBar({ showTryOn = true, onTryOnClick }: TopBarProps) 
 
               <div className="menuDivider" />
 
-              <button className="menuItem logout">
-                🚪 <span>Logout</span>
-              </button>
+              <button
+  className="menuItem logout"
+  onClick={handleLogout}
+>
+  🚪 <span>Logout</span>
+</button>
+
             </div>
           )}
         </div>

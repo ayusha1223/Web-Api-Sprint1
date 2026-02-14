@@ -1,61 +1,46 @@
-.property-types {
-  padding: 90px 20px;
-  text-align: center;
-  background: #f8f9fb;
+.category-section {
+  padding: 80px 8%;
+  background: white;
 }
 
-.property-header {
+.category-title {
+  text-align: center;
+  font-size: 32px;
   margin-bottom: 50px;
 }
 
-.property-subtitle {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  color: #9aa0a6;
-}
-
-.property-header h2 {
-  font-size: 34px;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-top: 10px;
-}
-
-.property-grid {
-  display: flex;
-  justify-content: center;
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 25px;
-  flex-wrap: wrap;
 }
 
-.property-card {
-  width: 180px;
-  background: white;
-  padding: 30px 20px;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+.category-card {
+  position: relative;
+  height: 450px;
+  background: white;               /* visible box */
+  border-radius: 20px;
+  padding-top: 40px;               /* space for head pop */
+  overflow: visible;               /* 🔥 allow head outside */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: 0.3s ease;
-  border-bottom: 3px solid #d27d2d;
 }
 
-.property-card:hover {
-  transform: translateY(-6px);
+.category-card img {
+  width: 100%;
+  height: 120%;
+  object-fit: contain;             /* don’t crop model */
+  transform: translateY(-50px);    /* 🔥 head out effect */
+  transition: 0.3s ease;
 }
 
-.property-card svg {
-  margin-bottom: 15px;
-  color: #2c3e50;
-}
 
-.property-card h3 {
-  font-size: 16px;
-  margin-bottom: 5px;
+.category-card span {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  color: white;
+  font-size: 20px;
   font-weight: 600;
-}
-
-.property-card p {
-  font-size: 13px;
-  color: #9aa0a6;
 }

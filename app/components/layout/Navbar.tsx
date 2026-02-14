@@ -73,10 +73,6 @@ export default function Navbar() {
           >
             Login
           </button>
-
-          <Link href="/cart" className="cart-btn">
-            Cart
-          </Link>
         </div>
       </nav>
 
