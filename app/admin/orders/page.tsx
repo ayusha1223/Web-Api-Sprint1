@@ -17,8 +17,13 @@ export default function AdminOrdersPage() {
           },
         });
 
-        const data = await res.json();
+        if (!res.ok) {
+          console.error("Fetch failed:", res.status);
+          setOrders([]);
+          return;
+        }
 
+        const data = await res.json();
         console.log("ORDERS RESPONSE:", data);
 
         if (data.success) {
@@ -49,8 +54,9 @@ export default function AdminOrdersPage() {
             <tr>
               <th>Order ID</th>
               <th>Total</th>
-              <th>Payment</th>
-              <th>Status</th>
+              <th>Payment Method</th>
+              <th>Payment Status</th>
+              <th>Order Status</th>
               <th>Date</th>
             </tr>
           </thead>
@@ -58,7 +64,7 @@ export default function AdminOrdersPage() {
           <tbody>
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={5}>No orders found</td>
+                <td colSpan={6}>No orders found</td>
               </tr>
             ) : (
               orders.map((o: any) => (
@@ -67,6 +73,7 @@ export default function AdminOrdersPage() {
                   <td>₹{o.totalAmount}</td>
                   <td>{o.paymentMethod}</td>
                   <td>{o.paymentStatus}</td>
+                  <td>{o.orderStatus}</td>
                   <td>
                     {new Date(o.createdAt).toLocaleString()}
                   </td>

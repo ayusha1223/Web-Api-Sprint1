@@ -21,8 +21,8 @@ export default function PaymentsPage() {
 
         console.log("PAYMENTS RESPONSE:", data);
 
-        if (Array.isArray(data)) {
-          setPayments(data);
+        if (data.success) {
+          setPayments(data.data);
         } else {
           setPayments([]);
         }

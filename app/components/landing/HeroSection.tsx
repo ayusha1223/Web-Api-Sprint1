@@ -37,16 +37,6 @@ export default function HeroSection() {
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
-
-        {/* Fallback Image */}
-        <Image
-          src="/images/hero1.jpg"
-          alt="Hero"
-          fill
-          priority
-          className="hero-img"
-        />
-
         {/* Overlay */}
         <div className="hero-overlay" />
 

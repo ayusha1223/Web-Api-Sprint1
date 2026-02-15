@@ -71,7 +71,7 @@ export default function TrendingSection() {
           loop
           playsInline
         >
-          <source src="/videos/sale.mp4" type="video/mp4" />
+          <source src="/videos/sale1.mp4" type="video/mp4" />
         </video>
 
         {/* DARK OVERLAY */}

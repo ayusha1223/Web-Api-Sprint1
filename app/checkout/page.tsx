@@ -14,7 +14,84 @@ const [selectedPayment, setSelectedPayment] = useState(null);
   const [step, setStep] = useState(1);
   const total = totalPrice + 119;
   const [showOTP, setShowOTP] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+const [placingOrder, setPlacingOrder] = useState(false);
+const [fullName, setFullName] = useState("");
+const [phone, setPhone] = useState("");
+const [address, setAddress] = useState("");
+const [city, setCity] = useState("");
+const [otp, setOtp] = useState("");
+const [cardNumber, setCardNumber] = useState("");
+const [expiry, setExpiry] = useState("");
+const [cvv, setCvv] = useState("");
+const [esewaId, setEsewaId] = useState("");
+const [mpin, setMpin] = useState("");
+const [paypalEmail, setPaypalEmail] = useState("");
+const [paypalPassword, setPaypalPassword] = useState("");
 
+
+const [errors, setErrors] = useState<any>({});
+
+const handlePlaceOrder = async () => {
+  if (cart.length === 0) {
+  alert("Your cart is empty");
+  return;
+}
+  try {
+    setPlacingOrder(true);
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+  alert("Please login first");
+  setPlacingOrder(false);
+  return;
+}
+    const res = await fetch("http://localhost:5050/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        items: cart,
+        totalAmount: total,
+        paymentMethod:
+          selectedPayment === "cod"
+            ? "COD"
+            : selectedPayment === "card"
+            ? "Card"
+            : selectedPayment === "esewa"
+            ? "eSewa"
+            : "Card",
+      address: {
+  name: fullName,
+  phone,
+  address,
+  city,
+},
+      }),
+    });
+
+    const data = await res.json();
+
+    console.log("ORDER RESPONSE:", data);
+
+    if (!res.ok || !data.success) {
+      alert("Order failed");
+      setPlacingOrder(false);
+      return;
+    }
+
+    clearCart();
+    setOrderPlaced(true);
+    setPlacingOrder(false);
+
+  } catch (error) {
+    console.error("Order error:", error);
+    setPlacingOrder(false);
+  }
+};
 
   return (
     
@@ -59,17 +136,35 @@ const [selectedPayment, setSelectedPayment] = useState(null);
 
       <div className="inputGroup">
         <label>Full Name</label>
-        <input placeholder="Enter your full name" />
+        <input
+  value={fullName}
+  onChange={(e) => setFullName(e.target.value)}
+  placeholder="Enter your full name"
+/>
+{errors.fullName && <p className="error">{errors.fullName}</p>}
+
       </div>
 
       <div className="inputGroup">
         <label>Phone Number</label>
-        <input placeholder="Enter phone number" />
+        <input
+  value={phone}
+  onChange={(e) => setPhone(e.target.value)}
+  placeholder="Enter phone number"
+/>
+{errors.phone && <p className="error">{errors.phone}</p>}
+
       </div>
 
       <div className="inputGroup">
         <label>Address</label>
-        <input placeholder="Street address" />
+        <input
+  value={address}
+  onChange={(e) => setAddress(e.target.value)}
+  placeholder="Street address"
+/>
+{errors.address && <p className="error">{errors.address}</p>}
+
       </div>
 
       <div className="mapSection">
@@ -83,12 +178,35 @@ const [selectedPayment, setSelectedPayment] = useState(null);
 
       <div className="inputGroup">
         <label>City</label>
-        <input placeholder="Enter your city" />
+       <input
+  value={city}
+  onChange={(e) => setCity(e.target.value)}
+  placeholder="Enter your city"
+/>
+{errors.city && <p className="error">{errors.city}</p>}
+
       </div>
 
       <button
         className="continueBtn"
-        onClick={() => setStep(2)}
+        onClick={() => {
+  const newErrors: any = {};
+
+  if (!fullName) newErrors.fullName = "Full name is required";
+  if (!phone) newErrors.phone = "Phone is required";
+  if (phone && phone.length < 8)
+    newErrors.phone = "Enter valid phone number";
+  if (!address) newErrors.address = "Address is required";
+  if (!city) newErrors.city = "City is required";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({});
+  setStep(2);
+}}
       >
         Continue to Payment
       </button>
@@ -158,10 +276,9 @@ const [selectedPayment, setSelectedPayment] = useState(null);
         <div
           className="paymentCard"
           onClick={() => {
-            setSelectedPayment("cod");
-            setStep(4);
-          }}
-        >
+  setSelectedPayment("cod");
+  setStep(3);
+}}        >
           <div className="paymentLeft">
             🚚
             <div>
@@ -221,9 +338,12 @@ const [selectedPayment, setSelectedPayment] = useState(null);
   <div className="cardModal">
     <h3>OTP Verification</h3>
     <p>Enter the 6-digit OTP sent to your registered number</p>
-
-    <input placeholder="Enter OTP" />
-
+    <input
+  value={otp}
+  onChange={(e) => setOtp(e.target.value)}
+  placeholder="Enter OTP"
+/>
+{errors.otp && <p className="error">{errors.otp}</p>}
     <div className="modalActions">
       <button onClick={() => setShowOTP(false)}>
         Back
@@ -232,20 +352,23 @@ const [selectedPayment, setSelectedPayment] = useState(null);
       <button
         className="confirmBtn"
         onClick={() => {
-          setShowOTP(false);
-          setShowModal(false);
-          setStep(3);
-        }}
+  if (!otp || otp.length !== 6) {
+    setErrors({ otp: "Enter valid 6 digit OTP" });
+    return;
+  }
+
+  setErrors({});
+  setShowOTP(false);
+  setShowModal(false);
+  setStep(3);
+}}
       >
         Verify & Continue
       </button>
     </div>
   </div>
-
-)
-}
-
-
+       ) : (
+  <>
         {/* ================= CARD MODAL ================= */}
         {selectedPayment === "card" && (
           <div className="cardModal">
@@ -254,23 +377,53 @@ const [selectedPayment, setSelectedPayment] = useState(null);
               <img src="/icons/mastercard.png" alt="mastercard" />
               <img src="/icons/rupay.png" alt="rupay" />
             </div>
-
             <h3>Secure Card Payment</h3>
-
-            <input placeholder="Card Number" />
             <div className="row">
-              <input placeholder="MM/YY" />
-              <input placeholder="CVV" />
+              <input
+  value={cardNumber}
+  onChange={(e) => setCardNumber(e.target.value)}
+  placeholder="Card Number"
+/>
+
+<div className="row">
+  <input
+    value={expiry}
+    onChange={(e) => setExpiry(e.target.value)}
+    placeholder="MM/YY"
+  />
+  <input
+    value={cvv}
+    onChange={(e) => setCvv(e.target.value)}
+    placeholder="CVV"
+  />
+</div>
             </div>
 
             <div className="modalActions">
               <button onClick={() => setShowModal(false)}>Cancel</button>
               <button
                 className="confirmBtn"
-                onClick={() => {
-                  setShowModal(false);
-                  setStep(3);
-                }}
+               onClick={() => {
+  const newErrors: any = {};
+
+  if (!cardNumber || cardNumber.length < 12)
+    newErrors.cardNumber = "Enter valid card number";
+
+  if (!expiry)
+    newErrors.expiry = "Enter expiry date";
+
+  if (!cvv || cvv.length < 3)
+    newErrors.cvv = "Enter valid CVV";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({});
+  setShowModal(false);
+  setStep(3);
+}}
               >
                 Continue
               </button>
@@ -301,12 +454,21 @@ const [selectedPayment, setSelectedPayment] = useState(null);
 
             <div className="esewaInputGroup">
               <label>eSewa ID</label>
-              <input placeholder="98XXXXXXXX" />
+              <input
+  value={esewaId}
+  onChange={(e) => setEsewaId(e.target.value)}
+  placeholder="98XXXXXXXX"
+/>
             </div>
 
             <div className="esewaInputGroup">
               <label>MPIN / Password</label>
-              <input type="password" placeholder="Your 4-digit MPIN" />
+              <input
+  type="password"
+  value={mpin}
+  onChange={(e) => setMpin(e.target.value)}
+  placeholder="Your 4-digit MPIN"
+/>
             </div>
 
             <div className="rememberRow">
@@ -320,9 +482,23 @@ const [selectedPayment, setSelectedPayment] = useState(null);
 
             <button
   className="esewaLoginBtn"
-  onClick={() => {
-    setShowOTP(true); // show OTP screen
-  }}
+ onClick={() => {
+  const newErrors: any = {};
+
+  if (!esewaId || esewaId.length < 8)
+    newErrors.esewaId = "Enter valid eSewa ID";
+
+  if (!mpin || mpin.length < 4)
+    newErrors.mpin = "Enter valid MPIN";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({});
+  setShowOTP(true);
+}}
 >
   LOGIN
 </button>
@@ -345,18 +521,18 @@ const [selectedPayment, setSelectedPayment] = useState(null);
     </div>
 
     <h3>Login to PayPal</h3>
-
-    <input
-      type="email"
-      placeholder="Email address"
-      className="paypalInput"
-    />
-
-    <input
-      type="password"
-      placeholder="Password"
-      className="paypalInput"
-    />
+  <input
+  value={paypalEmail}
+  onChange={(e) => setPaypalEmail(e.target.value)}
+  type="email"
+  placeholder="Email address"
+/>
+<input
+  value={paypalPassword}
+  onChange={(e) => setPaypalPassword(e.target.value)}
+  type="password"
+  placeholder="Password"
+/>
 
     <div className="paypalActions">
       <button
@@ -368,50 +544,152 @@ const [selectedPayment, setSelectedPayment] = useState(null);
 <button
   className="confirmBtn"
   onClick={() => {
-    setShowOTP(true); // show OTP
-  }}
+  const newErrors: any = {};
+
+  if (!paypalEmail.includes("@"))
+    newErrors.paypalEmail = "Enter valid email";
+
+  if (!paypalPassword)
+    newErrors.paypalPassword = "Password required";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({});
+  setShowOTP(true);
+}}
 >
   Continue
 </button>
     </div>
-  </div>
-)}
+          </div>
+        )}
+  </>
+      )}
       </div>
     )}
   </>
   
 )}
 
+{step === 3 && (
+  <div className="expectedLayout">
 
-        {/* STEP 3 */}
-        {step === 3 && (
-          <div className="card">
-            <h2>Expected Delivery</h2>
-            <p>Your order will arrive in 3–5 business days.</p>
+    {/* LEFT SIDE */}
+    <div className="expectedLeft">
 
-            <button onClick={() => setStep(4)}>Confirm</button>
-            <button onClick={() => setStep(2)}>Back</button>
-          </div>
-        )}
+      <div className="deliveryCardModern">
+        <h2>Expected Delivery</h2>
 
-        {/* STEP 4 */}
-        {step === 4 && (
-          <div className="card">
-            <h2>Confirm Order</h2>
-            <p>Total: ₹{total}</p>
+        <div className="deliveryStatus">
+          🚚 In Transit
+        </div>
 
-            <button
-              onClick={() => {
-                clearCart();
-                router.push("/order-success");
-              }}
-            >
-              Place Order
-            </button>
+        <div className="deliveryTime">
+          Will be delivered in 
+          <span> 3–5 business days</span>
+        </div>
 
-            <button onClick={() => setStep(3)}>Back</button>
-          </div>
-        )}
+        <div className="deliveryMeta">
+          <p><strong>Order ID:</strong> KB2026-2345</p>
+          <p><strong>Payment:</strong> {selectedPayment}</p>
+        </div>
+
+        <div className="deliveryActions">
+          <button
+            className="confirmBtn"
+            onClick={() => setStep(4)}
+          >
+            Confirm
+          </button>
+
+          <button
+            className="backBtn"
+            onClick={() => setStep(2)}
+          >
+            Back
+          </button>
+        </div>
       </div>
+
+    </div>
+
+    {/* RIGHT SIDE MAP */}
+    <div className="expectedRight">
+      <iframe
+        title="delivery-map"
+        src="https://www.google.com/maps?q=Kathmandu&output=embed"
+        loading="lazy"
+      />
+    </div>
+
+  </div>
+)}
+{step === 4 && !orderPlaced && (
+  <div className="confirmWrapper">
+    <div className="confirmCard">
+
+      <h2>Confirm Your Order</h2>
+
+      <p>Total Amount: <strong>₹{total}</strong></p>
+      <p>Payment Method: <strong>{selectedPayment}</strong></p>
+
+      <div style={{ marginTop: 20 }}>
+        <button
+          className="confirmBtn"
+          onClick={handlePlaceOrder}
+          disabled={placingOrder}
+        >
+          {placingOrder ? "Placing Order..." : "Place Order"}
+        </button>
+
+        <button
+          className="backBtn"
+          onClick={() => setStep(3)}
+        >
+          Back
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{orderPlaced && (
+  <div className="orderSuccessWrapper">
+    <div className="orderSuccessCard">
+
+      <div className="successIcon">✓</div>
+
+      <h2>Order Confirmed!</h2>
+
+      <p>Your order has been placed successfully.</p>
+
+      <p>
+        Get delivery in <strong>3–5 business days</strong>
+      </p>
+
+      <div className="successButtons">
+
+        <button
+          className="trackBtn"
+          onClick={() => router.push("/track-order")}
+        >
+          Track My Order
+        </button>
+
+        <button
+          className="continueBtnSuccess"
+          onClick={() => router.push("/dashboard")}
+        >
+          Continue Shopping
+        </button>
+
+      </div>
+    </div>
+  </div>
+)}
+    </div>
   );
 }

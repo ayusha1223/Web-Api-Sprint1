@@ -183,19 +183,23 @@ html, body {
   margin-bottom: 22px;
   cursor: pointer;
   margin-top: 35px;
+  text-transform: capitalize;
+  color: black;
   
 }
 
 .sidebar li:hover {
-  color: #ff6a00;
+  color: #050505;
 }
 
 .sidebar-logo img {
-  width: 130px;
+  width: 170px;
   height: auto;
   display: block;
   margin-bottom: 30px;
-  margin-top: -90px;
+  margin-top: -140px;
+  margin-left: -15px;
+
 }
 
 /* =========================

@@ -62,18 +62,18 @@ export default function Navbar() {
         </ul>
 
         {/* RIGHT: ACTION BUTTONS */}
-        <div className="nav-actions">
-          <button
-            className="login-btn"
-            onClick={() => {
-              setMode("login");
-              setOpen(true);
-            }}
-            type="button"
-          >
-            Login
-          </button>
-        </div>
+        <div
+  className="nav-actions"
+  onClick={() => {
+    setMode("login");
+    setOpen(true);
+  }}
+>
+  <div className="account-box">
+    <span className="account-top">Hello, Sign in</span>
+    <span className="account-bottom">Login</span>
+  </div>
+</div>
       </nav>
 
       <AuthModal

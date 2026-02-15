@@ -140,9 +140,16 @@ export default function CartPage() {
 
             <button
               className="checkoutBtn"
-              onClick={() => router.push("/checkout")}
-            >
-              PROCEED TO CHECKOUT
+                onClick={() => {
+    if (cart.length === 0) {
+      alert("Your cart is empty");
+      return;
+    }
+
+    router.push("/checkout");
+  }}
+>
+  PROCEED TO CHECKOUT
             </button>
           </div>
         </div>

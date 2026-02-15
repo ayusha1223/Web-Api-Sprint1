@@ -7,36 +7,38 @@
 /* Stepper */
 .checkoutStepper {
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin: 20px 0 -15px 0; /* less bottom space */
+  gap: 80px;
+  margin: 40px 0;
 }
 
 .stepItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 13px;
-  min-width: 100px;
 }
 
 .circle {
-  width: 34px;
-  height: 34px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  border: 2px solid #ccc;
+  background: #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  font-weight: bold;
+  transition: 0.3s ease;
 }
 
 .circle.active {
-  background: #000;
+  background: #22c55e;
   color: white;
-  border-color: #000;
+}
+
+.stepItem span {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
 }
 
 .line {
@@ -528,6 +530,185 @@
 .confirmBtn:hover {
   background: #e68a00;
 }
+/* ===== EXPECTED DELIVERY LAYOUT ===== */
+
+.expectedLayout {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  min-height: 500px;
+}
+
+.expectedLeft {
+  flex: 1;
+}
+
+.expectedRight {
+  flex: 1;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.expectedRight iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 450px;
+  border: none;
+  border-radius: 20px;
+}
+
+/* ===== DELIVERY CARD ===== */
+
+.deliveryCardModern {
+  background: linear-gradient(135deg, #f3f4ff, #ffffff);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.deliveryCardModern h2 {
+  margin-bottom: 15px;
+}
+
+.deliveryStatus {
+  display: inline-block;
+  background: #000;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.deliveryTime {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.deliveryTime span {
+  font-weight: bold;
+  color: #6b46ff;
+}
+
+.deliveryMeta p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.deliveryActions {
+  margin-top: 25px;
+  display: flex;
+  gap: 15px;
+}
+
+.confirmBtn {
+  background: black;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.backBtn {
+  background: #eee;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+/* ===== ORDER SUCCESS PAGE ===== */
+
+.orderSuccessWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  min-height: 70vh;
+}
+
+.orderSuccessCard {
+  background: white;
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  background: #22c55e;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+}
+
+.orderSuccessCard h2 {
+  margin-bottom: 10px;
+}
+
+.successMessage {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.deliveryInfo {
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.deliveryInfo strong {
+  color: #22c55e;
+}
+
+.successButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.trackBtn {
+  background: #e5e7eb;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.continueBtnSuccess {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.continueBtnSuccess:hover {
+  background: #16a34a;
+}
+
+.supportText {
+  margin-top: 25px;
+  font-size: 13px;
+  color: #777;
+}
+
+.supportText span {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+
 
 
 
