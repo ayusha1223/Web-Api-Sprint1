@@ -2,16 +2,66 @@
 
 import { useShop } from "../context/ShopContext";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function PaymentPage() {
-  const { totalPrice } = useShop();
+  const { cart, totalPrice, clearCart } = useShop();
   const [method, setMethod] = useState<"esewa" | "card" | "cod">("esewa");
+  const router = useRouter();
 
   const finalAmount = totalPrice + 119;
 
-  const handleEsewaPayment = () => {
-    const orderId = "ORDER_" + Date.now(); // temporary order id
+  const handleCreateOrder = async () => {
+    const token = localStorage.getItem("token");
 
+    if (!token) {
+      alert("Please login first");
+      return;
+    }
+
+    const orderData = {
+      items: cart.map((item) => ({
+  img: item.img,
+  qty: item.qty,
+  price: item.price,
+  size: item.size,
+})),
+      totalAmount: finalAmount,
+      paymentMethod:
+        method === "cod"
+          ? "COD"
+          : method === "card"
+          ? "Card"
+          : "eSewa",
+      address: {
+        name: "Test User", // replace with real form data later
+        phone: "9800000000",
+        address: "Kathmandu",
+        city: "Kathmandu",
+      },
+    };
+
+    const response = await fetch("http://localhost:5050/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    const data = await response.json();
+    console.log("ORDER RESPONSE:", data);
+
+    if (!data.success) {
+      alert("Order failed");
+      return null;
+    }
+
+    return data;
+  };
+
+  const handleEsewaPayment = (orderId: string) => {
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "https://uat.esewa.com.np/epay/main";
@@ -40,11 +90,17 @@ export default function PaymentPage() {
     form.submit();
   };
 
-  const handlePay = () => {
+  const handlePay = async () => {
+    const response = await handleCreateOrder();
+if (!response) return;
+
+const order = response.data; // 🔥 important
+    if (!order) return;
+
     if (method === "esewa") {
-      handleEsewaPayment();
+      handleEsewaPayment(order._id);
     } else if (method === "cod") {
-      alert("Order placed with Cash on Delivery");
+      router.push("/order-success");
     } else {
       alert("Card payment coming soon");
     }

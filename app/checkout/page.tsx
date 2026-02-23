@@ -12,7 +12,7 @@ export default function CheckoutPage() {
   const [showModal, setShowModal] = useState(false);
 const [selectedPayment, setSelectedPayment] = useState(null);
   const [step, setStep] = useState(1);
-  const total = totalPrice + 119;
+ const total = (totalPrice || 0) + 119;
   const [showOTP, setShowOTP] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 const [placingOrder, setPlacingOrder] = useState(false);
@@ -45,6 +45,12 @@ const handlePlaceOrder = async () => {
     if (!token) {
   alert("Please login first");
   setPlacingOrder(false);
+  return;
+}
+const safeTotal = Number(total);
+
+if (!safeTotal || safeTotal <= 0) {
+  alert("Invalid total amount");
   return;
 }
     const res = await fetch("http://localhost:5050/api/orders", {

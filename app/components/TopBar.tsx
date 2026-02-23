@@ -89,6 +89,14 @@ const handleLogout = () => {
               <button className="menuItem">
                 ⚙️ <span>Settings</span>
               </button>
+              {/* NEW - My Orders */}
+    <Link
+      href="/my-orders"
+      className="menuItem"
+      onClick={() => setShowProfileMenu(false)}
+    >
+      📦 <span>My Orders</span>
+    </Link>
 
               <button className="menuItem" onClick={toggleDarkMode}>
                 🌙 <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
