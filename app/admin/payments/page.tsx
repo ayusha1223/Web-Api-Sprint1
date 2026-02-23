@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import "./payment.css";
 
 export default function PaymentsPage() {
   const [payments, setPayments] = useState<any[]>([]);
@@ -19,14 +20,11 @@ export default function PaymentsPage() {
 
         const data = await res.json();
 
-        console.log("PAYMENTS RESPONSE:", data);
-
         if (data.success) {
           setPayments(data.data);
         } else {
           setPayments([]);
         }
-
       } catch (error) {
         console.error("Fetch payments error:", error);
       } finally {
@@ -37,47 +35,70 @@ export default function PaymentsPage() {
     fetchPayments();
   }, []);
 
+  const getStatusClass = (status: string) => {
+    if (status.toLowerCase() === "paid") return "status-paid";
+    if (status.toLowerCase() === "pending") return "status-pending";
+    return "status-failed";
+  };
+
   return (
-    <div>
-      <h2>Payments</h2>
+    <div className="payment-page">
+      <div className="payment-header">
+        <h2>Payments Overview</h2>
+        <div className="payment-count">
+          Total Payments: {payments.length}
+        </div>
+      </div>
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <table style={{ width: "100%", marginTop: 20 }}>
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>User</th>
-              <th>Amount</th>
-              <th>Method</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {payments.length === 0 ? (
+      <div className="payment-card">
+        {loading ? (
+          <p>Loading payments...</p>
+        ) : (
+          <table className="payment-table">
+            <thead>
               <tr>
-                <td colSpan={6}>No payments found</td>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Status</th>
+                <th>Date</th>
               </tr>
-            ) : (
-              payments.map((p: any) => (
-                <tr key={p._id}>
-                  <td>{p.orderId?._id}</td>
-                  <td>{p.userId?.email}</td>
-                  <td>₹{p.amount}</td>
-                  <td>{p.method}</td>
-                  <td>{p.status}</td>
-                  <td>
-                    {new Date(p.createdAt).toLocaleString()}
+            </thead>
+
+            <tbody>
+              {payments.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="no-data">
+                    No payments found
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      )}
+              ) : (
+                payments.map((p: any) => (
+                  <tr key={p._id}>
+                    <td>{p.orderId?._id}</td>
+                    <td>{p.userId?.email}</td>
+                    <td>₹{p.amount}</td>
+                    <td>
+                      <span className="method-badge">
+                        {p.method}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={getStatusClass(p.status)}>
+                        {p.status}
+                      </span>
+                    </td>
+                    <td>
+                      {new Date(p.createdAt).toLocaleString()}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }

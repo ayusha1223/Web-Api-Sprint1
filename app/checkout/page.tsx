@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useShop } from "../context/ShopContext";
 import TopBar from "../components/TopBar";
 import "./checkout.css";
+import jsPDF from "jspdf";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -97,6 +98,39 @@ if (!safeTotal || safeTotal <= 0) {
     console.error("Order error:", error);
     setPlacingOrder(false);
   }
+};
+const handleDownloadReceipt = () => {
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text("Naayu Attire - Order Receipt", 20, 20);
+
+  doc.setFontSize(12);
+  doc.text(`Order ID: KB2026-2345`, 20, 35);
+  doc.text(`Customer Name: ${fullName}`, 20, 45);
+  doc.text(`Phone: ${phone}`, 20, 55);
+  doc.text(`Address: ${address}, ${city}`, 20, 65);
+  doc.text(`Payment Method: ${selectedPayment}`, 20, 75);
+
+  doc.text("Items:", 20, 90);
+
+  let y = 100;
+
+  cart.forEach((item: any, index: number) => {
+    doc.text(
+      `${index + 1}. ${item.name} - ₹${item.price} x ${item.quantity}`,
+      20,
+      y
+    );
+    y += 10;
+  });
+
+  doc.text(`Subtotal: ₹${totalPrice}`, 20, y + 10);
+  doc.text(`Delivery: ₹99`, 20, y + 20);
+  doc.text(`Service Fee: ₹20`, 20, y + 30);
+  doc.text(`Total: ₹${total}`, 20, y + 40);
+
+  doc.save("receipt.pdf");
 };
 
   return (
@@ -684,6 +718,12 @@ if (!safeTotal || safeTotal <= 0) {
         >
           Track My Order
         </button>
+        <button
+  className="downloadBtn"
+  onClick={handleDownloadReceipt}
+>
+  Download Receipt PDF
+</button>
 
         <button
           className="continueBtnSuccess"

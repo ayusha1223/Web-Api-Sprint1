@@ -11,7 +11,7 @@ export default function AccountSettingsPage() {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [users, setUsers] = useState<any[]>([]);
-
+  const [editUser, setEditUser] = useState<any>(null);
   /* ================= LOAD LOGGED-IN USER PROFILE ================= */
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -86,24 +86,45 @@ export default function AccountSettingsPage() {
     setUsers((prev) => prev.filter((u) => u._id !== userId));
   };
 
-  const handleEditUser = async (userId: string, currentRole: string) => {
-    const token = localStorage.getItem("token");
-    const newRole = prompt("Enter role (admin/user)", currentRole);
-    if (!newRole) return;
+const handleEditUser = (user: any) => {
+  setEditUser({ ...user });
+};
+const handleSaveUser = async () => {
+  const token = localStorage.getItem("token");
+  if (!token || !editUser) return;
 
-    await fetch(`http://localhost:5050/api/admin/users/${userId}`, {
+  const formData = new FormData();
+  formData.append("name", editUser.name);
+  formData.append("email", editUser.email);
+  formData.append("phone", editUser.phone || "");
+  formData.append("role", editUser.role);
+
+  if (editUser.imageFile) {
+    formData.append("image", editUser.imageFile);
+  }
+
+  const res = await fetch(
+    `http://localhost:5050/api/admin/users/${editUser._id}`,
+    {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ role: newRole }),
-    });
+      body: formData,
+    }
+  );
 
+  const data = await res.json();
+
+  if (data.success) {
     setUsers((prev) =>
-      prev.map((u) => (u._id === userId ? { ...u, role: newRole } : u))
+      prev.map((u) =>
+        u._id === editUser._id ? data.data : u
+      )
     );
-  };
+    setEditUser(null);
+  }
+};
 
   // ✅ NEW: View user details
   const handleViewUser = (userId: string) => {
@@ -227,7 +248,7 @@ export default function AccountSettingsPage() {
 
                         <button
                           style={styles.editBtn}
-                          onClick={() => handleEditUser(user._id, user.role)}
+                          onClick={() => handleEditUser(user)}
                         >
                           Edit
                         </button>
@@ -244,6 +265,90 @@ export default function AccountSettingsPage() {
                 ))}
               </tbody>
             </table>
+            {editUser && (
+  <div style={styles.modalOverlay}>
+    <div style={styles.modal}>
+      <h3>Edit User</h3>
+
+      <input
+        value={editUser.name}
+        onChange={(e) =>
+          setEditUser({ ...editUser, name: e.target.value })
+        }
+        placeholder="Name"
+        style={styles.input}
+      />
+
+      <input
+        value={editUser.email}
+        onChange={(e) =>
+          setEditUser({ ...editUser, email: e.target.value })
+        }
+        placeholder="Email"
+        style={styles.input}
+      />
+
+      <input
+        value={editUser.phone || ""}
+        onChange={(e) =>
+          setEditUser({ ...editUser, phone: e.target.value })
+        }
+        placeholder="Phone Number"
+        style={styles.input}
+      />
+
+      <select
+        value={editUser.role}
+        onChange={(e) =>
+          setEditUser({ ...editUser, role: e.target.value })
+        }
+        style={styles.input}
+      >
+        <option value="admin">Admin</option>
+        <option value="user">User</option>
+      </select>
+      {editUser.image && (
+  <img
+    src={`http://localhost:5050${editUser.image}`}
+    style={{
+      width: 60,
+      height: 60,
+      borderRadius: "50%",
+      objectFit: "cover",
+      marginBottom: 10,
+    }}
+  />
+)}
+
+
+<input
+  type="file"
+  onChange={(e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setEditUser({
+        ...editUser,
+        imageFile: file,
+        image: URL.createObjectURL(file),
+      });
+    }
+  }}
+/>
+
+      <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
+        <button style={styles.button} onClick={handleSaveUser}>
+          Save
+        </button>
+        <button
+          style={styles.viewBtn}
+          onClick={() => setEditUser(null)}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
           </>
         )}
       </main>

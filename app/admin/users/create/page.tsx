@@ -1,9 +1,9 @@
 "use client";
 
-
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AdminGuard from "../../../components/AdminGuard";
+import "./CreateUserPage.css";
 
 export default function CreateUserPage() {
   const router = useRouter();
@@ -28,6 +28,7 @@ export default function CreateUserPage() {
       formData.append("email", email);
       formData.append("password", password);
       formData.append("role", role);
+
       if (image) formData.append("image", image);
 
       const res = await fetch("http://localhost:5050/api/admin/users", {
@@ -44,7 +45,7 @@ export default function CreateUserPage() {
       }
 
       alert("User created successfully!");
-      router.push("/admin/users"); // ✅ go back to list
+      router.push("/admin/users");
     } catch (err) {
       console.error(err);
       alert("Something went wrong");
@@ -55,13 +56,15 @@ export default function CreateUserPage() {
 
   return (
     <AdminGuard>
-      <div style={styles.page}>
-        <div style={styles.card}>
-          <h2 style={styles.title}>Create New User</h2>
-          <p style={styles.subTitle}>Add a new user or admin to the system</p>
+      <div className="create-user-page">
+        <div className="create-user-card">
+          <h2>Create New User</h2>
+          <p className="create-user-subtitle">
+            Add a new user or admin to the system
+          </p>
 
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.field}>
+          <form onSubmit={handleSubmit} className="create-user-form">
+            <div className="form-group">
               <label>Name</label>
               <input
                 type="text"
@@ -72,7 +75,7 @@ export default function CreateUserPage() {
               />
             </div>
 
-            <div style={styles.field}>
+            <div className="form-group">
               <label>Email</label>
               <input
                 type="email"
@@ -83,7 +86,7 @@ export default function CreateUserPage() {
               />
             </div>
 
-            <div style={styles.field}>
+            <div className="form-group">
               <label>Password</label>
               <input
                 type="password"
@@ -94,7 +97,7 @@ export default function CreateUserPage() {
               />
             </div>
 
-            <div style={styles.field}>
+            <div className="form-group">
               <label>Role</label>
               <select value={role} onChange={(e) => setRole(e.target.value)}>
                 <option value="user">User</option>
@@ -102,7 +105,7 @@ export default function CreateUserPage() {
               </select>
             </div>
 
-            <div style={styles.field}>
+            <div className="form-group">
               <label>Profile Image</label>
               <input
                 type="file"
@@ -111,14 +114,18 @@ export default function CreateUserPage() {
               />
             </div>
 
-            <div style={{ display: "flex", gap: 10 }}>
-              <button type="submit" style={styles.button} disabled={loading}>
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="primary-btn"
+                disabled={loading}
+              >
                 {loading ? "Creating..." : "Create User"}
               </button>
 
               <button
                 type="button"
-                style={styles.cancelBtn}
+                className="secondary-btn"
                 onClick={() => router.push("/admin/users")}
               >
                 Cancel
@@ -130,56 +137,3 @@ export default function CreateUserPage() {
     </AdminGuard>
   );
 }
-
-/* ================= STYLES ================= */
-const styles: Record<string, React.CSSProperties> = {
-  page: {
-    minHeight: "80vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "#f7f7fb",
-    padding: "40px",
-  },
-
-  card: {
-    width: "100%",
-    maxWidth: "480px",
-    background: "#fff",
-    borderRadius: "12px",
-    padding: "30px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-  },
-
-  title: { fontSize: "24px", marginBottom: "6px" },
-  subTitle: { color: "#6b7280", marginBottom: "25px" },
-
-  form: { display: "flex", flexDirection: "column", gap: "18px" },
-
-  field: { display: "flex", flexDirection: "column", gap: "6px", fontSize: "14px" },
-
-  button: {
-    flex: 1,
-    marginTop: "15px",
-    padding: "12px",
-    background: "#ec4899",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "16px",
-    fontWeight: 600,
-  },
-
-  cancelBtn: {
-    flex: 1,
-    marginTop: "15px",
-    padding: "12px",
-    background: "#fff",
-    color: "#111827",
-    border: "1px solid #d1d5db",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
-};
