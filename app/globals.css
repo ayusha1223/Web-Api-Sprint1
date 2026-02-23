@@ -785,7 +785,7 @@ body {
   font-size: 2,25rem;
   align-items: center;
   padding: 18px 80px;
-  background: #f9f8f7;
+  background: #cbcbc9;
   border-bottom: 1px solid #0c0c0c;
 }
 .brand-logo {
@@ -810,7 +810,7 @@ body {
   justify-content: center;
   gap: 150px;
   list-style: none;
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .nav-links a {
@@ -819,12 +819,12 @@ body {
   color: #111;  /* default color */
   font-weight: 500;
   transition: color 0.3s ease;
-  font-size: 34px;
+  font-size: 28px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .nav-links a:hover {
-  color: #0808d5; /* your purple theme */
+  color: #e9830f; /* your purple theme */
 }
 
 
@@ -855,12 +855,12 @@ body {
 .account-bottom {
   font-size: 24px;
   font-weight: 600;
-  color: #6b6ec3; /* pink like your screenshot */
+  color: #57b018; /* pink like your screenshot */
    text-align: center;
 }
 
 .footer {
-   background: #f9f7f7;
+   background: #cbcbc9;
   color: rgb(6, 6, 6);
   padding: 60px 80px 30px;
 }

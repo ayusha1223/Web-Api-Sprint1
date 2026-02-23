@@ -15,6 +15,7 @@ type CartItem = {
   qty: number;
   price: number;
   size: string;
+  rating?: number;
 };
 
 type ShopContextType = {
@@ -66,7 +67,18 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     const crt = localStorage.getItem("cart");
 
     if (fav) setFavorites(JSON.parse(fav));
-    if (crt) setCart(JSON.parse(crt));
+    if (crt) {
+  const parsed = JSON.parse(crt);
+
+  const cleanCart = parsed.map((item: any) => ({
+    img: item.img,
+    size: item.size,
+    price: Number(item.price) || 0,
+    qty: Number(item.qty) || 1,
+  }));
+
+  setCart(cleanCart);
+}
   }, []);
 
   /* ===== Save to storage ===== */
@@ -138,10 +150,11 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     showToast("🧾 Order placed successfully");
   }, []);
 
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.price * item.qty,
-    0
-  );
+ const totalPrice = cart.reduce((sum, item) => {
+  const price = Number(item.price) || 0;
+  const qty = Number(item.qty) || 0;
+  return sum + price * qty;
+}, 0);
 
   return (
     <ShopContext.Provider
