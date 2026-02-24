@@ -62,6 +62,15 @@ export default function PartyWearPage() {
             <Link href="/user/profile" className="icon">👤</Link>
           </div>
         </div>
+         <div className="categoryNav">
+          <Link href="/dashboard">Home</Link>
+          <Link href="/dashboard/category/casual" className="active">Casual Wear</Link>
+          <Link href="/dashboard/category/coord">Co-Ord Set</Link>
+          <Link href="/dashboard/category/party">Party Wear</Link>
+          <Link href="/dashboard/category/winter">Winter Wear</Link>
+          <Link href="/dashboard/category/wedding">Wedding Wear</Link>
+          <Link href="/dashboard/category/onepiece">1 Piece Set</Link>
+        </div>
 
         <div className="dashboard-layout">
 
@@ -78,15 +87,7 @@ export default function PartyWearPage() {
             </div>
 
             <h3>Categories</h3>
-            <ul>
-              <li><Link href="/dashboard">Home</Link></li>
-              <li><Link href="/dashboard/category/casual">Casual Wear</Link></li>
-              <li><Link href="/dashboard/category/coord">Co-ord Set</Link></li>
-              <li className="active"><Link href="/dashboard/category/party">Party Wear</Link></li>
-              <li><Link href="/dashboard/category/winter">Winter Wear</Link></li>
-              <li><Link href="/dashboard/category/wedding">Wedding Wear</Link></li>
-              <li><Link href="/dashboard/category/onepiece">1 Piece Set</Link></li>
-            </ul>
+            
 
             {/* ===== OLD PRICE INPUTS (KEPT) ===== */}
             <h3 style={{ marginTop: 24 }}>Filter by Price</h3>

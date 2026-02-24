@@ -39,14 +39,14 @@ export async function loginAction(data: {
     throw new Error(result.message || "Login failed");
   }
 
-  // ✅ SAVE TOKEN
+  // SAVE TOKEN
   localStorage.setItem("token", result.token);
 
-  // ✅ SAVE USER (MATCH BACKEND RESPONSE)
+  // SAVE USER
   localStorage.setItem(
     "user",
     JSON.stringify({
-      id: result.user.id,     // ✅ correct
+      id: result.user.id,
       email: result.user.email,
       role: result.user.role,
     })
@@ -70,7 +70,6 @@ export async function getProfileAction() {
 
   if (!res.ok) throw new Error(result.message);
 
-  // 🔥 FIX HERE
   return result.data.user;
 }
 
@@ -80,6 +79,13 @@ export async function updateProfileAction(data: {
   phone?: string;
   newPassword?: string;
   image?: File | null;
+  notifications?: {
+    emailNotifications: boolean;
+    smsNotifications: boolean;
+    saleAlerts: boolean;
+    orderUpdates: boolean;
+    promotionalOffers: boolean;
+  };
 }) {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Not authenticated");
@@ -88,20 +94,29 @@ export async function updateProfileAction(data: {
 
   if (data.name) formData.append("name", data.name);
   if (data.phone) formData.append("phone", data.phone);
-  if (data.newPassword) formData.append("newPassword", data.newPassword);
+  if (data.newPassword)
+    formData.append("newPassword", data.newPassword);
   if (data.image) formData.append("image", data.image);
 
-  const res = await fetch("http://localhost:5050/api/auth/update-profile", {
+  // 🔥 ADD THIS PART FOR NOTIFICATIONS
+  if (data.notifications) {
+    formData.append(
+      "notifications",
+      JSON.stringify(data.notifications)
+    );
+  }
+
+  const res = await fetch(`${API_URL}/update-profile`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
-      // ❌ DO NOT set Content-Type
+      // ❌ DO NOT SET CONTENT-TYPE when using FormData
     },
     body: formData,
   });
 
   const result = await res.json();
   if (!res.ok) throw new Error(result.message);
+
   return result;
 }
-

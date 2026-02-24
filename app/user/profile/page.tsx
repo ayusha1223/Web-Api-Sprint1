@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./profile.module.css";
 import {
   getProfileAction,
@@ -8,14 +9,17 @@ import {
 } from "../../lib/actions/auth.action";
 
 export default function ProfilePage() {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [updating, setUpdating] = useState(false); // 🔥 loading state
 
   /* ================= LOAD PROFILE ================= */
   useEffect(() => {
@@ -46,11 +50,10 @@ export default function ProfilePage() {
     <div className={styles.profilePage}>
       <div className={styles.profileCard}>
 
-        {/* BACK BUTTON */}
         <button
           type="button"
           className={styles.backBtn}
-          onClick={() => window.history.back()}
+          onClick={() => router.back()}
         >
           ← Back
         </button>
@@ -58,7 +61,7 @@ export default function ProfilePage() {
         <h2>Account Settings</h2>
         <p className={styles.subtitle}>Update your profile details</p>
 
-        {/* ================= AVATAR ================= */}
+        {/* AVATAR */}
         <div className={styles.avatarSection}>
           <img
             src={imagePreview || "/images/avatar.jpg"}
@@ -83,11 +86,13 @@ export default function ProfilePage() {
           </label>
         </div>
 
-        {/* ================= FORM ================= */}
+        {/* FORM */}
         <form
           onSubmit={async (e) => {
             e.preventDefault();
             try {
+              setUpdating(true);
+
               await updateProfileAction({
                 name,
                 phone,
@@ -96,13 +101,17 @@ export default function ProfilePage() {
               });
 
               setSuccess(true);
-              setTimeout(() => setSuccess(false), 3000);
+
+              setTimeout(() => {
+                router.push("/dashboard");
+              }, 2500);
+
             } catch (err: any) {
               alert(err.message);
+              setUpdating(false);
             }
           }}
         >
-          {/* NAME */}
           <div className={styles.formGroup}>
             <label>Full Name</label>
             <input
@@ -112,13 +121,11 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* EMAIL */}
           <div className={styles.formGroup}>
             <label>Email</label>
             <input type="email" value={email} disabled />
           </div>
 
-          {/* PHONE */}
           <div className={styles.formGroup}>
             <label>Phone Number</label>
             <input
@@ -128,7 +135,6 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* PASSWORD */}
           <div className={styles.divider}>Change Password</div>
 
           <div className={styles.formGroup}>
@@ -140,14 +146,23 @@ export default function ProfilePage() {
             />
           </div>
 
+          {/* SUCCESS MESSAGE */}
           {success && (
-            <p className={styles.successMsg}>
-              ✅ Profile updated successfully
-            </p>
+            <div className={styles.successMsg}>
+              ✅ Profile updated successfully! Redirecting...
+            </div>
           )}
 
-          <button type="submit" className={styles.saveBtn}>
-            Save Changes
+          <button
+            type="submit"
+            className={styles.saveBtn}
+            disabled={updating}
+          >
+            {updating ? (
+              <span className={styles.spinner}></span>
+            ) : (
+              "Save Changes"
+            )}
           </button>
         </form>
       </div>

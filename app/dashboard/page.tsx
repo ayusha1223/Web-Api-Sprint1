@@ -98,10 +98,30 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
     <div className="dashboard-container">
       <div className="dashboard-card">
         {/* ================= TOP BAR ================= */}
-        <TopBar
-          showTryOn={true}
-          onTryOnClick={() => setShowTryOn(true)}
-        />
+        <div className="dashboardHeader">
+
+  <TopBar
+    showTryOn={true}
+    onTryOnClick={() => setShowTryOn(true)}
+  />
+
+<div className="categoryNav">
+  {[
+    { name: "Home", link: "/dashboard" },
+    { name: "Casual Wear", link: "/dashboard/category/casual" },
+    { name: "Co-Ord Set", link: "/dashboard/category/coord" },
+    { name: "Party Wear", link: "/dashboard/category/party" },
+    { name: "Winter Wear", link: "/dashboard/category/winter" },
+    { name: "Wedding Wear", link: "/dashboard/category/wedding" },
+    { name: "1 Piece Set", link: "/dashboard/category/onepiece" },
+  ].map((cat) => (
+    <Link key={cat.name} href={cat.link} className="categoryLink">
+      {cat.name}
+    </Link>
+  ))}
+</div>
+
+</div>
 
         <div className="dashboard-layout">
           {/* ================= SIDEBAR ================= */}
@@ -115,38 +135,6 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
                 priority
               />
             </div>
-
-            <h3>Categories</h3>
-            <ul>
-              <li>
-                <Link href="/dashboard">Home</Link>
-              </li>
-
-              <li>
-                <Link href="/dashboard/category/casual">Casual Wear</Link>
-              </li>
-
-              <li>
-                <Link href="/dashboard/category/coord">Co-ord Set</Link>
-              </li>
-
-              <li>
-                <Link href="/dashboard/category/party">Party Wear</Link>
-              </li>
-
-              <li>
-                <Link href="/dashboard/category/winter">Winter Wear</Link>
-              </li>
-
-              <li>
-                <Link href="/dashboard/category/wedding">Wedding Wear</Link>
-              </li>
-
-              <li>
-                <Link href="/dashboard/category/onepiece">1 Piece Set</Link>
-              </li>
-            </ul>
-
             <h3 style={{ marginTop: "24px" }}>Filter by Price</h3>
             <div className="priceFilter">
               <input
@@ -217,97 +205,73 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
             </div>
           </aside>
 
-          {/* ================= MAIN ================= */}
-          <main>
-            {/* ===== PROMO ROW ===== */}
-            <div className="promo-row">
-              <div className="banner banner-extended">
-                <div className="banner-text">
-                  <h1>BIG SALE!</h1>
-                  <p>Trending fashion collections</p>
-                  <Link href="/dashboard/category/casual">
-                    <button>Shop Now</button>
-                  </Link>
-                </div>
-                <div className="banner-image">
-                  <Image src="/images/banner.png" alt="Sale" fill priority />
-                </div>
-              </div>
+         {/* ================= MAIN ================= */}
+<main>
+  {/* ===== BANNER ===== */}
+  <div className="promo-row">
+    <div className="long-banner">
+      <Image
+        src="/images/dashboard/festive-banner1.jpg"
+        alt="Big Festive Sale"
+        fill
+        priority
+      />
+      <div className="banner-overlay">
+        <h1>BIG FESTIVE SALE</h1>
+        <p>Upto 60% OFF on Trending Collections</p>
+        <Link href="/dashboard/category/casual">
+          <button>Shop Now</button>
+        </Link>
+      </div>
+    </div>
+  </div>
 
-              <div className="deal-card">
-                <div className="deal-text">
-                  <h4>Great Value Deals</h4>
-                  <p>50–75% OFF</p>
-                  <span className="deal-badge">75%</span>
-                </div>
-                <div className="deal-image">
-                  <Image src="/images/deal.png" alt="Deal" fill />
-                </div>
-              </div>
+  {/* ===== TITLE ===== */}
+  <h2 className="pickTitle">Pick yours now</h2>
 
-              <div className="promo-box promo-discount">
-                <h4>
-                  Get up to <span>20%</span>
-                </h4>
-                <p>OFF Dresses</p>
-              </div>
+  {/* ===== PRODUCTS ===== */}
+  <section className="productListSection">
+    <div className="productGrid">
+      {filteredProducts.map((p) => (
+        <div className="productCard" key={p.id}>
+          <span
+            className="wishlistIcon"
+            onClick={() => toggleFavorite(p.image)}
+          >
+            {favorites.includes(p.image) ? "❤️" : "♡"}
+          </span>
 
-              <div className="promo-box promo-new">
-                <h4>New Arrivals</h4>
-                <Link href="/party">
-                  <button>Shop now</button>
-                </Link>
-              </div>
+          <div
+            className="productImg"
+            onClick={() => router.push(`/product/${p.slug}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <img src={p.image} alt={p.title} />
+          </div>
+
+          <div className="productInfo">
+            <p className="brand">{p.color || "NAAYU"}</p>
+            <p className="name">{p.title}</p>
+
+            <div className="priceRow">
+              <span className="price">₹{p.price}</span>
+              <span className="off">{p.discount}</span>
             </div>
 
-            {/* ===== FEATURED ===== */}
-            <h2 className="pickTitle">Pick yours now</h2>
-
-            <section className="productListSection">
-              <div className="productGrid">
-                {filteredProducts.map((p) => (
-                  <div className="productCard" key={p.id}>
-                    <span
-                      className="wishlistIcon"
-                      onClick={() => toggleFavorite(p.image)}
-                    >
-                      {favorites.includes(p.image) ? "❤️" : "♡"}
-                    </span>
-
-                    <div
-                      className="productImg"
-                      onClick={() => router.push(`/product/${p.slug}`)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img src={p.image} alt={p.title} />
-                    </div>
-
-                    <div className="productInfo">
-                      <p className="brand">{p.color || "NAAYU"}</p>
-                      <p className="name">{p.title}</p>
-
-                      <div className="priceRow">
-                        <span className="price">₹{p.price}</span>
-                        <span className="off">{p.discount}</span>
-                      </div>
-
-                     <button
-  className="cartIconBtn"
-  onClick={(e) => {
-  e.stopPropagation();
-  setSelectedProduct(p);
-  setSelectedSize(null);
-}}
->
-  🛒
-</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </main>
+            <button
+              className="cartIconBtn"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedProduct(p);
+                setSelectedSize(null);
+              }}
+            >
+              🛒
+            </button>
+          </div>
         </div>
+      ))}
+    </div>
 
         {/* ================= TRY ON MODAL ================= */}
         {showTryOn && (
@@ -398,7 +362,25 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
     onClose={() => setSelectedProduct(null)}
   />
 )}
-      </div>
+  </section>
+
+{/* ===== PAYMENT METHODS SECTION ===== */}
+<div className="paymentSection">
+  <div className="paymentLeft">
+    <h3>Payment Methods</h3>
+    <div className="paymentIcons">
+      <Image src="/images/dashboard/cod.png" alt="Cash on Delivery" width={110} height={60} />
+      <Image src="/images/dashboard/visa.png" alt="Visa" width={70} height={40} />
+      <Image src="/images/dashboard/esewa.png" alt="eSewa" width={70} height={40} />
+      <Image src="/images/dashboard/paypal.png" alt="paypal" width={70} height={40} />
     </div>
-  );
-}
+  </div>
+</div>
+
+</main>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  

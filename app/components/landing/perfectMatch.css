@@ -1,0 +1,93 @@
+.perfect-wrapper {
+  width: 100%;
+}
+
+/* ===== TOP FEATURE STRIP ===== */
+
+.feature-strip {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  padding: 40px 10%;
+  background: #f4f4f4;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #eaeaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.feature-item h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.feature-item p {
+  margin: 3px 0 0;
+  font-size: 14px;
+  color: #777;
+}
+
+/* ===== PINK SECTION ===== */
+
+.perfect-container {
+  background: #f6dfe6;
+  padding: 80px 10%;
+}
+
+.perfect-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.perfect-text {
+  max-width: 600px;
+}
+
+.perfect-text h2 {
+  font-size: 36px;
+  color: #e63c75;
+  margin-bottom: 20px;
+}
+
+.perfect-text p {
+  color: #555;
+  line-height: 1.6;
+}
+
+.perfect-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.primary-btn {
+  background: #e63c75;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: transparent;
+  color: #e63c75;
+  padding: 12px 25px;
+  border-radius: 6px;
+  border: 1px solid #e63c75;
+  cursor: pointer;
+}

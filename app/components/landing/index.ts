@@ -4,3 +4,4 @@ export { default as FeatureSection } from "./FeatureSection";
 export { default as CategorySection } from "./CategorySection"
 export { default as TrendingSection } from "./TrendingSection"
 export { default as LuxuryShowcase } from "./LuxuryShowcase";
+export { default as PerfectMatchSection } from "./PerfectMatchSection";

@@ -6,7 +6,7 @@ export const featuredProducts = [
     title: "Grey Sarara",
     price: 1299,
     discount: "50% OFF",
-    color: "pink",
+    color: "white",
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const featuredProducts = [
     title: "Pakistani Set",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "pink",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ export const featuredProducts = [
     title: "Co-ord Set",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "pink",
   },
   {
     id: 4,
@@ -42,7 +42,7 @@ export const featuredProducts = [
     title: "Red Pashmina",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "red",
   },
   {
     id: 6,
@@ -51,7 +51,7 @@ export const featuredProducts = [
     title: "Black Tops",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "black",
   },
   {
     id: 7,
@@ -60,7 +60,7 @@ export const featuredProducts = [
     title: "Purple Long",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "purple",
   },
   {
     id: 8,
@@ -69,7 +69,7 @@ export const featuredProducts = [
     title: "Heavy Pink",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "pink",
   },
   {
     id: 9,
@@ -78,7 +78,7 @@ export const featuredProducts = [
     title: "Pakistani Wear",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "brown",
   },
   {
     id: 10,
@@ -87,7 +87,7 @@ export const featuredProducts = [
     title: "Kalini",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "purple",
   },
   {
     id: 11,
@@ -96,7 +96,7 @@ export const featuredProducts = [
     title: "Pashmina",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "brown",
   },
   {
     id: 12,
@@ -105,7 +105,7 @@ export const featuredProducts = [
     title: "Silk Kalini",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "blue",
   },
   {
     id: 13,
@@ -132,7 +132,7 @@ export const featuredProducts = [
     title: "Chikankari",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "green",
   },
   {
     id: 16,
@@ -141,7 +141,7 @@ export const featuredProducts = [
     title: "Cotton Tops",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "red",
   },
   {
     id: 17,
@@ -170,7 +170,7 @@ export const featuredProducts = [
     title: "Purple Garara",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "purple",
   },
   {
     id: 20,
@@ -179,6 +179,6 @@ export const featuredProducts = [
     title: "Casual Wear",
     price: 1379,
     discount: "50% OFF",
-    color: "white",
+    color: "brown",
   },
 ];

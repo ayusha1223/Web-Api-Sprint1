@@ -8,6 +8,7 @@ import {
   FeatureSection,
   TrendingSection,
   LuxuryShowcase,
+  PerfectMatchSection,
 } from "./components/landing";
 
 export default function Home() {
@@ -57,6 +58,7 @@ export default function Home() {
       <FeatureSection />
       <TrendingSection />
       <LuxuryShowcase />
+      <PerfectMatchSection />
     </>
   );
 }

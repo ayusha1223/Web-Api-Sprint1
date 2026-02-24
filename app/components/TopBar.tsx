@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 interface TopBarProps {
@@ -9,24 +9,71 @@ interface TopBarProps {
   onTryOnClick?: () => void;
 }
 
+interface User {
+  id: string;
+  email: string;
+  role: string;
+  name?: string;
+  image?: string;
+}
+
 export default function TopBar({ showTryOn = true, onTryOnClick }: TopBarProps) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-const handleLogout = () => {
-  // Clear auth
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+  const [notifications, setNotifications] = useState({
+    emailNotifications: true,
+    smsNotifications: false,
+    saleAlerts: true,
+    orderUpdates: true,
+    promotionalOffers: false,
+  });
 
-  // Close dropdown
-  setShowProfileMenu(false);
+  /* =========================================
+     FETCH REAL USER FROM BACKEND
+  ========================================= */
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
 
-  // Redirect to landing page and trigger auth modal
-  router.push("/?auth=login");
-};
+        const res = await fetch("http://localhost:5050/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
+        if (!res.ok) throw new Error("Failed to fetch user");
+
+        const data = await res.json();
+        setUser(data);
+      } catch (error) {
+        console.error("User fetch failed:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  /* =========================================
+     LOGOUT
+  ========================================= */
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setShowProfileMenu(false);
+    setShowSettingsMenu(false);
+    router.push("/?auth=login");
+  };
+
+  /* =========================================
+     DARK MODE
+  ========================================= */
   const toggleDarkMode = () => {
     document.body.classList.toggle("dark");
     const isDark = document.body.classList.contains("dark");
@@ -61,56 +108,123 @@ const handleLogout = () => {
             👗
           </span>
         )}
-        <Link href="/favorites" className="icon">
-          ♡
-        </Link>
-        <Link href="/cart" className="icon">
-          🛒
-        </Link>
+
+        <Link href="/favorites" className="icon">♡</Link>
+        <Link href="/cart" className="icon">🛒</Link>
+
         <div className="profileWrapper">
           <span
             className="icon"
-            onClick={() => setShowProfileMenu(!showProfileMenu)}
-            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setShowProfileMenu(!showProfileMenu);
+              setShowSettingsMenu(false);
+            }}
           >
             👤
           </span>
 
           {showProfileMenu && (
             <div className="profileDropdown">
-              <Link
-                href="/user/profile"
-                className="menuItem"
-                onClick={() => setShowProfileMenu(false)}
-              >
-                ✏️ <span>Edit Profile</span>
-              </Link>
 
-              <button className="menuItem">
-                ⚙️ <span>Settings</span>
-              </button>
-              {/* NEW - My Orders */}
-    <Link
-      href="/my-orders"
-      className="menuItem"
-      onClick={() => setShowProfileMenu(false)}
-    >
-      📦 <span>My Orders</span>
-    </Link>
+              {showSettingsMenu ? (
+                <>
+                  <button
+                    className="menuItem"
+                    onClick={() => setShowSettingsMenu(false)}
+                  >
+                    ← <span>Back</span>
+                  </button>
 
-              <button className="menuItem" onClick={toggleDarkMode}>
-                🌙 <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
-              </button>
+                  <div className="menuDivider" />
 
-              <div className="menuDivider" />
+                  {Object.keys(notifications).map((key) => (
+                    <label key={key} className="toggleRow">
+                      <span>{key}</span>
+                      <input
+                        type="checkbox"
+                        checked={
+                          notifications[key as keyof typeof notifications]
+                        }
+                        onChange={(e) =>
+                          setNotifications({
+                            ...notifications,
+                            [key]: e.target.checked,
+                          })
+                        }
+                      />
+                    </label>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {/* ================= PROFILE HEADER ================= */}
+                  <div className="profileHeader">
+                    <div className="profileAvatar">
+                      {user?.image ? (
+                        <img
+  src={`http://localhost:5050${user.image}`}
+  alt="Profile"
+  className="avatarImage"
+/>
+                      ) : (
+                        <span>
+                          {(user?.name || user?.email)
+                            ?.charAt(0)
+                            .toUpperCase()}
+                        </span>
+                      )}
+                    </div>
 
-              <button
-  className="menuItem logout"
-  onClick={handleLogout}
->
-  🚪 <span>Logout</span>
-</button>
+                    <div>
+                      <div className="profileName">
+                        {user?.name ||
+                          user?.email?.split("@")[0] ||
+                          "User"}
+                      </div>
 
+                      <div className="profileEmail">
+                        {user?.email || ""}
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href="/user/profile"
+                    className="menuItem"
+                    onClick={() => setShowProfileMenu(false)}
+                  >
+                    ✏️ <span>Edit Profile</span>
+                  </Link>
+
+                  <button
+                    className="menuItem"
+                    onClick={() => setShowSettingsMenu(true)}
+                  >
+                    ⚙️ <span>Settings</span>
+                  </button>
+
+                  <Link
+                    href="/my-orders"
+                    className="menuItem"
+                    onClick={() => setShowProfileMenu(false)}
+                  >
+                    📦 <span>My Orders</span>
+                  </Link>
+
+                  <button className="menuItem" onClick={toggleDarkMode}>
+                    🌙 <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
+                  </button>
+
+                  <div className="menuDivider" />
+
+                  <button
+                    className="menuItem logout"
+                    onClick={handleLogout}
+                  >
+                    🚪 <span>Logout</span>
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>
