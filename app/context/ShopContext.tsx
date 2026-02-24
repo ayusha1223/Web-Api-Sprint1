@@ -11,6 +11,7 @@ import React, {
 /* ================= TYPES ================= */
 
 type CartItem = {
+  name: string;
   img: string;
   qty: number;
   price: number;

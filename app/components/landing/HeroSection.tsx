@@ -61,7 +61,7 @@ export default function HeroSection() {
                 requireAuth(() => router.push("/shop"))
               }
             >
-              View Collection
+              
             </button>
           </div>
         </div>

@@ -396,7 +396,6 @@ body {
 /* Video */
 .hero-video {
   position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -412,17 +411,19 @@ body {
 /* Dark overlay for readability */
 .hero-overlay {
   position: absolute;
-  inset: 0;
-  background: transparent;
+  width: 100%;
+  height: 100%;
   z-index: 1;
-}
 
+  backdrop-filter: blur(1px);     /* 🔥 blur effect */
+  background: rgba(0, 0, 0, 0.45); /* dark overlay for readability */
+}
 /* Text content */
 .hero-content {
   position: relative;
   font-size: 3.5rem;
   z-index: 2;
-  color: white;
+  color: rgb(16, 16, 16);
   text-align: center;
   top: 50%;
   transform: translateY(-50%);
@@ -433,6 +434,7 @@ body {
   display: flex;
   gap: 24px;
   justify-content: center;
+  
 }
 
 /* Buttons themselves */
@@ -442,8 +444,6 @@ body {
   font-weight: 600;
   border-radius: 4px;
 }
-
-
 
 /* Buttons */
 .primary-btn {
@@ -462,11 +462,22 @@ body {
   cursor: pointer;
 }
 
+/* Shop Now Button */
 .primary-btn {
-  background: black;
+  background-color: #D4AF37;   /* Soft Gold */
   color: white;
-  padding: 12px 20px;
   border: none;
+}
+
+/* View Collection Button */
+.secondary-btn {
+  background: transparent;
+  color: #D4AF37;
+  border: 2px solid #D4AF37;
+}
+.primary-btn:hover {
+  background-color: #b7b2a4;
+  transform: translateY(-2px);
 }
 
 .secondary-btn {
@@ -785,7 +796,7 @@ body {
   font-size: 2,25rem;
   align-items: center;
   padding: 18px 80px;
-  background: #cbcbc9;
+  background: #c8c7c8;
   border-bottom: 1px solid #0c0c0c;
 }
 .brand-logo {
@@ -860,7 +871,7 @@ body {
 }
 
 .footer {
-   background: #cbcbc9;
+   background: #b4b3b4;
   color: rgb(6, 6, 6);
   padding: 60px 80px 30px;
 }
