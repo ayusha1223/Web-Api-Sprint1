@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-
 const PerfectMatchSection = () => {
   const router = useRouter();
   return (
