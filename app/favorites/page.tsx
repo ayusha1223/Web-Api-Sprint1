@@ -32,133 +32,110 @@ export default function FavoritesPage() {
   );
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-card">
+    <div className="bg-[#f5f5f6] min-h-screen">
+      <TopBar />
 
-        <TopBar showTryOn={true} />
+      <div className="max-w-[1200px] mx-auto px-6 py-12">
 
-        <div style={{ padding: "40px" }}>
-          <h2 style={{ marginBottom: 30 }}>My Favorites ❤️</h2>
+        {/* TITLE */}
+        <h1 className="text-3xl font-bold mb-10">
+          My Wishlist ❤️
+        </h1>
 
-          {favoriteProducts.length === 0 ? (
-            <p>No favorites yet ❤️</p>
-          ) : (
-            <div
-              style={{
-                background: "#fff",
-                borderRadius: 10,
-                padding: 20,
-                boxShadow: "0 5px 15px rgba(0,0,0,0.05)",
-              }}
-            >
-              {/* TABLE HEADER */}
+        {favoriteProducts.length === 0 ? (
+          <div className="bg-white rounded-xl p-16 text-center shadow-sm">
+            <p className="text-gray-500 text-lg">
+              Your wishlist is empty.
+            </p>
+          </div>
+        ) : (
+
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+
+            {/* HEADER */}
+            <div className="hidden md:grid grid-cols-4 gap-4 bg-gray-100 px-8 py-4 text-sm font-semibold text-gray-600">
+              <div>Product</div>
+              <div>Price</div>
+              <div>Discount</div>
+              <div className="text-center">Actions</div>
+            </div>
+
+            {/* ROWS */}
+            {favoriteProducts.map((product) => (
               <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "2fr 1fr 1fr 1fr",
-                  padding: "10px 0",
-                  borderBottom: "1px solid #eee",
-                  fontWeight: 600,
-                }}
+                key={product.id}
+                className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center px-8 py-6 border-b last:border-none hover:bg-gray-50 transition"
               >
-                <div>Product</div>
-                <div>Price</div>
-                <div>Discount</div>
-                <div>Actions</div>
-              </div>
+                {/* PRODUCT */}
+                <div className="flex items-center gap-4">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-20 h-24 object-contain cursor-pointer"
+                    onClick={() =>
+                      router.push(`/product/${product.slug}`)
+                    }
+                  />
 
-              {/* TABLE ROWS */}
-              {favoriteProducts.map((product) => (
-                <div
-                  key={product.id}   // 🔥 FIXED duplicate key issue
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "2fr 1fr 1fr 1fr",
-                    alignItems: "center",
-                    padding: "20px 0",
-                    borderBottom: "1px solid #f1f1f1",
-                  }}
-                >
-                  {/* PRODUCT COLUMN */}
-                  <div style={{ display: "flex", gap: 15, alignItems: "center" }}>
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      style={{ width: 70, cursor: "pointer" }}
-                      onClick={() =>
-                        router.push(`/product/${product.slug}`)
-                      }
-                    />
-                    <span>{product.title}</span>
-                  </div>
-
-                  {/* PRICE COLUMN */}
                   <div>
-                    ₹{product.price}
-                    {product.oldPrice && (
-                      <span
-                        style={{
-                          marginLeft: 8,
-                          textDecoration: "line-through",
-                          color: "#888",
-                        }}
-                      >
-                        ₹{product.oldPrice}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* DISCOUNT COLUMN */}
-                  <div style={{ color: "red" }}>
-                    {product.discount}
-                  </div>
-
-                  {/* ACTION COLUMN */}
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button
-                      style={{
-                        padding: "6px 12px",
-                        background: "#000",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: 5,
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setSelectedProduct(product)}
-                    >
-                      Move to Cart 🛒
-                    </button>
-
-                    <button
-                      style={{
-                        padding: "6px 12px",
-                        background: "#f5f5f5",
-                        border: "1px solid #ddd",
-                        borderRadius: 5,
-                        cursor: "pointer",
-                      }}
-                      onClick={() =>
-                        toggleFavorite(product.image)
-                      }
-                    >
-                      Remove ❌
-                    </button>
+                    <p className="font-medium text-gray-800">
+                      {product.title}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      KALINI
+                    </p>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
 
-        {/* 🔥 MODAL */}
-        {selectedProduct && (
-          <AddToCartModal
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-          />
+                {/* PRICE */}
+                <div className="text-gray-800 font-semibold">
+                  ₹{product.price}
+                  {product.oldPrice && (
+                    <span className="ml-2 text-sm line-through text-gray-400">
+                      ₹{product.oldPrice}
+                    </span>
+                  )}
+                </div>
+
+                {/* DISCOUNT */}
+                <div className="text-orange-500 font-medium">
+                  {product.discount}
+                </div>
+
+                {/* ACTIONS */}
+                <div className="flex md:justify-center gap-3">
+
+                  <button
+                    onClick={() => setSelectedProduct(product)}
+                    className="bg-[#ff3f6c] text-white px-4 py-2 rounded-md hover:bg-[#ff527b] transition text-sm font-semibold"
+                  >
+                    Move to Cart
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      toggleFavorite(product.image)
+                    }
+                    className="border border-gray-300 px-4 py-2 rounded-md text-sm hover:bg-gray-100 transition"
+                  >
+                    Remove
+                  </button>
+
+                </div>
+              </div>
+            ))}
+
+          </div>
         )}
-
       </div>
+
+      {/* MODAL */}
+      {selectedProduct && (
+        <AddToCartModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </div>
   );
 }

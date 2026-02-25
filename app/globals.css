@@ -1,6 +1,10 @@
 /* GLOBAL (safe) */
 
 /* ===== THEME VARIABLES ===== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   --bg-page: #f4f4f4;
   --bg-card: #ffffff;
@@ -24,6 +28,20 @@
   --text-muted: #b5b5b5;
 
   --border-light: #333333;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease;
 }
 
 body {
@@ -381,78 +399,12 @@ body {
   height: 100%;
   object-fit: cover;   /* 🔑 key line */
 }
-
-/*Hero section*/
-
-.hero {
-  position: relative;
-  height: 70vh;
-  width: 100%;
-  overflow: hidden;
-  margin-top: 5px;
-   background: #fff;
-}
-
-/* Video */
-.hero-video {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
 /* Image fallback */
 .hero-img {
   object-fit: cover;
   z-index: 0;
 }
 
-/* Dark overlay for readability */
-.hero-overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-
-  backdrop-filter: blur(1px);     /* 🔥 blur effect */
-  background: rgba(0, 0, 0, 0.45); /* dark overlay for readability */
-}
-/* Text content */
-.hero-content {
-  position: relative;
-  font-size: 3.5rem;
-  z-index: 2;
-  color: rgb(16, 16, 16);
-  text-align: center;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.hero-buttons {
-  margin-top: 28px;
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  
-}
-
-/* Buttons themselves */
-.hero-buttons button {
-  font-size: 1.2rem;      /* 👈 bigger text */
-  padding: 16px 36px;     /* 👈 bigger buttons */
-  font-weight: 600;
-  border-radius: 4px;
-}
-
-/* Buttons */
-.primary-btn {
-  background: #000;
-  color: #fff;
-  padding: 12px 24px;
-  border: none;
-  cursor: pointer;
-}
 
 .secondary-btn {
   background: transparent;

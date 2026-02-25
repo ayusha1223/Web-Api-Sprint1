@@ -2,12 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-interface TopBarProps {
-  showTryOn?: boolean;
-  onTryOnClick?: () => void;
-}
+import { useRouter, usePathname } from "next/navigation";
+import TryOnViewer from "./TryOnViewer";
 
 interface User {
   id: string;
@@ -17,218 +13,159 @@ interface User {
   image?: string;
 }
 
-export default function TopBar({ showTryOn = true, onTryOnClick }: TopBarProps) {
+export default function TopBar() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState<User | null>(null);
+  const [showTryOn, setShowTryOn] = useState(false);
+
   const router = useRouter();
+  const pathname = usePathname();
 
-  const [notifications, setNotifications] = useState({
-    emailNotifications: true,
-    smsNotifications: false,
-    saleAlerts: true,
-    orderUpdates: true,
-    promotionalOffers: false,
-  });
+  const categories = [
+    { name: "Home", link: "/dashboard" },
+    { name: "CASUAL", link: "/dashboard/category/casual" },
+    { name: "CO-ORD", link: "/dashboard/category/coord" },
+    { name: "PARTY", link: "/dashboard/category/party" },
+    { name: "WINTER", link: "/dashboard/category/winter" },
+    { name: "WEDDING", link: "/dashboard/category/wedding" },
+    { name: "1 PIECE", link: "/dashboard/category/onepiece" },
+  ];
 
-  /* =========================================
-     FETCH REAL USER FROM BACKEND
-  ========================================= */
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
         const res = await fetch("http://localhost:5050/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
-        if (!res.ok) throw new Error("Failed to fetch user");
 
         const data = await res.json();
         setUser(data);
-      } catch (error) {
-        console.error("User fetch failed:", error);
+      } catch (err) {
+        console.log(err);
       }
     };
 
     fetchUser();
   }, []);
 
-  /* =========================================
-     LOGOUT
-  ========================================= */
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    setShowProfileMenu(false);
-    setShowSettingsMenu(false);
     router.push("/?auth=login");
   };
 
-  /* =========================================
-     DARK MODE
-  ========================================= */
-  const toggleDarkMode = () => {
-    document.body.classList.toggle("dark");
-    const isDark = document.body.classList.contains("dark");
-    setDarkMode(isDark);
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  };
-
   return (
-    <div className="topBar">
-      <div className="topSearch">
-        <div className="searchWrapper">
-          <span className="searchIcon">🔍</span>
-          <input
-            type="text"
-            placeholder="Search for dresses, co-ord sets, party wear..."
-            className="searchInput"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <span className="filterIcon">⚙️</span>
-        </div>
-      </div>
+    <>
+      <header className="w-full bg-white shadow-sm sticky top-0 z-50">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-8 py-4">
 
-      <div className="topRight">
-        {showTryOn && (
-          <span
-            className="icon"
-            onClick={onTryOnClick}
-            title="Try On"
-            style={{ cursor: "pointer" }}
-          >
-            👗
-          </span>
-        )}
+          {/* LEFT */}
+          <div className="flex items-center gap-12">
+            <Link href="/dashboard">
+              <div className="text-4xl font-extrabold text-pink-500 hover:scale-110 transition cursor-pointer select-none">
+                N
+              </div>
+            </Link>
 
-        <Link href="/favorites" className="icon">♡</Link>
-        <Link href="/cart" className="icon">🛒</Link>
+            <nav className="hidden lg:flex items-center gap-10 text-sm font-bold tracking-wide">
+              {categories.map((cat) => (
+                <Link
+                  key={cat.name}
+                  href={cat.link}
+                  className={`relative uppercase transition 
+                  after:absolute after:left-0 after:-bottom-2 after:h-[3px] after:w-0 
+                  after:bg-pink-500 after:transition-all after:duration-300
+                  hover:text-pink-500 hover:after:w-full
+                  ${
+                    pathname === cat.link
+                      ? "text-pink-500 after:w-full"
+                      : "text-gray-800"
+                  }`}
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-        <div className="profileWrapper">
-          <span
-            className="icon"
-            onClick={() => {
-              setShowProfileMenu(!showProfileMenu);
-              setShowSettingsMenu(false);
-            }}
-          >
-            👤
-          </span>
-
-          {showProfileMenu && (
-            <div className="profileDropdown">
-
-              {showSettingsMenu ? (
-                <>
-                  <button
-                    className="menuItem"
-                    onClick={() => setShowSettingsMenu(false)}
-                  >
-                    ← <span>Back</span>
-                  </button>
-
-                  <div className="menuDivider" />
-
-                  {Object.keys(notifications).map((key) => (
-                    <label key={key} className="toggleRow">
-                      <span>{key}</span>
-                      <input
-                        type="checkbox"
-                        checked={
-                          notifications[key as keyof typeof notifications]
-                        }
-                        onChange={(e) =>
-                          setNotifications({
-                            ...notifications,
-                            [key]: e.target.checked,
-                          })
-                        }
-                      />
-                    </label>
-                  ))}
-                </>
-              ) : (
-                <>
-                  {/* ================= PROFILE HEADER ================= */}
-                  <div className="profileHeader">
-                    <div className="profileAvatar">
-                      {user?.image ? (
-                        <img
-  src={`http://localhost:5050${user.image}`}
-  alt="Profile"
-  className="avatarImage"
-/>
-                      ) : (
-                        <span>
-                          {(user?.name || user?.email)
-                            ?.charAt(0)
-                            .toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-
-                    <div>
-                      <div className="profileName">
-                        {user?.name ||
-                          user?.email?.split("@")[0] ||
-                          "User"}
-                      </div>
-
-                      <div className="profileEmail">
-                        {user?.email || ""}
-                      </div>
-                    </div>
-                  </div>
-
-                  <Link
-                    href="/user/profile"
-                    className="menuItem"
-                    onClick={() => setShowProfileMenu(false)}
-                  >
-                    ✏️ <span>Edit Profile</span>
-                  </Link>
-
-                  <button
-                    className="menuItem"
-                    onClick={() => setShowSettingsMenu(true)}
-                  >
-                    ⚙️ <span>Settings</span>
-                  </button>
-
-                  <Link
-                    href="/my-orders"
-                    className="menuItem"
-                    onClick={() => setShowProfileMenu(false)}
-                  >
-                    📦 <span>My Orders</span>
-                  </Link>
-
-                  <button className="menuItem" onClick={toggleDarkMode}>
-                    🌙 <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
-                  </button>
-
-                  <div className="menuDivider" />
-
-                  <button
-                    className="menuItem logout"
-                    onClick={handleLogout}
-                  >
-                    🚪 <span>Logout</span>
-                  </button>
-                </>
-              )}
+          {/* SEARCH */}
+          <div className="flex-1 flex justify-center px-10">
+            <div className="w-full max-w-xl">
+              <div className="flex items-center gap-3 bg-gray-100 px-5 py-2 rounded-md">
+                <span className="text-gray-500">🔍</span>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-transparent outline-none w-full text-sm"
+                />
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* RIGHT ICONS */}
+          <div className="flex items-center gap-10 text-sm font-medium">
+
+            {/* TRY ON */}
+            <div
+              onClick={() => setShowTryOn(true)}
+              className="flex flex-col items-center cursor-pointer hover:text-pink-500 transition"
+            >
+              <span className="text-xl">👗</span>
+              <span>Try On</span>
+            </div>
+
+            {/* PROFILE */}
+            <Link
+  href="/dashboard/profile"
+  className="flex flex-col items-center hover:text-pink-500 transition"
+>
+  <span className="text-xl">👤</span>
+  <span>Profile</span>
+</Link>
+
+            <Link
+              href="/favorites"
+              className="flex flex-col items-center hover:text-pink-500 transition"
+            >
+              <span className="text-xl">♡</span>
+              <span>Wishlist</span>
+            </Link>
+
+            <Link
+              href="/cart"
+              className="flex flex-col items-center hover:text-pink-500 transition"
+            >
+              <span className="text-xl">🛍️</span>
+              <span>Bag</span>
+            </Link>
+          </div>
         </div>
-      </div>
-    </div>
+      </header>
+
+      {/* TRY ON MODAL */}
+      {showTryOn && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
+
+          <div className="bg-white rounded-xl w-[900px] h-[600px] relative p-6">
+
+            <button
+              onClick={() => setShowTryOn(false)}
+              className="absolute top-4 right-4 text-gray-500 text-lg"
+            >
+              ✕
+            </button>
+
+            <TryOnViewer />
+          </div>
+
+        </div>
+      )}
+    </>
   );
 }

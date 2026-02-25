@@ -62,56 +62,80 @@ export default function TrendingSection() {
 
   return (
     <>
-      <section className={styles.promoBanner}>
-        {/* VIDEO BACKGROUND */}
-        <video
-          className={styles.promoVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-        >
-          <source src="/videos/sale1.mp4" type="video/mp4" />
-        </video>
+      <section className="relative w-full h-[40vh] overflow-hidden">
 
-        {/* DARK OVERLAY */}
-        <div className={styles.overlay} />
+ {/* VIDEO BACKGROUND */}
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="absolute inset-0 w-full h-full object-cover object-[center_75%] brightness-75 blur-[2px] scale-105 z-0"
+>
+  <source src="/videos/sale1.mp4" type="video/mp4" />
+</video>
 
-        {/* CONTENT */}
-        <div className={styles.promoContent}>
-          <p className={styles.promoSmall}>
-            This week only! Ends 9/25.
-          </p>
+{/* LUXURY GRADIENT OVERLAY */}
+<div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-[1]" />
 
-          <div className={styles.promoTimer}>
-            <div>
-              <h3>{timeLeft.days}</h3>
-              <span>Days</span>
-            </div>
-            <div>
-              <h3>{timeLeft.hours}</h3>
-              <span>Hours</span>
-            </div>
-            <div>
-              <h3>{timeLeft.minutes}</h3>
-              <span>Minutes</span>
-            </div>
-            <div>
-              <h3>{timeLeft.seconds}</h3>
-              <span>Seconds</span>
-            </div>
-          </div>
+  <div className="relative z-[2] h-full flex flex-col justify-center items-center text-white text-center px-4">
 
-          <button
-            className={styles.promoBtn}
-            onClick={() =>
-              requireAuth(() => router.push("/shop"))
-            }
-          >
-            Get it now
-          </button>
-        </div>
-      </section>
+  {/* TOP TEXT */}
+  <p className="text-lg md:text-xl font-medium tracking-wide mb-6 drop-shadow-lg">
+    This week only • Ends 9/25
+  </p>
+
+  {/* COUNTDOWN */}
+  <div className="flex gap-10 mb-8 backdrop-blur-sm bg-white/10 px-8 py-6 rounded-2xl border border-white/20">
+
+    <div className="flex flex-col items-center">
+      <h3 className="text-4xl md:text-5xl font-bold drop-shadow-lg">
+        {timeLeft.days}
+      </h3>
+      <span className="text-xs uppercase tracking-widest opacity-80 mt-1">
+        Days
+      </span>
+    </div>
+
+    <div className="flex flex-col items-center">
+      <h3 className="text-4xl md:text-5xl font-bold drop-shadow-lg">
+        {timeLeft.hours}
+      </h3>
+      <span className="text-xs uppercase tracking-widest opacity-80 mt-1">
+        Hours
+      </span>
+    </div>
+
+    <div className="flex flex-col items-center">
+      <h3 className="text-4xl md:text-5xl font-bold drop-shadow-lg">
+        {timeLeft.minutes}
+      </h3>
+      <span className="text-xs uppercase tracking-widest opacity-80 mt-1">
+        Minutes
+      </span>
+    </div>
+
+    <div className="flex flex-col items-center">
+      <h3 className="text-4xl md:text-5xl font-bold drop-shadow-lg">
+        {timeLeft.seconds}
+      </h3>
+      <span className="text-xs uppercase tracking-widest opacity-80 mt-1">
+        Seconds
+      </span>
+    </div>
+
+  </div>
+
+  {/* BUTTON */}
+  <button
+    className="px-10 py-4 bg-white text-black rounded-full font-semibold shadow-lg hover:bg-[#f0f0f0] transition transform hover:-translate-y-1"
+    onClick={() => router.push("/?auth=login")}
+  >
+    Get it now
+  </button>
+  </div>
+
+</section>
 
       {/* AUTH MODAL */}
       <AuthModal

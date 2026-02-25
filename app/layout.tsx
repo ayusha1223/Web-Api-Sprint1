@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-import { Navbar, Footer } from "./components/layout";
 import { ShopProvider } from "./context/ShopContext";
-import GlobalToast from "./components/ui/GlobalToast"; // 👈 ADD THIS
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,6 +13,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
@@ -30,23 +35,19 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased`}
       >
         <ShopProvider>
-
-          {/* 🔥 GLOBAL TOAST (VERY IMPORTANT) */}
-          <GlobalToast />
-
-          {/* GLOBAL NAVBAR */}
-          <Navbar />
-
-          {/* PAGE CONTENT */}
-          <main>{children}</main>
-
-          {/* GLOBAL FOOTER */}
-          <Footer />
-
+          {children}
         </ShopProvider>
+
+        <Toaster
+          position="top-center"
+          containerStyle={{
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        />
       </body>
     </html>
   );

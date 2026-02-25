@@ -1,6 +1,6 @@
 "use client";
 
-import "./dashboard.css";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useShop } from "../context/ShopContext";
@@ -9,14 +9,13 @@ import { featuredProducts } from "./data/featured";
 import { useRouter } from "next/navigation";
 import TopBar from "../components/TopBar";
 import AddToCartModal from "../components/AddToCartModal";
+import TryOnViewer from "../components/TryOnViewer";
 
 
 export default function Dashboard() {
   const { favorites, toggleFavorite, addToCart } = useShop();
   const router = useRouter();
   const [showTryOn, setShowTryOn] = useState(false);
-  const [tryOnIndex, setTryOnIndex] = useState(0);
-  const [isFading, setIsFading] = useState(false);
   const [minPrice, setMinPrice] = useState<number | "">("");
   const [maxPrice, setMaxPrice] = useState<number | "">("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,57 +23,6 @@ export default function Dashboard() {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 const [selectedSize, setSelectedSize] = useState<string | null>(null);
-
-
-  const tryOnDresses = [
-    {
-      src: "/images/dresses/dress-8.png",
-      price: 1899,
-      top: 123,
-      width: 260,
-      offsetX: 10,
-    },
-    {
-      src: "/images/dresses/dress-15.png",
-      price: 2199,
-      top: -10,
-      width: 350,
-    },
-    {
-      src: "/images/dresses/dress-10.png",
-      price: 1899,
-      top: 30,
-      width: 265,
-      offsetX: -8,
-    },
-    {
-      src: "/images/dresses/dress-11.png",
-      price: 1899,
-      top: 122,
-      width: 245,
-      offsetX: -3,
-    },
-    {
-      src: "/images/dresses/dress-12.png",
-      price: 1899,
-      top: 123,
-      width: 245,
-      offsetX: -5,
-    },
-    {
-      src: "/images/dresses/dress-13.png",
-      price: 1899,
-      top: 100,
-      width: 200,
-    },
-    {
-      src: "/images/dresses/dress-14.png",
-      price: 1899,
-      top: 116,
-      width: 290,
-      offsetX: -5,
-    },
-  ];
 
   const filteredProducts = featuredProducts
     .filter((p) => {
@@ -94,293 +42,269 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
       return true;
     });
 
-  return (
-    <div className="dashboard-container">
-      <div className="dashboard-card">
-        {/* ================= TOP BAR ================= */}
-        <div className="dashboardHeader">
+return (
+  <div className="bg-[#f5f5f6] min-h-screen">
 
-  <TopBar
-    showTryOn={true}
-    onTryOnClick={() => setShowTryOn(true)}
-  />
+   
+   <TopBar />
 
-<div className="categoryNav">
-  {[
-    { name: "Home", link: "/dashboard" },
-    { name: "Casual Wear", link: "/dashboard/category/casual" },
-    { name: "Co-Ord Set", link: "/dashboard/category/coord" },
-    { name: "Party Wear", link: "/dashboard/category/party" },
-    { name: "Winter Wear", link: "/dashboard/category/winter" },
-    { name: "Wedding Wear", link: "/dashboard/category/wedding" },
-    { name: "1 Piece Set", link: "/dashboard/category/onepiece" },
-  ].map((cat) => (
-    <Link key={cat.name} href={cat.link} className="categoryLink">
-      {cat.name}
-    </Link>
-  ))}
-</div>
+    {/* ===== PAGE CONTAINER ===== */}
+    <div className="max-w-[1400px] mx-auto px-8 py-8">
 
-</div>
+      <div className="grid grid-cols-[260px_1fr] gap-12">
 
-        <div className="dashboard-layout">
-          {/* ================= SIDEBAR ================= */}
-          <aside className="sidebar">
-            <div className="sidebar-logo">
-              <Image
-                src="/images/logo.png"
-                alt="Naayu Attire"
-                width={130}
-                height={50}
-                priority
-              />
-            </div>
-            <h3 style={{ marginTop: "24px" }}>Filter by Price</h3>
-            <div className="priceFilter">
-              <input
-                type="number"
-                placeholder="Min"
-                value={minPrice}
-                onChange={(e) =>
-                  setMinPrice(e.target.value === "" ? "" : Number(e.target.value))
-                }
-              />
-              <input
-                type="number"
-                placeholder="Max"
-                value={maxPrice}
-                onChange={(e) =>
-                  setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))
-                }
-              />
-              <div className="priceSliderBox">
-                <input
-                  type="range"
-                  min={500}
-                  max={5000}
-                  step={100}
-                  value={priceRange}
-                  onChange={(e) => setPriceRange(Number(e.target.value))}
-                  className="priceSlider"
-                />
-                <div className="priceRangeText">
-                  ₹500 – ₹{priceRange.toLocaleString()}
-                </div>
-                <h3 style={{ marginTop: 24 }}>Choose by Color</h3>
+        {/* ================= SIDEBAR ================= */}
+        <aside className="pr-8 border-r border-gray-200">
 
-                <div className="colorFilterVertical">
-                  {[
-                    "black",
-                    "white",
-                    "red",
-                    "blue",
-                    "green",
-                    "pink",
-                    "yellow",
-                    "brown",
-                    "maroon",
-                    "orange",
-                  ].map((color) => (
-                    <div
-                      key={color}
-                      className={`colorRow ${selectedColor === color ? "active" : ""}`}
-                      onClick={() =>
-                        setSelectedColor(selectedColor === color ? null : color)
-                      }
-                    >
-                      <span
-                        className="colorDot"
-                        style={{
-                          backgroundColor: color === "white" ? "#fff" : color,
-                          border: color === "white" ? "1.5px solid #ccc" : undefined,
-                        }}
-                      />
-                      <span className="colorName">
-                        {color.charAt(0).toUpperCase() + color.slice(1)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
+          {/* ===== PRICE ===== */}
+          <div className="pb-8 border-b">
+            <h3 className="text-sm font-bold tracking-wide mb-6">PRICE</h3>
 
-         {/* ================= MAIN ================= */}
-<main>
-  {/* ===== BANNER ===== */}
-  <div className="promo-row">
-    <div className="long-banner">
-      <Image
-        src="/images/dashboard/festive-banner1.jpg"
-        alt="Big Festive Sale"
-        fill
-        priority
-      />
-      <div className="banner-overlay">
-        <h1>BIG FESTIVE SALE</h1>
-        <p>Upto 60% OFF on Trending Collections</p>
-        <Link href="/dashboard/category/casual">
-          <button>Shop Now</button>
-        </Link>
-      </div>
-    </div>
-  </div>
+            <input
+              type="range"
+              min={100}
+              max={10100}
+              step={100}
+              value={priceRange}
+              onChange={(e) => setPriceRange(Number(e.target.value))}
+              className="w-full accent-pink-500"
+            />
 
-  {/* ===== TITLE ===== */}
-  <h2 className="pickTitle">Pick yours now</h2>
-
-  {/* ===== PRODUCTS ===== */}
-  <section className="productListSection">
-    <div className="productGrid">
-      {filteredProducts.map((p) => (
-        <div className="productCard" key={p.id}>
-          <span
-            className="wishlistIcon"
-            onClick={() => toggleFavorite(p.image)}
-          >
-            {favorites.includes(p.image) ? "❤️" : "♡"}
-          </span>
-
-          <div
-            className="productImg"
-            onClick={() => router.push(`/product/${p.slug}`)}
-            style={{ cursor: "pointer" }}
-          >
-            <img src={p.image} alt={p.title} />
+            <p className="mt-4 text-sm font-semibold">
+              ₹100 - ₹{priceRange.toLocaleString()}+
+            </p>
           </div>
 
-          <div className="productInfo">
-            <p className="brand">{p.color || "NAAYU"}</p>
-            <p className="name">{p.title}</p>
-
-            <div className="priceRow">
-              <span className="price">₹{p.price}</span>
-              <span className="off">{p.discount}</span>
+          {/* ===== COLOR ===== */}
+          <div className="pt-8">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-sm font-bold tracking-wide">COLOR</h3>
+              
             </div>
 
-            <button
-              className="cartIconBtn"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedProduct(p);
-                setSelectedSize(null);
-              }}
-            >
-              🛒
-            </button>
+            <div className="space-y-4">
+              {[
+                { name: "Pink", count: 6270, code: "#f472b6" },
+                { name: "Green", count: 6233, code: "#16a34a" },
+                { name: "Blue", count: 6109, code: "#2563eb" },
+                { name: "Purple", count: 4450, code: "#9333ea" },
+                { name: "Black", count: 3816, code: "#111827" },
+                { name: "Red", count: 3501, code: "#dc2626" },
+                { name: "Yellow", count: 3479, code: "#eab308" },
+              ].map((color) => (
+                <label
+                  key={color.name}
+                  className="flex items-center gap-3 cursor-pointer text-sm"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedColor === color.name.toLowerCase()}
+                    onChange={() =>
+                      setSelectedColor(
+                        selectedColor === color.name.toLowerCase()
+                          ? null
+                          : color.name.toLowerCase()
+                      )
+                    }
+                    className="w-4 h-4 accent-pink-500"
+                  />
+
+                  <span
+                    className="w-4 h-4 rounded-full border"
+                    style={{ backgroundColor: color.code }}
+                  />
+
+                  <span>
+                    {color.name}
+                    <span className="text-gray-400 ml-1">
+                      ({color.count})
+                    </span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* ================= PRODUCTS SECTION ================= */}
+        <main>
+
+  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+    {filteredProducts.map((p) => (
+      <div
+        key={p.id}
+        className="bg-white rounded-xl overflow-hidden 
+                   shadow-sm hover:shadow-lg 
+                   transition duration-300 relative"
+      >
+
+        {/* IMAGE */}
+        <div
+          onClick={() => router.push(`/product/${p.slug}`)}
+          className="relative cursor-pointer"
+        >
+
+          {/* Wishlist */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFavorite(p.image);
+            }}
+            className="absolute top-3 right-3 z-10 w-8 h-8 
+                       bg-white rounded-full shadow 
+                       flex items-center justify-center"
+          >
+            {favorites.includes(p.image) ? "❤️" : "🤍"}
+          </button>
+
+          <div className="w-full aspect-[3/4] bg-white flex items-center justify-center">
+            <img
+              src={p.image}
+              alt={p.title}
+              className="h-full object-contain transition duration-300"
+            />
           </div>
         </div>
-      ))}
-    </div>
 
-        {/* ================= TRY ON MODAL ================= */}
-        {showTryOn && (
-          <div className="tryonOverlay">
-            <div className="tryonModal">
-              <button className="closeTryon" onClick={() => setShowTryOn(false)}>
-                ✕
-              </button>
+        {/* TEXT */}
+        <div className="p-4">
+          <p className="text-sm font-semibold tracking-wide">
+            KALINI
+          </p>
 
-              <h2>Select Kurtha</h2>
+          <p className="text-sm text-gray-600 truncate">
+            {p.title}
+          </p>
 
-              <div
-                style={{
-                  position: "relative",
-                  width: 300,
-                  height: 520,
-                  margin: "auto",
-                }}
-              >
-                {/* BODY */}
-                <Image
-                  src="/images/body1.png"
-                  alt="Body"
-                  fill
-                  style={{ objectFit: "contain", zIndex: 1 }}
-                />
+          <div className="flex items-center gap-2 mt-2">
+            <span className="font-semibold text-black">
+              ₹{p.price}
+            </span>
 
-                {/* DRESS */}
-                <div
-                  className={`tryonDress ${isFading ? "fade" : ""}`}
-                  style={{
-                    position: "absolute",
-                    top: `${tryOnDresses[tryOnIndex].top}px`,
-                    left: "50%",
-                    transform: `translateX(calc(-50% + ${
-                      tryOnDresses[tryOnIndex].offsetX || 0
-                    }px))`,
-                    width: `${tryOnDresses[tryOnIndex].width}px`,
-                    zIndex: 2,
-                  }}
-                >
-                  <Image
-                    key={tryOnIndex}
-                    src={tryOnDresses[tryOnIndex].src}
-                    alt="Dress"
-                    width={tryOnDresses[tryOnIndex].width}
-                    height={500}
-                    style={{ objectFit: "contain", height: "auto" }}
-                  />
-                </div>
+            <span className="line-through text-gray-400 text-sm">
+              ₹2499
+            </span>
 
-                {/* LEFT */}
-                <button
-                  className="tryonArrow left"
-                  onClick={() => {
-                    setIsFading(true);
-                    setTimeout(() => {
-                      setTryOnIndex(
-                        (prev) => (prev - 1 + tryOnDresses.length) % tryOnDresses.length
-                      );
-                      setIsFading(false);
-                    }, 200);
-                  }}
-                >
-                  ◀
-                </button>
-
-                {/* RIGHT */}
-                <button
-                  className="tryonArrow right"
-                  onClick={() => {
-                    setIsFading(true);
-                    setTimeout(() => {
-                      setTryOnIndex((prev) => (prev + 1) % tryOnDresses.length);
-                      setIsFading(false);
-                    }, 200);
-                  }}
-                >
-                  ▶
-                </button>
-              </div>
-            </div>
+            <span className="text-orange-500 text-sm">
+              {p.discount}
+            </span>
           </div>
-        )}
-        {selectedProduct && (
-  <AddToCartModal
-    product={selectedProduct}
-    onClose={() => setSelectedProduct(null)}
-  />
-)}
-  </section>
 
-{/* ===== PAYMENT METHODS SECTION ===== */}
-<div className="paymentSection">
-  <div className="paymentLeft">
-    <h3>Payment Methods</h3>
-    <div className="paymentIcons">
-      <Image src="/images/dashboard/cod.png" alt="Cash on Delivery" width={110} height={60} />
-      <Image src="/images/dashboard/visa.png" alt="Visa" width={70} height={40} />
-      <Image src="/images/dashboard/esewa.png" alt="eSewa" width={70} height={40} />
-      <Image src="/images/dashboard/paypal.png" alt="paypal" width={70} height={40} />
-    </div>
+          {/* ADD TO BAG BUTTON */}
+         <button
+  onClick={(e) => {
+    e.stopPropagation();
+    setSelectedProduct(p);
+    setSelectedSize(null);
+  }}
+  className="mt-4 w-full bg-[#ff3f6c] text-white py-3 rounded-md 
+             hover:bg-[#ff527b] transition font-semibold 
+             flex items-center justify-center gap-2"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-5 h-5 text-white"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 7h12l-1 12H7L6 7zm3 0V5a3 3 0 016 0v2"
+    />
+  </svg>
+
+  ADD TO BAG
+</button>
+        </div>
+
+      </div>
+    ))}
   </div>
-</div>
 
 </main>
-          </div>
+{selectedProduct && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+    <div className="bg-white rounded-xl p-6 w-[420px] relative">
+
+      {/* Close */}
+      <button
+        onClick={() => setSelectedProduct(null)}
+        className="absolute top-4 right-4 text-gray-500"
+      >
+        ✕
+      </button>
+
+      {/* Image */}
+      <img
+        src={selectedProduct.image}
+        className="w-full h-[300px] object-contain"
+      />
+
+      {/* Title */}
+      <h2 className="mt-4 font-semibold text-lg">
+        {selectedProduct.title}
+      </h2>
+
+      {/* Price */}
+      <p className="font-bold mt-1">
+        ₹{selectedProduct.price}
+      </p>
+
+      {/* Size */}
+      <div className="mt-4">
+        <p className="mb-2 font-medium">Select Size</p>
+        <div className="flex gap-3">
+          {["S", "M", "L", "XL"].map((size) => (
+            <button
+              key={size}
+              onClick={() => setSelectedSize(size)}
+              className={`px-4 py-2 border rounded ${
+                selectedSize === size
+                  ? "bg-black text-white"
+                  : "bg-white"
+              }`}
+            >
+              {size}
+            </button>
+          ))}
         </div>
       </div>
+
+      {/* Add to Cart */}
+<button
+  onClick={() => {
+    if (!selectedSize) {
+      alert("Please select size");
+      return;
+    }
+
+    addToCart(
+      selectedProduct.image,
+      selectedSize,
+      Number(selectedProduct.price),
+      selectedProduct.title
     );
-  }
-  
+
+    setTimeout(() => {
+      setSelectedProduct(null);
+      router.push("/cart");
+    }, 1500);
+  }}
+  className="mt-6 w-full bg-[#ff3f6c] text-white py-3 rounded-md 
+             hover:bg-[#ff527b] transition font-semibold 
+             flex items-center justify-center gap-2"
+>
+  ADD TO BAG
+</button>
+    </div>
+  </div>
+)}
+</div>
+</div>
+</div>
+)
+}

@@ -1,440 +1,215 @@
 "use client";
 
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
-export default function AccountSettingsPage() {
+export default function EditUserPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [users, setUsers] = useState<any[]>([]);
-  const [editUser, setEditUser] = useState<any>(null);
-  /* ================= LOAD LOGGED-IN USER PROFILE ================= */
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  /* ================= LOAD USER ================= */
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token || !id) return;
 
-    fetch("http://localhost:5050/api/auth/whoami", {
+    fetch(`http://localhost:5050/api/admin/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((res) => {
-        const user = res.data;
-        setName(user.name || "");
-        setEmail(user.email || "");
-
-        if (user.image) setPreview(`http://localhost:5050${user.image}`);
+      .then((data) => {
+        const user = data.data.user;
+        setName(user.name);
+        setEmail(user.email);
+        setRole(user.role);
+        if (user.imageUrl) {
+          setPreview(`http://localhost:5050${user.imageUrl}`);
+        }
       })
-      .catch((err) => console.error("Profile load error:", err));
-  }, []);
+      .finally(() => setLoading(false));
+  }, [id]);
 
-  /* ================= LOAD ADMIN USERS ================= */
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
-
-    if (role !== "admin") return;
-
-    fetch("http://localhost:5050/api/admin/users", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setUsers(data.data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  /* ================= SAVE PROFILE ================= */
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  /* ================= SAVE USER ================= */
+  const handleSave = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
+
+    setSaving(true);
 
     const formData = new FormData();
     formData.append("name", name);
+    formData.append("email", email);
+    formData.append("role", role);
 
-    if (image) formData.append("image", image);
+    if (password) {
+      formData.append("password", password);
+    }
 
-    const res = await fetch("http://localhost:5050/api/auth/update-profile", {
-      method: "PUT",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    const res = await fetch(
+      `http://localhost:5050/api/admin/users/${id}`,
+      {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      }
+    );
 
     const data = await res.json();
+    setSaving(false);
 
-    if (data?.data?.image) {
-      setPreview(`http://localhost:5050${data.data.image}`);
+    if (data.success) {
+      router.push(`/admin/users/${id}`);
+    } else {
+      alert("Update failed");
     }
-
-    alert("Profile updated successfully");
   };
 
-  /* ================= ADMIN ACTIONS ================= */
-  const handleDeleteUser = async (userId: string) => {
-    const token = localStorage.getItem("token");
-    if (!confirm("Are you sure you want to delete this user?")) return;
-
-    await fetch(`http://localhost:5050/api/admin/users/${userId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    setUsers((prev) => prev.filter((u) => u._id !== userId));
-  };
-
-const handleEditUser = (user: any) => {
-  setEditUser({ ...user });
-};
-const handleSaveUser = async () => {
-  const token = localStorage.getItem("token");
-  if (!token || !editUser) return;
-
-  const formData = new FormData();
-  formData.append("name", editUser.name);
-  formData.append("email", editUser.email);
-  formData.append("phone", editUser.phone || "");
-  formData.append("role", editUser.role);
-
-  if (editUser.imageFile) {
-    formData.append("image", editUser.imageFile);
-  }
-
-  const res = await fetch(
-    `http://localhost:5050/api/admin/users/${editUser._id}`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    }
-  );
-
-  const data = await res.json();
-
-  if (data.success) {
-    setUsers((prev) =>
-      prev.map((u) =>
-        u._id === editUser._id ? data.data : u
-      )
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-gray-600 text-lg">Loading user...</div>
+      </div>
     );
-    setEditUser(null);
   }
-};
 
-  // ✅ NEW: View user details
-  const handleViewUser = (userId: string) => {
-    router.push(`/admin/users/${userId}`);
-  };
+ return (
+  <div className="min-h-screen bg-gray-50 px-6 pt-6 pb-16">
+    <div className="max-w-6xl mx-auto space-y-8">
 
-  // ✅ NEW: Go to create page
-  const handleCreateUser = () => {
-    router.push("/admin/users/create");
-  };
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">
+            Edit User
+          </h1>
+          <p className="text-gray-500 mt-1">
+            Update profile information and permissions
+          </p>
+        </div>
 
-  return (
-    <div style={styles.page}>
-      {/* Sidebar */}
-      <aside style={styles.sidebar}>
-        <h3 style={styles.sideTitle}>Settings</h3>
-        <ul style={styles.menu}>
-          <li style={styles.active}>Account</li>
-          <li>Users</li>
-          <li>Notifications</li>
-          <li>Privacy</li>
-          <li>Languages</li>
-          <li>Help</li>
-        </ul>
-      </aside>
-
-      {/* Main Content */}
-      <main style={styles.content}>
-        <h2>Account Settings</h2>
-        <p style={styles.sub}>Basic info</p>
-
-        {/* ================= PROFILE FORM ================= */}
-        <form onSubmit={handleSubmit}>
-          {/* Profile Picture */}
-          <div style={styles.row}>
-            <div style={styles.label}>Profile Picture</div>
-            <div style={styles.value}>
-              <div style={styles.avatarWrap}>
-                <img
-                  src={preview || "/user-placeholder.png"}
-                  alt="profile"
-                  style={styles.avatar}
-                />
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0] || null;
-                  setImage(file);
-                  if (file) setPreview(URL.createObjectURL(file));
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Name */}
-          <div style={styles.row}>
-            <div style={styles.label}>Name</div>
-            <input
-              style={styles.input}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-
-          {/* Email (read-only) */}
-          <div style={styles.row}>
-            <div style={styles.label}>Email</div>
-            <input style={styles.input} value={email} disabled />
-          </div>
-
-          <button type="submit" style={styles.button}>
-            Save Changes
-          </button>
-        </form>
-
-        {/* ================= ADMIN USERS LIST ================= */}
-        {users.length > 0 && (
-          <>
-            <hr style={{ margin: "50px 0" }} />
-
-            {/* ✅ Title + Create button in same row */}
-            <div style={styles.usersHeaderRow}>
-              <div>
-                <h2 style={{ margin: 0 }}>All Registered Users</h2>
-                <p style={styles.sub}>Admin view</p>
-              </div>
-
-              <button style={styles.createBtn} onClick={handleCreateUser}>
-                + Create
-              </button>
-            </div>
-
-            <table style={styles.table}>
-              <thead>
-                <tr>
-                  <th style={styles.th}>Name</th>
-                  <th style={styles.th}>Email</th>
-                  <th style={styles.th}>Role</th>
-                  <th style={styles.th}>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user._id}>
-                    <td style={styles.td}>{user.name}</td>
-                    <td style={styles.td}>{user.email}</td>
-                    <td style={styles.td}>{user.role}</td>
-
-                    <td style={styles.td}>
-                      <div style={styles.actionGroup}>
-                        {/* ✅ NEW: View */}
-                        <button
-                          style={styles.viewBtn}
-                          onClick={() => handleViewUser(user._id)}
-                        >
-                          View
-                        </button>
-
-                        <button
-                          style={styles.editBtn}
-                          onClick={() => handleEditUser(user)}
-                        >
-                          Edit
-                        </button>
-
-                        <button
-                          style={styles.deleteBtn}
-                          onClick={() => handleDeleteUser(user._id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {editUser && (
-  <div style={styles.modalOverlay}>
-    <div style={styles.modal}>
-      <h3>Edit User</h3>
-
-      <input
-        value={editUser.name}
-        onChange={(e) =>
-          setEditUser({ ...editUser, name: e.target.value })
-        }
-        placeholder="Name"
-        style={styles.input}
-      />
-
-      <input
-        value={editUser.email}
-        onChange={(e) =>
-          setEditUser({ ...editUser, email: e.target.value })
-        }
-        placeholder="Email"
-        style={styles.input}
-      />
-
-      <input
-        value={editUser.phone || ""}
-        onChange={(e) =>
-          setEditUser({ ...editUser, phone: e.target.value })
-        }
-        placeholder="Phone Number"
-        style={styles.input}
-      />
-
-      <select
-        value={editUser.role}
-        onChange={(e) =>
-          setEditUser({ ...editUser, role: e.target.value })
-        }
-        style={styles.input}
-      >
-        <option value="admin">Admin</option>
-        <option value="user">User</option>
-      </select>
-      {editUser.image && (
-  <img
-    src={`http://localhost:5050${editUser.image}`}
-    style={{
-      width: 60,
-      height: 60,
-      borderRadius: "50%",
-      objectFit: "cover",
-      marginBottom: 10,
-    }}
-  />
-)}
-
-
-<input
-  type="file"
-  onChange={(e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setEditUser({
-        ...editUser,
-        imageFile: file,
-        image: URL.createObjectURL(file),
-      });
-    }
-  }}
-/>
-
-      <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
-        <button style={styles.button} onClick={handleSaveUser}>
-          Save
-        </button>
         <button
-          style={styles.viewBtn}
-          onClick={() => setEditUser(null)}
+          onClick={() => router.push(`/admin/users/${id}`)}
+          className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
         >
           Cancel
         </button>
       </div>
+
+      {/* EDIT CARD */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+
+        <div className="flex items-start gap-10">
+
+          {/* PROFILE IMAGE */}
+          <div className="space-y-4">
+            <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-white shadow-lg">
+              <img
+                src={preview || "/user-placeholder.png"}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <label className="block text-sm text-center cursor-pointer text-gray-600 hover:text-black">
+              Change Photo
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setImageFile(file);
+                    setPreview(URL.createObjectURL(file));
+                  }
+                }}
+              />
+            </label>
+          </div>
+
+          {/* FORM FIELDS */}
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="md:col-span-2">
+              <label className="text-sm text-gray-400 uppercase tracking-wide">
+                Name
+              </label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-2 w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-black outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-400 uppercase tracking-wide">
+                Email
+              </label>
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-2 w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-black outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-400 uppercase tracking-wide">
+                Role
+              </label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="mt-2 w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-black outline-none"
+              >
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm text-gray-400 uppercase tracking-wide">
+                New Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Leave empty to keep current password"
+                className="mt-2 w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-black outline-none"
+              />
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* ACTION BUTTON */}
+        <div className="mt-10 flex justify-end">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
+          >
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
+
+      </div>
+
     </div>
   </div>
-)}
-          </>
-        )}
-      </main>
-    </div>
-  );
+);
 }
-
-/* ================= STYLES ================= */
-const styles: Record<string, React.CSSProperties> = {
-  page: { display: "flex", minHeight: "100vh", background: "#f7f7fb" },
-  sidebar: { width: "220px", background: "#fdecef", padding: "25px" },
-  sideTitle: { marginBottom: "20px", fontSize: "18px" },
-  menu: { listStyle: "none", padding: 0, lineHeight: "2.2" },
-  active: { fontWeight: 600, color: "#ec4899" },
-  content: { flex: 1, background: "#fff", padding: "40px" },
-  sub: { color: "#6b7280", marginBottom: "25px" },
-
-  row: { display: "flex", alignItems: "center", marginBottom: "20px", gap: "20px" },
-  label: { width: "150px", fontSize: "14px", color: "#6b7280" },
-  value: { display: "flex", alignItems: "center", gap: "15px" },
-
-  avatarWrap: {
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    overflow: "hidden",
-    border: "2px solid #ec4899",
-  },
-  avatar: { width: "100%", height: "100%", objectFit: "cover" },
-
-  input: { flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #e5e7eb" },
-  button: {
-    marginTop: "30px",
-    padding: "10px 20px",
-    background: "#ec4899",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-
-  usersHeaderRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "10px",
-  },
-
-  createBtn: {
-    padding: "10px 14px",
-    background: "#ec4899",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: 600,
-  },
-
-  table: { width: "100%", borderCollapse: "collapse", marginTop: "10px" },
-  th: { textAlign: "left", padding: "10px", borderBottom: "2px solid #e5e7eb" },
-  td: { padding: "10px", borderBottom: "1px solid #e5e7eb" },
-
-  actionGroup: { display: "flex", gap: "8px" },
-
-  viewBtn: {
-    padding: "6px 10px",
-    borderRadius: "6px",
-    border: "1px solid #d1d5db",
-    background: "#fff",
-    cursor: "pointer",
-  },
-
-  editBtn: {
-    padding: "6px 10px",
-    borderRadius: "6px",
-    border: "1px solid #d1d5db",
-    background: "#fff",
-    cursor: "pointer",
-  },
-
-  deleteBtn: {
-    padding: "6px 10px",
-    borderRadius: "6px",
-    border: "1px solid #ef4444",
-    background: "#fff",
-    color: "#ef4444",
-    cursor: "pointer",
-  },
-};

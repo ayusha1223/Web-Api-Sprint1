@@ -23,14 +23,8 @@ export default function CartPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
-const [cardName, setCardName] = useState("");
-const [cardNumber, setCardNumber] = useState("");
-const [expiryMonth, setExpiryMonth] = useState("");
-const [expiryYear, setExpiryYear] = useState("");
-const [cvv, setCvv] = useState("");
-const [paypalEmail, setPaypalEmail] = useState("");
-const [paypalError, setPaypalError] = useState("");
 const [showCodConfirm, setShowCodConfirm] = useState(false);
+const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
 const [showOtpModal, setShowOtpModal] = useState(false);
 const [otp, setOtp] = useState("");
 const [otpError, setOtpError] = useState("");
@@ -95,6 +89,7 @@ const [city, setCity] = useState("");
 const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
 
 
+
   useEffect(() => {
   if (checkoutStep !== "none") {
     document.body.style.overflow = "hidden";
@@ -110,22 +105,7 @@ const formatCardNumber = (value) => {
     .replace(/(.{4})/g, "$1 ")
     .trim();
 };
-const validatePaypalEmail = () => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!paypalEmail) {
-    setPaypalError("Email is required");
-    return false;
-  }
-
-  if (!emailRegex.test(paypalEmail)) {
-    setPaypalError("Enter a valid email address");
-    return false;
-  }
-
-  setPaypalError("");
-  return true;
-};
 const validateDeliveryForm = () => {
   const errors: {
   fullName?: string;
@@ -167,546 +147,569 @@ const validateDeliveryForm = () => {
 };
 
   return (
-    <div className="cartPage">
-      <TopBar showTryOn={true} />
-      <h1 className="cartTitle">My Cart</h1>
+    <div className="bg-[#f5f5f6] min-h-screen">
+  <TopBar />
 
-      <div className="cartLayout">
+  <div className="max-w-[1300px] mx-auto px-6 py-10">
 
-        {/* LEFT SIDE */}
-        <div className="cartItems">
-          {cart.map((item) => (
-            <div
-              className="cartItem"
-              key={`${item.img}-${item.size}`}
-            >
-              <img src={item.img} alt="Product" />
+    {/* TITLE */}
+    <h1 className="text-3xl font-bold mb-8">
+      My Cart ({cart.length})
+    </h1>
 
-              <div className="cartItemInfo">
-                <h4>{item.name || "Kurtha Set"}</h4>
-                <p>Size: {item.size}</p>
+    <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10">
 
-                <div className="priceRow">
-                  <span className="price">₹{item.price}</span>
-                </div>
-              </div>
+      {/* ================= LEFT: CART ITEMS ================= */}
+      <div className="space-y-6">
 
-              <div className="qtyBox">
-                <button
-                  onClick={() =>
-                    updateQty(item.img, item.size, item.qty - 1)
-                  }
-                >
-                  -
-                </button>
-
-                <span>{item.qty}</span>
-
-                <button
-                  onClick={() =>
-                    updateQty(item.img, item.size, item.qty + 1)
-                  }
-                >
-                  +
-                </button>
-              </div>
-
-              <button
-                className="removeBtn"
-                onClick={() =>
-                  removeFromCart(item.img, item.size)
-                }
-              >
-                ✕ Remove
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* RIGHT SIDE */}
-        <div className="orderSummary">
-          <div className="summaryBox">
-            <h4>Your Order</h4>
-
-            <div className="summaryRow">
-              <span>Subtotal</span>
-              <span>₹{totalPrice}</span>
-            </div>
-
-            <div className="summaryRow">
-              <span>Delivery</span>
-              <span>₹99</span>
-            </div>
-
-            <div className="summaryRow">
-              <span>Service Fee</span>
-              <span>₹20</span>
-            </div>
-
-            <hr />
-
-            <div className="summaryRow total">
-              <span>Total Payable</span>
-              <span>₹{total}</span>
-            </div>
-
-            <button
-              className="checkoutBtn"
-              onClick={() => {
-                if (cart.length === 0) {
-                  alert("Your cart is empty");
-                  return;
-                }
-                setCheckoutStep("details");   // 🔥 Open modal instead of routing
-              }}
-            >
-              PROCEED TO CHECKOUT
-            </button>
+        {cart.length === 0 ? (
+          <div className="bg-white p-16 rounded-xl shadow-sm text-center">
+            <p className="text-gray-500 text-lg">
+              Your cart is empty 🛒
+            </p>
           </div>
-        </div>
+        ) : (
+          cart.map((item) => (
+            <div
+              key={`${item.img}-${item.size}`}
+              className="bg-white rounded-xl shadow-sm p-6 flex gap-6 hover:shadow-md transition"
+            >
+
+              {/* IMAGE */}
+              <img
+                src={item.img}
+                alt="Product"
+                className="w-32 h-40 object-contain cursor-pointer"
+              />
+
+              {/* INFO */}
+              <div className="flex-1">
+
+                <h3 className="font-semibold text-lg text-gray-800">
+                  {item.name || "Kurtha Set"}
+                </h3>
+
+                <p className="text-gray-500 text-sm mt-1">
+                  Size: {item.size}
+                </p>
+
+                <p className="font-bold text-lg mt-3">
+                  ₹{item.price}
+                </p>
+
+                {/* QTY + REMOVE */}
+                <div className="flex items-center gap-6 mt-4">
+
+                  {/* QTY BOX */}
+                  <div className="flex items-center border rounded-md overflow-hidden">
+
+                    <button
+                      onClick={() =>
+                        updateQty(item.img, item.size, item.qty - 1)
+                      }
+                      className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition"
+                    >
+                      -
+                    </button>
+
+                    <span className="px-4 py-1 font-medium">
+                      {item.qty}
+                    </span>
+
+                    <button
+                      onClick={() =>
+                        updateQty(item.img, item.size, item.qty + 1)
+                      }
+                      className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  {/* REMOVE */}
+                  <button
+                    onClick={() =>
+                      removeFromCart(item.img, item.size)
+                    }
+                    className="text-sm text-red-500 hover:underline"
+                  >
+                    Remove
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+          ))
+        )}
+
       </div>
+
+      {/* ================= RIGHT: ORDER SUMMARY ================= */}
+      <div className="bg-white rounded-xl shadow-sm p-6 h-fit sticky top-24">
+
+        <h3 className="text-lg font-semibold mb-6">
+          Order Summary
+        </h3>
+
+        <div className="space-y-4 text-sm text-gray-700">
+
+          <div className="flex justify-between">
+            <span>Subtotal</span>
+            <span>₹{totalPrice}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span>Delivery</span>
+            <span>₹99</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span>Service Fee</span>
+            <span>₹20</span>
+          </div>
+
+          <hr />
+
+          <div className="flex justify-between font-bold text-lg">
+            <span>Total Payable</span>
+            <span>₹{total}</span>
+          </div>
+
+        </div>
+
+        {/* CHECKOUT BUTTON */}
+        <button
+          onClick={() => {
+            if (cart.length === 0) {
+              alert("Your cart is empty");
+              return;
+            }
+            setCheckoutStep("details");
+          }}
+          className="mt-8 w-full bg-[#ff3f6c] text-white py-3 rounded-lg font-semibold hover:bg-[#ff527b] transition shadow-md"
+        >
+          PROCEED TO CHECKOUT
+        </button>
+
+      </div>
+
+    </div>
+
+  
+  
 
       {/* ================= CHECKOUT MODAL ================= */}
 
-    {/* ================= DELIVERY DETAILS ================= */}
-{checkoutStep === "details" && (
-  <div
-    className="checkoutOverlay"
-    onClick={() => setCheckoutStep("none")}
-  >
-    <div
-      className="checkoutModal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <h2>Delivery Details</h2>
+ {checkoutStep === "details" && (
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50">
 
-      <div className="inputGroup">
-        <FaUser className="inputIcon userIcon" />
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        {formErrors.fullName && (
-  <p className="formError">{formErrors.fullName}</p>
-)}
-      </div>
+    <div className="bg-white w-[460px] max-w-[94%] rounded-3xl shadow-2xl relative overflow-hidden">
 
-      <div className="inputGroup">
-        <FaPhone className="inputIcon phoneIcon" />
-        <input
-          type="tel"
-          placeholder="Phone Number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        {formErrors.phone && (
-  <p className="formError">{formErrors.phone}</p>
-)}
-      </div>
+      {/* TOP GRADIENT STRIP */}
+      <div className="h-2 bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500"></div>
 
-      <div className="inputGroup">
-        <FaEnvelope className="inputIcon emailIcon" />
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {formErrors.email && (
-  <p className="formError">{formErrors.email}</p>
-)}
-      </div>
+      <div className="p-7">
 
-      <div className="inputGroup">
-        <FaMapMarkerAlt className="inputIcon locationIcon" />
-        <textarea
-          placeholder="Full Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        {formErrors.address && (
-  <p className="formError">{formErrors.address}</p>
-)}
-      </div>
+        {/* HEADER */}
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          Delivery Details
+        </h2>
 
-      <input
-        placeholder="City"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
-      {formErrors.city && (
-  <p className="formError">{formErrors.city}</p>
-)}
+        <div className="space-y-4">
 
-      <button className="locationBtn" onClick={handleUseLocation}>
-        📍 Use My Current Location
-      </button>
+      <div className="relative">
+  <span className={`absolute left-3 top-3 ${formErrors.fullName ? "text-red-500" : "text-gray-400"}`}>
+    👤
+  </span>
 
-      <div className="modalActions">
-        <button onClick={() => setCheckoutStep("none")}>
-          Cancel
-        </button>
+  <input
+    className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      ${formErrors.fullName 
+        ? "border-red-500 focus:ring-red-400" 
+        : "border-gray-300 focus:ring-pink-400"}
+    `}
+    placeholder="Full Name"
+    value={fullName}
+    onChange={(e) => setFullName(e.target.value)}
+  />
 
-      <button
-  className="primary"
-  onClick={() => {
-    if (validateDeliveryForm()) {
-      setCheckoutStep("payment");
-    }
-  }}
->
-  Continue
-</button>
-      </div>
-    </div>
-  </div>
-)}
+  {formErrors.fullName && (
+    <p className="text-red-500 text-xs mt-1 ml-1">
+      {formErrors.fullName}
+    </p>
+  )}
+</div>
+<div className="relative">
+  <span className={`absolute left-3 top-3 ${formErrors.phone ? "text-red-500" : "text-gray-400"}`}>
+    📞
+  </span>
 
-      {/* ================= PAYMENT SELECTION ================= */}
-{checkoutStep === "payment" && !selectedPayment && (
-  <div
-    className="checkoutOverlay"
-    onClick={() => setCheckoutStep("details")}
-  >
-    <div
-      className="checkoutModal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <h2>Select Payment Method</h2>
+  <input
+    className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      ${formErrors.phone 
+        ? "border-red-500 focus:ring-red-400" 
+        : "border-gray-300 focus:ring-pink-400"}
+    `}
+    placeholder="Phone Number"
+    value={phone}
+    onChange={(e) => setPhone(e.target.value)}
+  />
 
-      <button className="payOption" onClick={() => setSelectedPayment("card")}>
-        💳 Card
-      </button>
+  {formErrors.phone && (
+    <p className="text-red-500 text-xs mt-1 ml-1">
+      {formErrors.phone}
+    </p>
+  )}
+</div>
+<div className="relative">
+  <span className={`absolute left-3 top-3 ${formErrors.email ? "text-red-500" : "text-gray-400"}`}>
+    ✉️
+  </span>
 
-      <button className="payOption" onClick={() => setSelectedPayment("esewa")}>
-        🟢 eSewa
-      </button>
+  <input
+    className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      ${formErrors.email 
+        ? "border-red-500 focus:ring-red-400" 
+        : "border-gray-300 focus:ring-pink-400"}
+    `}
+    placeholder="Email Address"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+  />
 
-      <button className="payOption" onClick={() => setSelectedPayment("paypal")}>
-        🟦 PayPal
-      </button>
+  {formErrors.email && (
+    <p className="text-red-500 text-xs mt-1 ml-1">
+      {formErrors.email}
+    </p>
+  )}
+</div>
 
-      <button
-  className="payOption"
-  onClick={() => setShowCodConfirm(true)}
->
-  🚚 Cash on Delivery
-</button>
+         <div className="relative">
+  <span className={`absolute left-3 top-3 ${formErrors.address ? "text-red-500" : "text-gray-400"}`}>
+    📍
+  </span>
 
-      <div className="modalActions">
-        <button onClick={() => setCheckoutStep("details")}>
-          Back
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+  <textarea
+    rows={2}
+    className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition resize-none
+      ${formErrors.address 
+        ? "border-red-500 focus:ring-red-400" 
+        : "border-gray-300 focus:ring-pink-400"}
+    `}
+    placeholder="Full Address"
+    value={address}
+    onChange={(e) => setAddress(e.target.value)}
+  />
 
- {/* ================= CARD MODAL ================= */}
-{selectedPayment === "card" && (
-  <div className="checkoutOverlay">
-    <div
-      className="checkoutModal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-  className="modalClose"
-  onClick={() => setSelectedPayment(null)}
->
-  ✕
-</button>
-      <h2>Card Payment</h2>
+  {formErrors.address && (
+    <p className="text-red-500 text-xs mt-1 ml-1">
+      {formErrors.address}
+    </p>
+  )}
+</div>
 
-      <div className="cardPaymentContainer">
-        <div className="creditCardPreview">
-          <div className="cardChip"></div>
+          {/* LOCATION BUTTON */}
+          <button
+            onClick={handleUseLocation}
+            className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition shadow-md"
+          >
+            📍 Detect My Precise Location
+          </button>
 
-          <div className="cardNumber">
-            {cardNumber || "1234 5678 9012 3456"}
-          </div>
+         <div className="relative">
+  <span className={`absolute left-3 top-3 ${formErrors.city ? "text-red-500" : "text-gray-400"}`}>
+    🏙️
+  </span>
 
-          <div className="cardBottom">
-            <div>
-              <small>CARDHOLDER NAME</small>
-              <div>{cardName || "YOUR NAME"}</div>
-            </div>
+  <input
+    className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      ${formErrors.city 
+        ? "border-red-500 focus:ring-red-400" 
+        : "border-gray-300 focus:ring-pink-400"}
+    `}
+    placeholder="City"
+    value={city}
+    onChange={(e) => setCity(e.target.value)}
+  />
 
-            <div>
-              <small>EXPIRY</small>
-              <div>
-                {expiryMonth || "MM"}/{expiryYear || "YY"}
-              </div>
-            </div>
-          </div>
+  {formErrors.city && (
+    <p className="text-red-500 text-xs mt-1 ml-1">
+      {formErrors.city}
+    </p>
+  )}
+</div>
+
         </div>
 
-        <div className="cardForm">
-          <input
-            placeholder="Card Number"
-            value={cardNumber}
-            onChange={(e) =>
-              setCardNumber(formatCardNumber(e.target.value))
-            }
-          />
-
-          <input
-            placeholder="Cardholder Name"
-            value={cardName}
-            onChange={(e) => setCardName(e.target.value)}
-          />
-
-          <div className="row">
-            <input
-              placeholder="MM"
-              value={expiryMonth}
-              onChange={(e) =>
-                setExpiryMonth(e.target.value.replace(/\D/g, "").slice(0, 2))
-              }
-            />
-
-            <input
-              placeholder="YY"
-              value={expiryYear}
-              onChange={(e) =>
-                setExpiryYear(e.target.value.replace(/\D/g, "").slice(0, 2))
-              }
-            />
-
-            <input
-              placeholder="CVV"
-              value={cvv}
-              onChange={(e) =>
-                setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
-              }
-            />
-          </div>
+        {/* FOOTER */}
+        <div className="flex justify-between items-center mt-6">
 
           <button
-  className="payNowBtn"
-  onClick={() => {
-    setSelectedPayment(null);
-    setShowReviewModal(true);
-    router.push(
-  `/payment?method=card&name=${encodeURIComponent(fullName)}&phone=${encodeURIComponent(phone)}&city=${encodeURIComponent(city)}&address=${encodeURIComponent(address)}`
-);
+            onClick={() => setCheckoutStep("none")}
+            className="text-gray-500 text-sm hover:text-black transition"
+          >
+            Cancel
+          </button>
 
-    setTimeout(() => {
-    }, 2500);
-  }}
->
-  Pay Now
-</button>
+          <button
+            onClick={() => {
+              if (validateDeliveryForm()) {
+                setCheckoutStep("payment");
+              }
+            }}
+            className="bg-black text-white px-7 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-900 transition shadow-lg"
+          >
+            Continue →
+          </button>
+
         </div>
+
       </div>
     </div>
   </div>
 )}
+     {/* ================= PAYMENT SELECTION ================= */}
+{checkoutStep === "payment" && (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50">
 
-{/* ================= ESEWA MODAL ================= */}
-{selectedPayment === "esewa" && (
-  <div className="checkoutOverlay">
-    <div
-      className="esewaStandaloneModal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        className="esewaClose"
-        onClick={() => setSelectedPayment(null)}
-      >
-        ✕
-      </button>
+    <div className="bg-white w-[480px] max-w-[95%] rounded-3xl shadow-2xl overflow-hidden animate-scaleIn">
 
-      <div className="esewaContainer">
-        <div className="esewaLeftPanel">
-          <h2>eSewa</h2>
-          <p>Login securely to complete your payment.</p>
-        </div>
+      {/* Gradient Header Strip */}
+      <div className="h-2 bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500"></div>
 
-        <div className="esewaRightPanel">
-          <h3>Login</h3>
-          <input className="esewaInput" placeholder="eSewa ID" />
-          <input
-            type="password"
-            className="esewaInput"
-            placeholder="MPIN"
-          />
+      <div className="p-8">
 
-         <button
-  className="esewaLoginBtn"
-  onClick={() => {
-    setPendingMethod("esewa");
-    setSelectedPayment(null);
-    setShowOtpModal(true);
-  }}
->
-  Login
-</button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
+          Choose Payment Method
+        </h2>
 
-{/* ================= PAYPAL MODAL ================= */}
-{selectedPayment === "paypal" && (
-  <div className="checkoutOverlay">
-    <div
-      className="paypalModal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        className="modalClose"
-        onClick={() => {
-          setSelectedPayment(null);
-          setPaypalEmail("");
-          setPaypalError("");
-        }}
-      >
-        ✕
-      </button>
+        <div className="space-y-5">
 
-      <h1 className="paypalTitle">PayPal</h1>
+     {/* eSewa */}
+<button
+  onClick={async () => {
+    if (!validateDeliveryForm()) return;
 
-      <input
-        type="email"
-        className="paypalInput"
-        placeholder="Email address"
-        value={paypalEmail}
-        onChange={(e) => {
-          setPaypalEmail(e.target.value);
-          setPaypalError("");
-        }}
-      />
+    const token = localStorage.getItem("token");
 
-      {paypalError && (
-        <p style={{ color: "red", fontSize: "14px", marginBottom: "15px" }}>
-          {paypalError}
-        </p>
-      )}
-
-      <button
-        className="paypalNextBtn"
-       onClick={() => {
-  if (validatePaypalEmail()) {
-    setPendingMethod("paypal");
-    setSelectedPayment(null);
-    setShowOtpModal(true);
-  }
-}}
-      >
-        Next
-      </button>
-    </div>
-  </div>
-)}
-{/* ================= COD CONFIRM MODAL ================= */}
-{showCodConfirm && (
-  <div className="checkoutOverlay">
-    <div
-      className="codConfirmModal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        className="modalClose"
-        onClick={() => setShowCodConfirm(false)}
-      >
-        ✕
-      </button>
-
-      <h2>Confirm Order</h2>
-      <p style={{ marginBottom: "30px", color: "#555" }}>
-        Do you want to confirm your order with Cash on Delivery?
-      </p>
-
-      <div className="modalActions">
-        <button
-          onClick={() => setShowCodConfirm(false)}
-        >
-          Cancel
-        </button>
-
-        <button
-          className="primary"
-          onClick={() => {
-            setShowCodConfirm(false);
-            router.push(
-              `/payment?method=cod&name=${encodeURIComponent(fullName)}&phone=${encodeURIComponent(phone)}&city=${encodeURIComponent(city)}&address=${encodeURIComponent(address)}`
-            );
-          }}
-        >
-          Confirm Order
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-{/* ================= OTP MODAL ================= */}
-{showOtpModal && (
-  <div className="checkoutOverlay">
-    <div className="otpModal" onClick={(e) => e.stopPropagation()}>
-      <h2>Enter OTP</h2>
-      <p style={{ marginBottom: "20px", color: "#666" }}>
-        Please enter 6 digit verification code
-      </p>
-
-      <input
-        type="text"
-        maxLength={6}
-        value={otp}
-        onChange={(e) => {
-          setOtp(e.target.value.replace(/\D/g, "").slice(0, 6));
-          setOtpError("");
-        }}
-        className="otpInput"
-      />
-
-      {otpError && (
-        <p style={{ color: "red", marginTop: "10px" }}>
-          {otpError}
-        </p>
-      )}
-
-      <div className="modalActions" style={{ marginTop: "30px" }}>
-        <button onClick={() => setShowOtpModal(false)}>
-          Cancel
-        </button>
-
-       <button
-  className="primary"
-  onClick={() => {
-    if (otp.length !== 6) {
-      setOtpError("Enter valid 6 digit OTP");
+    if (!token) {
+      router.push("/login");
       return;
     }
 
-    setShowOtpModal(false);
-
-    if (pendingMethod) {
-      router.push(
-        `/payment?method=${pendingMethod}&name=${encodeURIComponent(fullName)}&phone=${encodeURIComponent(phone)}&city=${encodeURIComponent(city)}&address=${encodeURIComponent(address)}`
+    try {
+      const createOrderRes = await fetch(
+        "http://localhost:5050/api/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            items: cart,
+            totalAmount: total,
+            paymentMethod: "ESEWA",
+            address: {
+              name: fullName,
+              phone,
+              address,
+              city,
+            },
+          }),
+        }
       );
+
+      const orderData = await createOrderRes.json();
+      const orderId = orderData.data._id;
+
+      const transaction_uuid = "TXN" + Date.now();
+      const total_amount = total;
+
+      const res = await fetch("/api/esewa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          total_amount,
+          transaction_uuid,
+        }),
+      });
+
+      const data = await res.json();
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action =
+        "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+
+      const fields = {
+        amount: total_amount,
+        tax_amount: 0,
+        total_amount: total_amount,
+        transaction_uuid,
+        product_code: data.product_code,
+        product_service_charge: 0,
+        product_delivery_charge: 0,
+        success_url: `http://localhost:3000/payment?id=${orderId}`,
+        failure_url: `http://localhost:3000/payment-failure?id=${orderId}`,
+        signed_field_names:
+          "total_amount,transaction_uuid,product_code",
+        signature: data.signature,
+      };
+
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = String(value);
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+
+    } catch (err) {
+      console.error("Payment error:", err);
+      alert("Something went wrong");
     }
   }}
+  className="w-full group border border-gray-200 bg-white hover:bg-gray-50 rounded-2xl p-5 transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-between"
 >
-  Verify
-</button>
-      </div>
-    </div>
-  </div>
-)}
-{/* ================= REVIEWING MODAL ================= */}
-{showReviewModal && (
-  <div className="checkoutOverlay">
-    <div className="reviewModal">
-      <h2>Reviewing Payment</h2>
-      <p style={{ marginTop: "20px", color: "#666" }}>
-        Please wait while we verify your card details...
+  <div className="flex items-center gap-4">
+
+   {/* ICON */}
+<div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center shadow-sm">
+  <img
+    src="https://esewa.com.np/common/images/esewa-icon-large.png"
+    alt="eSewa"
+    className="w-8 h-8 object-contain"
+  />
+</div>
+
+    {/* TEXT */}
+    <div className="text-left">
+      <p className="font-semibold text-lg text-gray-800">
+        Pay with eSewa
       </p>
-      <div className="loader"></div>
+      <p className="text-sm text-gray-500">
+        Fast • Secure • Instant Confirmation
+      </p>
+    </div>
+
+  </div>
+
+  <span className="text-gray-400 text-lg group-hover:text-gray-600 group-hover:translate-x-1 transition">
+    →
+  </span>
+</button>
+
+     {/* COD */}
+<button
+  onClick={async () => {
+    if (!validateDeliveryForm()) return;
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        "http://localhost:5050/api/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            items: cart,
+            totalAmount: total,
+            paymentMethod: "COD",
+            address: {
+              name: fullName,
+              phone,
+              address,
+              city,
+            },
+            orderStatus: "Order Placed",
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!data.success) {
+        alert("Order creation failed");
+        return;
+      }
+
+      setCreatedOrderId(data.data._id);
+      setShowCodConfirm(true);
+
+    } catch (err) {
+      console.error("COD error:", err);
+      alert("Something went wrong");
+    }
+  }}
+  className="w-full bg-gradient-to-r from-gray-800 to-gray-900 text-white py-3 rounded-2xl font-semibold tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+>
+  🚚 Cash on Delivery
+</button>
+{showCodConfirm && (
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+
+    <div className="bg-white w-[420px] max-w-[95%] p-8 rounded-3xl shadow-2xl text-center">
+
+      <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-yellow-100 flex items-center justify-center text-2xl">
+        🚚
+      </div>
+
+      <h2 className="text-xl font-bold mb-3 text-gray-800">
+        Confirm Your Order
+      </h2>
+
+      <p className="text-sm text-gray-500 mb-8 leading-relaxed">
+        Do you want to confirm this Cash on Delivery order?
+      </p>
+
+      <div className="flex justify-center gap-4">
+
+        <button
+          onClick={() => {
+            setShowCodConfirm(false);
+          }}
+          className="px-6 py-2 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 transition-all duration-200"
+        >
+          No
+        </button>
+
+        <button
+          onClick={() => {
+            setShowCodConfirm(false);
+            router.push(`/payment?id=${createdOrderId}&method=cod`);
+          }}
+          className="px-6 py-2 rounded-xl bg-black text-white shadow-md hover:bg-gray-900 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+        >
+          Yes, Confirm
+        </button>
+
+      </div>
+
     </div>
   </div>
 )}
-  </div>
+</div>
+</div>
+</div>
+
+</div>
 )}
+</div>
+</div>
+  )
+}

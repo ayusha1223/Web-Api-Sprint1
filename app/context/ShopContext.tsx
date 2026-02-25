@@ -23,7 +23,12 @@ type ShopContextType = {
   favorites: string[];
   cart: CartItem[];
   toggleFavorite: (img: string) => void;
-  addToCart: (img: string, size: string, price: number) => void;
+  addToCart: (
+    img: string,
+    size: string,
+    price: number,
+    name: string
+  ) => void;
   removeFromCart: (img: string, size: string) => void;
   updateQty: (img: string, size: string, qty: number) => void;
   clearCart: () => void;
@@ -68,18 +73,20 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     const crt = localStorage.getItem("cart");
 
     if (fav) setFavorites(JSON.parse(fav));
+
     if (crt) {
-  const parsed = JSON.parse(crt);
+      const parsed = JSON.parse(crt);
 
-  const cleanCart = parsed.map((item: any) => ({
-    img: item.img,
-    size: item.size,
-    price: Number(item.price) || 0,
-    qty: Number(item.qty) || 1,
-  }));
+      const cleanCart: CartItem[] = parsed.map((item: any) => ({
+        name: item.name || "",
+        img: item.img,
+        size: item.size,
+        price: Number(item.price) || 0,
+        qty: Number(item.qty) || 1,
+      }));
 
-  setCart(cleanCart);
-}
+      setCart(cleanCart);
+    }
   }, []);
 
   /* ===== Save to storage ===== */
@@ -107,7 +114,12 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const addToCart = (img: string, size: string, price: number) => {
+  const addToCart = (
+    img: string,
+    size: string,
+    price: number,
+    name: string
+  ) => {
     setCart((prev) => {
       const existingItem = prev.find(
         (p) => p.img === img && p.size === size
@@ -123,7 +135,17 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       }
 
       showToast("✅ Added to cart successfully");
-      return [...prev, { img, qty: 1, price, size }];
+
+      return [
+        ...prev,
+        {
+          name,
+          img,
+          size,
+          price,
+          qty: 1,
+        },
+      ];
     });
   };
 
@@ -151,29 +173,37 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     showToast("🧾 Order placed successfully");
   }, []);
 
- const totalPrice = cart.reduce((sum, item) => {
-  const price = Number(item.price) || 0;
-  const qty = Number(item.qty) || 0;
-  return sum + price * qty;
-}, 0);
+  const totalPrice = cart.reduce((sum, item) => {
+    return sum + item.price * item.qty;
+  }, 0);
 
-  return (
-    <ShopContext.Provider
-      value={{
-        favorites,
-        cart,
-        toggleFavorite,
-        addToCart,
-        removeFromCart,
-        updateQty,
-        clearCart,
-        totalPrice,
-        toastMessage,
-      }}
-    >
-      {children}
-    </ShopContext.Provider>
-  );
+return (
+  <ShopContext.Provider
+    value={{
+      favorites,
+      cart,
+      toggleFavorite,
+      addToCart,
+      removeFromCart,
+      updateQty,
+      clearCart,
+      totalPrice,
+      toastMessage,
+    }}
+  >
+    {children}
+
+    {/* 🔔 TOAST UI */}
+    {toastMessage && (
+      <div className="fixed top-6 right-6 z-50 
+                      bg-black text-white 
+                      px-6 py-3 rounded-lg 
+                      shadow-lg animate-slideIn">
+        {toastMessage}
+      </div>
+    )}
+  </ShopContext.Provider>
+);
 }
 
 /* ================= HOOK ================= */

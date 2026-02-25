@@ -1,93 +1,106 @@
 "use client";
 
-import { useShop } from "../context/ShopContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useShop } from "../context/ShopContext";
 
 export default function PaymentPage() {
-  const { cart, totalPrice, clearCart } = useShop();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { clearCart } = useShop();
 
-  const method = searchParams.get("method");
-  const name = searchParams.get("name");
-  const phone = searchParams.get("phone");
-  const address = searchParams.get("address");
-  const city = searchParams.get("city");
+  const orderId = searchParams.get("id");
+  const method = searchParams.get("method"); // cod OR null (esewa)
 
-  const finalAmount = totalPrice + 119;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const createOrder = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        alert("Please login first");
-        router.push("/cart");
-        return;
-      }
-
-      if (!cart || cart.length === 0) {
-        alert("Cart is empty");
+    const finalizePayment = async () => {
+      if (!orderId) {
         router.push("/cart");
         return;
       }
 
       try {
-        const response = await fetch("http://localhost:5050/api/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            items: cart.map(item => ({
-              img: item.img,
-              qty: item.qty,
-              price: item.price,
-              size: item.size,
-            })),
-            totalAmount: finalAmount,
-            paymentMethod: method?.toUpperCase(),
-            address: {
-              name: name || "",
-              phone: phone || "",
-              address: address || "",
-              city: city || "",
-            },
-          }),
-        });
+        const token = localStorage.getItem("token");
 
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-          alert("Order failed");
-          router.push("/cart");
+        if (!token) {
+          router.push("/login");
           return;
         }
 
-        clearCart();
-        router.push(`/order-success?id=${data.data._id}`);
+        // 🟢 If eSewa → mark paid
+        if (!method || method !== "cod") {
+          await fetch(
+            `http://localhost:5050/api/orders/${orderId}/mark-paid`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        }
 
-      } catch (error) {
-        console.error("Payment error:", error);
-        alert("Server error");
+        // 🟢 If COD → update status only (optional)
+        if (method === "cod") {
+          await fetch(
+            `http://localhost:5050/api/orders/${orderId}/update-status`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                orderStatus: "Order Placed",
+              }),
+            }
+          );
+        }
+
+        clearCart();
+
+        setTimeout(() => {
+          router.push(`/order-success?id=${orderId}`);
+        }, 1500);
+
+      } catch (err) {
+        console.error("Payment finalize error:", err);
         router.push("/cart");
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (method) {
-      createOrder();
-    } else {
-      router.push("/cart");
-    }
-
+    finalizePayment();
   }, []);
 
   return (
-    <div style={{ padding: 80, textAlign: "center" }}>
-      <h2>Processing Payment...</h2>
-      <p>Please wait while we complete your transaction.</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+      <div className="bg-white p-10 rounded-xl shadow-md text-center w-[400px]">
+
+        {loading ? (
+          <>
+            <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+            <h2 className="text-lg font-semibold">
+              Finalizing Payment...
+            </h2>
+            <p className="text-sm text-gray-500 mt-2">
+              Please wait while we confirm your order.
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="text-lg font-semibold">
+              Redirecting...
+            </h2>
+          </>
+        )}
+
+      </div>
+
     </div>
   );
 }
