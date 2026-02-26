@@ -4,7 +4,7 @@ export const casualProducts = [
   {
     id: 1,
     slug: "floral-casual-kurti",
-    image: "/images/casual-wear/casual1.png",
+    image: "/images/casual-wear/casual24.png",
     title: "Floral Casual Kurti",
     category: "CASUAL",
     price: 1399,

@@ -46,7 +46,7 @@ export default function AdminProductsPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5050/api/admin/products/${id}`,
+        `http://localhost:5050/api/products/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -74,7 +74,7 @@ export default function AdminProductsPage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:5050/api/admin/products", {
+    fetch("http://localhost:5050/api/products", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -50,7 +50,7 @@ export default function CreateProductPage() {
     });
 
     const res = await fetch(
-      "http://localhost:5050/api/admin/products",
+      "http://localhost:5050/api/products",
       {
         method: "POST",
         headers: {
@@ -158,6 +158,8 @@ export default function CreateProductPage() {
                 <option value="party">Party</option>
                 <option value="wedding">Wedding</option>
                 <option value="winter">Winter</option>
+                <option value="onepiece">Winter</option>
+                <option value="coord">Winter</option>
               </select>
             </div>
 

@@ -1,10 +1,8 @@
 "use client";
-
-
 import Image from "next/image";
 import Link from "next/link";
 import { useShop } from "../context/ShopContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { featuredProducts } from "./data/featured";
 import { useRouter } from "next/navigation";
 import TopBar from "../components/TopBar";
@@ -20,9 +18,41 @@ export default function Dashboard() {
   const [priceRange, setPriceRange] = useState(5000);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [sortOption, setSortOption] = useState("default");
 const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [dynamicProducts, setDynamicProducts] = useState<any[]>([]);
+  useEffect(() => {
+  async function fetchProducts() {
+    try {
+      const res = await fetch(
+        "http://localhost:5050/api/products"
+      );
+      const data = await res.json();
 
-  const filteredProducts = featuredProducts
+      const formatted = data.data.map((p: any) => ({
+        id: p._id,
+        title: p.name,
+        price: p.price,
+        image: p.images?.[0]
+            ? `http://localhost:5050${p.images[0]}`
+            : "/placeholder.png",
+        slug: p._id,
+        color: null,
+        discount: "",
+      }));
+
+      setDynamicProducts(formatted);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }
+
+  fetchProducts();
+}, []);
+  
+  const allProducts = [...featuredProducts, ...dynamicProducts];
+
+const filteredProducts = allProducts
     .filter((p) => {
       if (!searchQuery) return true;
       return p.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -39,11 +69,20 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
       return true;
     });
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+  if (sortOption === "lowToHigh") {
+    return Number(a.price) - Number(b.price);
+  }
+  if (sortOption === "highToLow") {
+    return Number(b.price) - Number(a.price);
+  }
+  return 0;
+});
+    
 
 return (
-  <div className="min-h-screen bg-[#f5f5f6] dark:bg-black transition-colors duration-300">
+  <div className="min-h-screen bg-[#fafafa] dark:bg-black transition-colors duration-300">
 
-   
    <TopBar />
 
     {/* ===== PAGE CONTAINER ===== */}
@@ -52,8 +91,14 @@ return (
       <div className="grid grid-cols-[260px_1fr] gap-12">
 
         {/* ================= SIDEBAR ================= */}
-        <aside className="pr-8 border-r border-gray-200">
-
+        <aside className="
+bg-white
+rounded-2xl
+p-6
+shadow-sm
+sticky top-24
+h-fit
+">
           {/* ===== PRICE ===== */}
           <div className="pb-8 border-b">
             <h3 className="text-sm font-bold tracking-wide mb-6">PRICE</h3>
@@ -126,24 +171,45 @@ return (
 
         {/* ================= PRODUCTS SECTION ================= */}
         <main>
+          {/* SORT BAR */}
+<div className="flex justify-between items-center mb-8">
+
+  <p className="text-sm text-gray-600">
+    {sortedProducts.length} Products
+  </p>
+
+  <div>
+    <select
+      value={sortOption}
+      onChange={(e) => setSortOption(e.target.value)}
+      className="border rounded-lg px-4 py-2 text-sm bg-white"
+    >
+      <option value="default">Recommended</option>
+      <option value="lowToHigh">Price: Low to High</option>
+      <option value="highToLow">Price: High to Low</option>
+    </select>
+  </div>
+
+</div>
 
   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
-    {filteredProducts.map((p) => (
+    {sortedProducts.map((p) => (
       <div
         key={p.id}
 className="
-  bg-white dark:bg-[#1a1a1a]
-  text-black dark:text-white
-  rounded-xl
-  overflow-hidden
-  shadow-sm dark:shadow-md
-  hover:shadow-lg
-  transition duration-300
-  relative
+group
+bg-white
+rounded-2xl
+overflow-hidden
+shadow-sm
+hover:shadow-xl
+transition-all duration-500
+hover:-translate-y-2
+relative
 "
       >
-
-        {/* IMAGE */}
+        
+      {/* IMAGE */}
         <div
           onClick={() => router.push(`/product/${p.slug}`)}
           className="relative cursor-pointer"
@@ -164,7 +230,7 @@ className="absolute top-3 right-3 z-10 w-8 h-8 bg-white dark:bg-[#2a2a2a] rounde
             <img
               src={p.image}
               alt={p.title}
-              className="h-full object-contain transition duration-300"
+              className="h-full object-contain transition-transform duration-700 group-hover:scale-105"
             />
           </div>
         </div>
