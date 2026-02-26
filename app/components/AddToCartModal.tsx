@@ -52,7 +52,12 @@ export default function AddToCartModal({ product, onClose }: Props) {
             className="confirmBtn"
             disabled={!selectedSize}
             onClick={() => {
-  addToCart(product.image, selectedSize!, product.price);
+   addToCart(
+      product.image,
+      selectedSize!,
+      product.price,
+      product.title
+    );
   setShowToast(true);
 
   setTimeout(() => {

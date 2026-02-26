@@ -4,18 +4,18 @@ import { useState } from "react";
 import { useShop } from "../context/ShopContext";
 import { useRouter } from "next/navigation";
 import TopBar from "../components/TopBar";
-import AddToCartModal from "../components/AddToCartModal";
-
 import { casualProducts } from "../dashboard/data/casual";
 import { coordProducts } from "../dashboard/data/coord";
 import { partyProducts } from "../dashboard/data/party";
 import { winterProducts } from "../dashboard/data/winter";
 import { weddingProducts } from "../dashboard/data/wedding";
 import { onePieceProducts } from "../dashboard/data/onepiece";
+import AddToCartModal from "../components/AddToCartModal";
 
 export default function FavoritesPage() {
   const { favorites, toggleFavorite } = useShop();
   const router = useRouter();
+  const { addToCart } = useShop();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   const allProducts = [
@@ -105,12 +105,20 @@ export default function FavoritesPage() {
                 {/* ACTIONS */}
                 <div className="flex md:justify-center gap-3">
 
-                  <button
-                    onClick={() => setSelectedProduct(product)}
-                    className="bg-[#ff3f6c] text-white px-4 py-2 rounded-md hover:bg-[#ff527b] transition text-sm font-semibold"
-                  >
-                    Move to Cart
-                  </button>
+                 <button
+ onClick={() => {
+    addToCart(
+  product.image,
+   "M",
+  product.price,
+  product.title  // ✅ correct
+);
+    router.push("/cart");  // 🔥 go to cart page
+  }}
+  className="bg-[#ff3f6c] text-white px-4 py-2 rounded-md hover:bg-[#ff527b] transition text-sm font-semibold"
+>
+  Move to Cart
+</button>
 
                   <button
                     onClick={() =>

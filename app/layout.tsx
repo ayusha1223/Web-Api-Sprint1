@@ -5,7 +5,7 @@ import "./globals.css";
 import { ShopProvider } from "./context/ShopContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "react-hot-toast";
-
+import { UserProvider } from "./context/UserContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -50,9 +50,11 @@ export default function RootLayout({
         `}
       >
         <ThemeProvider>
+          <UserProvider>
           <ShopProvider>
             {children}
           </ShopProvider>
+          </UserProvider>
         </ThemeProvider>
 
         <Toaster position="top-right" />

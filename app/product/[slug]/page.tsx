@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useShop } from "../../context/ShopContext";
 
+
 // ===== IMPORT ALL CATEGORY DATA =====
 import { casualProducts } from "../../dashboard/data/casual";
 import { coordProducts } from "../../dashboard/data/coord";
@@ -99,9 +100,7 @@ const product =
               {product.title}
             </h2>
 
-            <div className="mt-3 text-sm text-gray-600">
-              ⭐ {(product.rating ?? 4.2).toFixed(1)} | 527 Ratings
-            </div>
+           
 
             <div className="mt-6 flex items-center gap-3">
               <span className="text-3xl font-bold">
@@ -144,7 +143,7 @@ const product =
   setTimeout(() => setToast(null), 2000);
   return;
 }
-                  addToCart(product.image, selectedSize, product.price);
+                  addToCart(product.image, selectedSize, product.price, product.title);
                   router.push("/cart");
                 }}
                 className="flex-1 h-14 bg-pink-600 text-white 
@@ -216,7 +215,7 @@ const product =
                 </div>
 
                 <button
-                  onClick={() => addToCart(item.image, "M", item.price)}
+                  onClick={() => addToCart(item.image, "M", item.price, item.title)}
                   className="mt-4 w-full bg-pink-600 text-white 
                              py-2 rounded-md text-sm font-semibold
                              hover:bg-pink-700 transition"

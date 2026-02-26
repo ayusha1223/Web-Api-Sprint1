@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useUser } from "../../context/UserContext";
 import {
   getProfileAction,
   updateProfileAction,
@@ -9,7 +11,7 @@ import {
 
 export default function ProfilePage() {
   const router = useRouter();
-
+  const { fetchUser } = useUser();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -51,6 +53,28 @@ export default function ProfilePage() {
     </div>
   );
 }
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    setUpdating(true);
+
+    await updateProfileAction({
+      name,
+      phone,
+      newPassword: newPassword || undefined,
+      image,
+    });
+
+    await fetchUser();  // 🔥 updates TopBar image
+
+    setUpdating(false);
+
+  } catch (err) {
+    console.error("Update failed:", err);
+    setUpdating(false);
+  }
+};
 return (
   <div className="min-h-screen bg-[#f8f6f8] flex">
 
@@ -145,29 +169,7 @@ return (
       {/* FORM */}
      <form
   className="space-y-8 max-w-2xl"
- onSubmit={async (e) => {
-  e.preventDefault();
-
-  console.log("Submitting:", { name, phone, newPassword, image });
-
-  try {
-    setUpdating(true);
-
-    const result = await updateProfileAction({
-      name,
-      phone,
-      newPassword: newPassword || undefined,
-      image,
-    });
-
-    console.log("Server Response:", result);
-
-    setUpdating(false);
-  } catch (err) {
-    console.error("Update failed:", err);
-    setUpdating(false);
-  }
-}}
+  onSubmit={handleSubmit}
 >
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-2">

@@ -6,7 +6,7 @@ type ProductCardProps = {
   category: string;
   price: number;
   oldPrice: number;
-  rating: number;
+  rating?: number;
   discount: string;
   isFav: boolean;
   onToggleFav: () => void;

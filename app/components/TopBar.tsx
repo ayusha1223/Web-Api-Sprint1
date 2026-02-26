@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import TryOnViewer from "./TryOnViewer";
 import { useTheme } from "../context/ThemeContext";
+import { useUser } from "../context/UserContext";
 interface User {
   id: string;
   email: string;
@@ -16,7 +17,7 @@ interface User {
 export default function TopBar() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useUser();
   const [showTryOn, setShowTryOn] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -82,27 +83,10 @@ const fetchNotifications = async () => {
 };
 
 useEffect(() => {
-  const fetchUser = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const res = await fetch("http://localhost:5050/api/auth/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  fetchUser();
-  fetchNotifications(); // 🔥 CALL IT
+  fetchNotifications();
 
   const interval = setInterval(() => {
-    fetchNotifications(); // auto refresh every 10s
+    fetchNotifications();
   }, 10000);
 
   return () => clearInterval(interval);
@@ -277,24 +261,59 @@ useEffect(() => {
     <span>Profile</span>
   </div>
 
-  {showProfileMenu && (
-    <div className="absolute right-0 mt-4 w-64 bg-white shadow-xl rounded-xl border p-4 z-50">
+{showProfileMenu && (
+  <div
+    className="
+      absolute right-0 mt-6
+      w-[400px]
+      backdrop-blur-xl
+      bg-white/95 dark:bg-[#111111]/95
+      shadow-[0_25px_70px_rgba(0,0,0,0.18)]
+      rounded-3xl
+      border border-gray-200/60 dark:border-gray-700/60
+      p-8
+      z-50
+      transition-all duration-300
+    "
+  >
+    <div className="flex items-center gap-6 border-b border-gray-200/60 dark:border-gray-700/60 pb-8 mb-8">
+  {/* PREMIUM AVATAR */}
+  <div className="relative group">
+    <div className="
+      w-24 h-24
+      rounded-full
+      overflow-hidden
+      ring-4 ring-pink-100 dark:ring-pink-900/40
+      shadow-lg
+      transition-all duration-300
+      group-hover:scale-105
+      group-hover:ring-pink-300
+    ">
+      {user?.image ? (
+        <img
+          src={`http://localhost:5050${user.image}?t=${Date.now()}`}
+          alt="Profile"
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <div className="
+          w-full h-full
+          bg-gradient-to-br from-pink-400 to-pink-600
+          flex items-center justify-center
+          text-3xl font-bold text-white
+        ">
+          {user?.name?.charAt(0).toUpperCase() || "U"}
+        </div>
+      )}
+    </div>
 
-      {/* USER INFO */}
-      {/* USER INFO WITH IMAGE */}
-<div className="flex items-center gap-3 border-b pb-4 mb-4">
-
-  {/* PROFILE IMAGE */}
-  <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-500">
-    {user?.image ? (
-      <img
-        src={`http://localhost:5050/${user.image}`}
-        alt="Profile"
-        className="w-full h-full object-cover"
-      />
-    ) : (
-      user?.name?.charAt(0).toUpperCase() || "U"
-    )}
+    {/* Soft Glow */}
+    <div className="
+      absolute inset-0 rounded-full
+      bg-pink-400/10 blur-xl
+      opacity-0 group-hover:opacity-100
+      transition duration-300
+    "></div>
   </div>
 
   {/* NAME & EMAIL */}

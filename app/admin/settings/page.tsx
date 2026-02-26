@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SettingsPage() {
   const [name, setName] = useState("");
@@ -58,9 +59,9 @@ export default function SettingsPage() {
       const data = await res.json();
 
       if (data.success) {
-        alert("Profile updated successfully");
+        toast("Profile updated successfully");
       } else {
-        alert(data.message || "Update failed");
+        toast(data.message || "Update failed");
       }
     } catch (err) {
       console.error(err);
