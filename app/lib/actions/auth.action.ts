@@ -73,49 +73,39 @@ export async function getProfileAction() {
   return result.data.user;
 }
 
-/* ---------------- UPDATE PROFILE ---------------- */
 export async function updateProfileAction(data: {
   name?: string;
   phone?: string;
   newPassword?: string;
   image?: File | null;
-  notifications?: {
-    emailNotifications: boolean;
-    smsNotifications: boolean;
-    saleAlerts: boolean;
-    orderUpdates: boolean;
-    promotionalOffers: boolean;
-  };
 }) {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Not authenticated");
 
   const formData = new FormData();
 
-  if (data.name) formData.append("name", data.name);
-  if (data.phone) formData.append("phone", data.phone);
-  if (data.newPassword)
-    formData.append("newPassword", data.newPassword);
-  if (data.image) formData.append("image", data.image);
+  // ✅ Always append values
+  formData.append("name", data.name ?? "");
+  formData.append("phone", data.phone ?? "");
 
-  // 🔥 ADD THIS PART FOR NOTIFICATIONS
-  if (data.notifications) {
-    formData.append(
-      "notifications",
-      JSON.stringify(data.notifications)
-    );
+  if (data.newPassword && data.newPassword.trim() !== "") {
+    formData.append("newPassword", data.newPassword);
+  }
+
+  if (data.image) {
+    formData.append("image", data.image);
   }
 
   const res = await fetch(`${API_URL}/update-profile`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
-      // ❌ DO NOT SET CONTENT-TYPE when using FormData
     },
     body: formData,
   });
 
   const result = await res.json();
+
   if (!res.ok) throw new Error(result.message);
 
   return result;

@@ -173,6 +173,12 @@ export default function OrderSuccessPage() {
           </div>
 
           <div className="mt-10 space-y-4">
+            <button
+  onClick={() => router.push("/dashboard")}
+  className="w-full py-3 border border-gray-300 font-medium hover:bg-gray-100 transition"
+>
+  Continue Shopping
+</button>
 
             <button
               onClick={() =>

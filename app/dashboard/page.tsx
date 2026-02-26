@@ -10,8 +10,6 @@ import { useRouter } from "next/navigation";
 import TopBar from "../components/TopBar";
 import AddToCartModal from "../components/AddToCartModal";
 import TryOnViewer from "../components/TryOnViewer";
-
-
 export default function Dashboard() {
   const { favorites, toggleFavorite, addToCart } = useShop();
   const router = useRouter();
@@ -43,7 +41,7 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
     });
 
 return (
-  <div className="bg-[#f5f5f6] min-h-screen">
+  <div className="min-h-screen bg-[#f5f5f6] dark:bg-black transition-colors duration-300">
 
    
    <TopBar />
@@ -133,9 +131,16 @@ return (
     {filteredProducts.map((p) => (
       <div
         key={p.id}
-        className="bg-white rounded-xl overflow-hidden 
-                   shadow-sm hover:shadow-lg 
-                   transition duration-300 relative"
+className="
+  bg-white dark:bg-[#1a1a1a]
+  text-black dark:text-white
+  rounded-xl
+  overflow-hidden
+  shadow-sm dark:shadow-md
+  hover:shadow-lg
+  transition duration-300
+  relative
+"
       >
 
         {/* IMAGE */}
@@ -150,14 +155,12 @@ return (
               e.stopPropagation();
               toggleFavorite(p.image);
             }}
-            className="absolute top-3 right-3 z-10 w-8 h-8 
-                       bg-white rounded-full shadow 
-                       flex items-center justify-center"
+className="absolute top-3 right-3 z-10 w-8 h-8 bg-white dark:bg-[#2a2a2a] rounded-full shadow flex items-center justify-center"
           >
             {favorites.includes(p.image) ? "❤️" : "🤍"}
           </button>
 
-          <div className="w-full aspect-[3/4] bg-white flex items-center justify-center">
+          <div className="w-full aspect-[3/4] bg-white dark:bg-[#1a1a1a] flex items-center justify-center">
             <img
               src={p.image}
               alt={p.title}
@@ -172,7 +175,7 @@ return (
             KALINI
           </p>
 
-          <p className="text-sm text-gray-600 truncate">
+         <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
             {p.title}
           </p>
 

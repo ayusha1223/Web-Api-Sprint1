@@ -8,8 +8,6 @@ type ProductCardProps = {
   oldPrice: number;
   rating: number;
   discount: string;
-
-  // 👇 ADD THESE
   isFav: boolean;
   onToggleFav: () => void;
   onAddToCart: () => void;
@@ -30,35 +28,88 @@ export default function ProductCard({
   onOpenDetails,
 }: ProductCardProps) {
   return (
-    <div className="productCard">
-      <div className="imageWrapper" onClick={onOpenDetails}>
-        <span className="discountBadge">{discount}</span>
+    <div
+      className="
+        bg-white dark:bg-[#1a1a1a]
+        text-black dark:text-white
+        rounded-xl
+        shadow-sm hover:shadow-lg
+        transition duration-300
+        overflow-hidden
+      "
+    >
+      {/* IMAGE */}
+      <div
+        className="relative cursor-pointer bg-white dark:bg-[#1a1a1a]"
+        onClick={onOpenDetails}
+      >
+        <span
+          className="
+            absolute top-3 left-3
+            bg-pink-500 text-white
+            text-xs font-semibold
+            px-2 py-1 rounded
+          "
+        >
+          {discount}
+        </span>
+
         <Image
           src={image}
           alt={title}
           width={300}
           height={300}
-          className="productImage"
+          className="w-full object-contain"
         />
       </div>
 
-      <div className="cardContent">
-        <p className="category">{category}</p>
-        <h3 className="title">{title}</h3>
+      {/* CONTENT */}
+      <div className="p-4 space-y-2">
+        <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          {category}
+        </p>
 
-        <div className="rating">⭐ {rating}</div>
+        <h3 className="font-semibold text-sm truncate">
+          {title}
+        </h3>
 
-        <div className="priceRow">
-          <span className="price">₹{price}</span>
-          <span className="oldPrice">₹{oldPrice}</span>
+        <div className="text-sm text-yellow-500">
+          ⭐ {rating}
         </div>
 
-        <div className="cardActions">
-          <button onClick={onToggleFav}>
-            {isFav ? "❤️" : "♡"}
+        <div className="flex items-center gap-2">
+          <span className="font-semibold">
+            ₹{price}
+          </span>
+
+          <span className="line-through text-gray-400 text-sm">
+            ₹{oldPrice}
+          </span>
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex justify-between items-center pt-2">
+          <button
+            onClick={onToggleFav}
+            className="text-lg"
+          >
+            {isFav ? "❤️" : "🤍"}
           </button>
 
-          <button onClick={onAddToCart}>🛒</button>
+          <button
+            onClick={onAddToCart}
+            className="
+              bg-[#ff3f6c]
+              hover:bg-[#ff527b]
+              text-white
+              text-sm
+              px-3 py-1.5
+              rounded-md
+              transition
+            "
+          >
+            🛒 Add
+          </button>
         </div>
       </div>
     </div>

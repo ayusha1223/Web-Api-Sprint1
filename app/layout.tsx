@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 import { ShopProvider } from "./context/ShopContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -32,22 +33,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased`}
+        className={`
+          ${geistSans.variable} 
+          ${geistMono.variable} 
+          ${playfair.variable}
+          
+          min-h-screen
+          bg-white text-black
+          dark:bg-black dark:text-white
+          
+          transition-colors duration-300
+          antialiased
+        `}
       >
-        <ShopProvider>
-          {children}
-        </ShopProvider>
+        <ThemeProvider>
+          <ShopProvider>
+            {children}
+          </ShopProvider>
+        </ThemeProvider>
 
-        <Toaster
-          position="top-center"
-          containerStyle={{
-            top: "50%",
-            transform: "translateY(-50%)",
-          }}
-        />
+        <Toaster position="top-right" />
       </body>
     </html>
   );

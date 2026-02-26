@@ -36,7 +36,7 @@ export default function CategoryLayout({ title, products }: Props) {
   });
 
   return (
-    <div className="bg-[#f5f5f6] min-h-screen">
+   <div className="bg-[#f5f5f6] dark:bg-black text-black dark:text-white min-h-screen transition-colors duration-300">
 
       <TopBar />
 
@@ -44,7 +44,7 @@ export default function CategoryLayout({ title, products }: Props) {
         <div className="grid grid-cols-[260px_1fr] gap-12">
 
           {/* SIDEBAR */}
-          <aside className="pr-8 border-r border-gray-200">
+<aside className="pr-8 border-r border-gray-200 dark:border-gray-700">
             <div className="pb-8 border-b">
               <h3 className="text-sm font-bold tracking-wide mb-6">PRICE</h3>
 
@@ -97,9 +97,16 @@ export default function CategoryLayout({ title, products }: Props) {
               {filteredProducts.map((p) => (
                 <div
                   key={p.id}
-                  className="bg-white rounded-xl overflow-hidden 
-                             shadow-sm hover:shadow-lg 
-                             transition duration-300 relative"
+                 className="
+  bg-white dark:bg-[#1a1a1a]
+  text-black dark:text-white
+  rounded-xl
+  overflow-hidden
+  shadow-sm dark:shadow-md
+  hover:shadow-lg
+  transition duration-300
+  relative
+"
                 >
                   <div
                     onClick={() => router.push(`/product/${p.slug}`)}
@@ -110,9 +117,7 @@ export default function CategoryLayout({ title, products }: Props) {
                         e.stopPropagation();
                         toggleFavorite(p.image);
                       }}
-                      className="absolute top-3 right-3 z-10 w-8 h-8 
-                                 bg-white rounded-full shadow 
-                                 flex items-center justify-center"
+                      className="absolute top-3 right-3 z-10 w-8 h-8 bg-white dark:bg-[#2a2a2a] rounded-full shadow flex items-center justify-center"
                     >
                       {favorites.includes(p.image) ? "❤️" : "🤍"}
                     </button>
@@ -134,7 +139,7 @@ export default function CategoryLayout({ title, products }: Props) {
                     </p>
 
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="font-semibold text-black">
+                      <span className="font-semibold text-black dark:text-white">
                         ₹{p.price}
                       </span>
 
@@ -169,7 +174,7 @@ export default function CategoryLayout({ title, products }: Props) {
       {selectedProduct && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-          <div className="bg-white rounded-xl p-6 w-[420px] relative">
+          <div className="bg-white dark:bg-[#1a1a1a] text-black dark:text-white rounded-xl p-6 w-[420px] relative">
 
             {/* Close */}
             <button

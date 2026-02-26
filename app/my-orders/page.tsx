@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import TopBar from "../components/TopBar";
 
 interface OrderItem {
   img: string;
@@ -90,174 +91,125 @@ export default function MyOrdersPage() {
     return <p style={{ padding: 40 }}>Loading orders...</p>;
 
   return (
-    <div
-      style={{
-        padding: "40px",
-        background: "#f5f5f5",
-        minHeight: "100vh",
-      }}
-    >
-      <h1 style={{ color: "#e91e63", marginBottom: "20px" }}>
+  <div className="min-h-screen bg-[#f8f6f3]">
+
+    {/* TOPBAR */}
+    <TopBar />
+
+    <div className="max-w-6xl mx-auto px-6 py-12">
+
+      <h1 className="text-3xl font-serif tracking-wide text-gray-900 mb-10">
         My Orders
       </h1>
 
-      {orders.length === 0 && <p>No orders found.</p>}
+      {orders.length === 0 && (
+        <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
+          <p className="text-gray-500 text-lg">No orders found.</p>
+        </div>
+      )}
 
       {orders.map((order) => (
         <div
           key={order._id}
-          style={{
-            background: "#fff",
-            padding: "20px",
-            marginBottom: "20px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-          }}
+          className="bg-white rounded-2xl p-8 mb-8 shadow-sm hover:shadow-md transition"
         >
-          {/* ===== TOP SECTION ===== */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              borderBottom: "1px solid #eee",
-              paddingBottom: "10px",
-              marginBottom: "15px",
-            }}
-          >
-            <div>
-              <p>
-                <strong>Order Number:</strong> {order._id}
+          {/* ===== HEADER SECTION ===== */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center border-b pb-6 mb-6 gap-4">
+
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">
+                Order ID
               </p>
-              <p>
-                Ordered Time:{" "}
+              <p className="font-medium text-gray-900">
+                {order._id}
+              </p>
+              <p className="text-sm text-gray-500">
                 {new Date(order.createdAt).toLocaleString()}
               </p>
             </div>
 
             <span
-              style={{
-                fontWeight: "bold",
-                padding: "6px 10px",
-                borderRadius: "6px",
-                background:
-                  order.orderStatus === "Delivered"
-                    ? "#e6ffed"
-                    : order.orderStatus === "Cancelled"
-                    ? "#ffe6e6"
-                    : order.orderStatus === "Refunded"
-                    ? "#e6f0ff"
-                    : "#fff0f5",
-                color:
-                  order.orderStatus === "Delivered"
-                    ? "green"
-                    : order.orderStatus === "Cancelled"
-                    ? "red"
-                    : order.orderStatus === "Refunded"
-                    ? "#0066ff"
-                    : "#e91e63",
-              }}
+              className={`px-4 py-2 rounded-full text-sm font-medium ${
+                order.orderStatus === "Delivered"
+                  ? "bg-green-100 text-green-700"
+                  : order.orderStatus === "Cancelled"
+                  ? "bg-red-100 text-red-600"
+                  : order.orderStatus === "Refunded"
+                  ? "bg-blue-100 text-blue-600"
+                  : "bg-pink-100 text-pink-600"
+              }`}
             >
               {order.orderStatus}
             </span>
+
           </div>
 
-          {/* ===== PRODUCT IMAGES ===== */}
-          <div
-            style={{
-              display: "flex",
-              gap: "15px",
-              marginBottom: "15px",
-            }}
-          >
+          {/* ===== PRODUCT SECTION ===== */}
+          <div className="flex flex-wrap gap-6 mb-8">
             {order.items.map((item, index) => (
-              <div
-                key={index}
-                style={{ position: "relative" }}
-              >
+              <div key={index} className="relative">
+
                 <img
                   src={item.img}
                   alt="product"
-                  width={80}
-                  height={100}
-                  style={{ borderRadius: "6px" }}
+                  className="w-24 h-32 object-cover rounded-xl shadow-sm"
                 />
 
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "-8px",
-                    right: "-8px",
-                    background: "#e91e63",
-                    color: "#fff",
-                    borderRadius: "50%",
-                    width: "22px",
-                    height: "22px",
-                    fontSize: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-6 h-6 flex items-center justify-center rounded-full">
                   {item.qty}
                 </span>
+
               </div>
             ))}
           </div>
 
-          {/* ===== ORDER INFO ===== */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "20px",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <p>Payment Method: {order.paymentMethod}</p>
+          {/* ===== ORDER DETAILS ===== */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+
+            <div className="space-y-2 text-sm text-gray-600">
+              <p>
+                Payment Method:{" "}
+                <span className="font-medium text-gray-900">
+                  {order.paymentMethod}
+                </span>
+              </p>
+
               <p>
                 Payment Status:{" "}
                 <span
-                  style={{
-                    color:
-                      order.paymentStatus === "Paid"
-                        ? "green"
-                        : "orange",
-                  }}
+                  className={`font-medium ${
+                    order.paymentStatus === "Paid"
+                      ? "text-green-600"
+                      : "text-orange-500"
+                  }`}
                 >
                   {order.paymentStatus}
                 </span>
               </p>
+
               <p>Total Items: {order.items.length}</p>
-              <p>
-                <strong>
-                  Total Amount: Rs. {order.totalAmount}
-                </strong>
+
+              <p className="text-lg font-semibold text-gray-900 mt-2">
+                ₹{order.totalAmount}
               </p>
             </div>
 
-            {/* ===== CANCEL BUTTON ===== */}
+            {/* CANCEL BUTTON */}
             {order.orderStatus === "Processing" && (
               <button
                 onClick={() =>
                   handleCancelRequest(order._id)
                 }
-                style={{
-                  background: "red",
-                  color: "white",
-                  padding: "8px 14px",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                }}
+                className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition shadow-sm"
               >
                 Cancel Order
               </button>
             )}
+
           </div>
         </div>
       ))}
     </div>
-  );
+  </div>
+);
 }
