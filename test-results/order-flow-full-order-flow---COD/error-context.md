@@ -1,0 +1,105 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "N" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+            - generic [ref=e7]: "N"
+          - navigation [ref=e8]:
+            - link "Home" [ref=e9] [cursor=pointer]:
+              - /url: /dashboard
+            - link "CASUAL" [ref=e10] [cursor=pointer]:
+              - /url: /dashboard/category/casual
+            - link "CO-ORD" [ref=e11] [cursor=pointer]:
+              - /url: /dashboard/category/coord
+            - link "PARTY" [ref=e12] [cursor=pointer]:
+              - /url: /dashboard/category/party
+            - link "WINTER" [ref=e13] [cursor=pointer]:
+              - /url: /dashboard/category/winter
+            - link "WEDDING" [ref=e14] [cursor=pointer]:
+              - /url: /dashboard/category/wedding
+            - link "1 PIECE" [ref=e15] [cursor=pointer]:
+              - /url: /dashboard/category/onepiece
+        - generic [ref=e18]:
+          - generic [ref=e19]: 🔍
+          - textbox "Search..."
+        - generic [ref=e20]:
+          - generic [ref=e21] [cursor=pointer]:
+            - generic [ref=e22]: 👗
+            - generic [ref=e23]: Try On
+          - generic [ref=e25] [cursor=pointer]:
+            - generic [ref=e26]: 🔔
+            - generic [ref=e27]: Alerts
+          - generic [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]: 👤
+            - generic [ref=e31]: Profile
+          - link "♡ Wishlist" [ref=e32] [cursor=pointer]:
+            - /url: /favorites
+            - generic [ref=e33]: ♡
+            - generic [ref=e34]: Wishlist
+          - link "🛍️ Bag" [ref=e35] [cursor=pointer]:
+            - /url: /cart
+            - generic [ref=e36]: 🛍️
+            - generic [ref=e37]: Bag
+    - generic [ref=e38]:
+      - heading "My Cart (1)" [level=1] [ref=e39]
+      - generic [ref=e40]:
+        - generic [ref=e42]:
+          - img "Product" [ref=e43] [cursor=pointer]
+          - generic [ref=e44]:
+            - heading "Pakistani Set" [level=3] [ref=e45]
+            - paragraph [ref=e46]: "Size: M"
+            - paragraph [ref=e47]: ₹1379
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - button "-" [ref=e50] [cursor=pointer]
+                - generic [ref=e51]: "1"
+                - button "+" [ref=e52] [cursor=pointer]
+              - button "Remove" [ref=e53] [cursor=pointer]
+        - generic [ref=e54]:
+          - heading "Order Summary" [level=3] [ref=e55]
+          - generic [ref=e56]:
+            - generic [ref=e57]:
+              - generic [ref=e58]: Subtotal
+              - generic [ref=e59]: ₹1379
+            - generic [ref=e60]:
+              - generic [ref=e61]: Delivery
+              - generic [ref=e62]: ₹99
+            - generic [ref=e63]:
+              - generic [ref=e64]: Service Fee
+              - generic [ref=e65]: ₹20
+            - separator [ref=e66]
+            - generic [ref=e67]:
+              - generic [ref=e68]: Total Payable
+              - generic [ref=e69]: ₹1498
+          - button "PROCEED TO CHECKOUT" [ref=e70] [cursor=pointer]
+      - generic [ref=e74]:
+        - heading "Delivery Details" [level=2] [ref=e75]
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]: 👤
+            - textbox "Full Name" [ref=e79]: Ayusha Thapa
+          - generic [ref=e80]:
+            - generic [ref=e81]: 📞
+            - textbox "Phone Number" [ref=e82]: "9869163844"
+          - generic [ref=e83]:
+            - generic [ref=e84]: ✉️
+            - textbox "Email Address" [active] [ref=e85]: 2@
+          - generic [ref=e86]:
+            - generic [ref=e87]: 📍
+            - textbox "Full Address" [ref=e88]
+          - button "📍 Detect My Precise Location" [ref=e89] [cursor=pointer]
+          - generic [ref=e90]:
+            - generic [ref=e91]: 🏙️
+            - textbox "City" [ref=e92]
+        - generic [ref=e93]:
+          - button "Cancel" [ref=e94] [cursor=pointer]
+          - button "Continue →" [ref=e95] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=e101] [cursor=pointer]:
+    - img [ref=e102]
+  - alert [ref=e105]
+```

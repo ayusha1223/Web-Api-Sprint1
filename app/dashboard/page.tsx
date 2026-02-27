@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import TopBar from "../components/TopBar";
 import AddToCartModal from "../components/AddToCartModal";
 import TryOnViewer from "../components/TryOnViewer";
+import { useSearchParams } from "next/navigation";
 export default function Dashboard() {
   const { favorites, toggleFavorite, addToCart } = useShop();
   const router = useRouter();
@@ -21,12 +22,28 @@ export default function Dashboard() {
   const [sortOption, setSortOption] = useState("default");
 const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [dynamicProducts, setDynamicProducts] = useState<any[]>([]);
-  useEffect(() => {
+  const searchParams = useSearchParams();
+const urlSearch = searchParams.get("search") || "";
+ const [debouncedSearch, setDebouncedSearch] = useState(urlSearch);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(urlSearch);
+  }, 400);
+
+  return () => clearTimeout(timer);
+}, [urlSearch]);
+
+useEffect(() => {
   async function fetchProducts() {
     try {
-      const res = await fetch(
-        "http://localhost:5050/api/products"
-      );
+      let url = "http://localhost:5050/api/products";
+
+      if (debouncedSearch) {
+        url += `?search=${debouncedSearch}`;
+      }
+
+      const res = await fetch(url);
       const data = await res.json();
 
       const formatted = data.data.map((p: any) => ({
@@ -34,8 +51,8 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
         title: p.name,
         price: p.price,
         image: p.images?.[0]
-            ? `http://localhost:5050${p.images[0]}`
-            : "/placeholder.png",
+          ? `http://localhost:5050${p.images[0]}`
+          : "/placeholder.png",
         slug: p._id,
         color: null,
         discount: "",
@@ -48,15 +65,15 @@ const [selectedSize, setSelectedSize] = useState<string | null>(null);
   }
 
   fetchProducts();
-}, []);
+}, [debouncedSearch]);
   
   const allProducts = [...featuredProducts, ...dynamicProducts];
 
 const filteredProducts = allProducts
     .filter((p) => {
-      if (!searchQuery) return true;
-      return p.title.toLowerCase().includes(searchQuery.toLowerCase());
-    })
+  if (!urlSearch) return true;
+  return p.title.toLowerCase().includes(urlSearch.toLowerCase());
+})
     .filter((p) => {
       const price = Number(p.price);
 

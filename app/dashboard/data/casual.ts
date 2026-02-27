@@ -13,6 +13,7 @@ export const casualProducts = [
     imageOffsetY: -3,
     discount: "20% OFF",
     color: "white",
+    rating: 4.3,
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ export const casualProducts = [
     imageOffsetY: -18,
     discount: "15% OFF",
     color: "white",
+    rating: 4.3,
   },
   {
     id: 3,
@@ -40,6 +42,7 @@ export const casualProducts = [
     rating: 4.3,
     discount: "18% OFF",
     color: "brown",
+   
   },
   {
     id: 4,
@@ -53,6 +56,7 @@ export const casualProducts = [
     imageOffsetY: -38,
     discount: "20% OFF",
     color: "pink",
+    rating: 4.3,
   },
   {
     id: 5,
@@ -66,6 +70,7 @@ export const casualProducts = [
     imageOffsetY: 6,
     discount: "15% OFF",
     color: "yellow",
+    rating: 4.3,
   },
    {
     id: 6,
@@ -79,6 +84,7 @@ export const casualProducts = [
     imageOffsetY: -5,
     discount: "15% OFF",
     color: "blue",
+    rating: 4.3,
   },
    {
     id: 7,
@@ -92,6 +98,7 @@ export const casualProducts = [
     imageOffsetY: -38,
     discount: "20% OFF",
     color: "pink",
+    rating: 4.3,
   },
    {
     id: 8,
@@ -106,6 +113,7 @@ export const casualProducts = [
     imageOffsetX: -60,
     discount: "21% OFF",
     color: "maroon",
+    rating: 4.3,
   },
    {
     id: 9,
@@ -119,6 +127,7 @@ export const casualProducts = [
     imageOffsetY: -5,
     discount: "17% OFF",
     color: "brown",
+    rating: 4.3,
   },
    {
     id: 10,
@@ -131,6 +140,7 @@ export const casualProducts = [
     rating: 4.0,
     discount: "20% OFF",
     color: "yellow",
+    
   },
    {
     id: 11,
@@ -143,6 +153,7 @@ export const casualProducts = [
     rating: 4.2,
     discount: "15% OFF",
     color: "white",
+    
   },
    {
     id: 12,

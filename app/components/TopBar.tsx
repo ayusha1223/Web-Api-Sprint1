@@ -148,12 +148,15 @@ useEffect(() => {
               <div className="flex items-center gap-3 bg-gray-100 px-5 py-2 rounded-md">
                 <span className="text-gray-500">🔍</span>
                 <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent outline-none w-full text-sm"
-                />
+  type="text"
+  placeholder="Search..."
+  value={searchQuery}
+  onChange={(e) => {
+    setSearchQuery(e.target.value);
+    router.push(`/dashboard?search=${e.target.value}`);
+  }}
+  className="bg-transparent outline-none w-full text-sm"
+/>
               </div>
             </div>
           </div>

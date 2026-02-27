@@ -66,9 +66,15 @@ const handleSubmit = async (e: React.FormEvent) => {
       image,
     });
 
-    await fetchUser();  // 🔥 updates TopBar image
+    await fetchUser();
 
-    setUpdating(false);
+    setSuccess(true);     // show message
+    setUpdating(false);   // stop loading
+
+    // delay redirect properly
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 2500);
 
   } catch (err) {
     console.error("Update failed:", err);
@@ -131,6 +137,12 @@ return (
       <h1 className="text-3xl font-bold text-gray-900 mb-12">
         Profile
       </h1>
+
+      {success && (
+  <div className="mb-6 p-4 rounded-lg bg-green-100 border border-green-300 text-green-700 font-medium">
+    ✅ Profile updated successfully! Redirecting to dashboard...
+  </div>
+)}
 
       {/* Avatar */}
       <div className="flex items-center gap-8 mb-12">
