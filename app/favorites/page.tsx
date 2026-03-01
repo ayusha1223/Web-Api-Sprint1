@@ -32,7 +32,9 @@ export default function FavoritesPage() {
   );
 
   return (
-    <div className="bg-[#f5f5f6] min-h-screen">
+    <div 
+    data-testid="favorite-toggle"
+    className="bg-[#f5f5f6] min-h-screen">
       <TopBar />
 
       <div className="max-w-[1200px] mx-auto px-6 py-12">
@@ -43,7 +45,9 @@ export default function FavoritesPage() {
         </h1>
 
         {favoriteProducts.length === 0 ? (
-          <div className="bg-white rounded-xl p-16 text-center shadow-sm">
+          <div 
+          data-testid="favorites-empty"
+          className="bg-white rounded-xl p-16 text-center shadow-sm">
             <p className="text-gray-500 text-lg">
               Your wishlist is empty.
             </p>
@@ -63,6 +67,7 @@ export default function FavoritesPage() {
             {/* ROWS */}
             {favoriteProducts.map((product) => (
               <div
+               data-testid="favorite-item"
                 key={product.id}
                 className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center px-8 py-6 border-b last:border-none hover:bg-gray-50 transition"
               >
@@ -106,7 +111,9 @@ export default function FavoritesPage() {
                 <div className="flex md:justify-center gap-3">
 
                  <button
+                 data-testid="favorite-move-to-cart"
  onClick={() => {
+  
     addToCart(
   product.image,
    "M",
@@ -121,6 +128,7 @@ export default function FavoritesPage() {
 </button>
 
                   <button
+                  data-testid="favorite-remove"
                     onClick={() =>
                       toggleFavorite(product.image)
                     }

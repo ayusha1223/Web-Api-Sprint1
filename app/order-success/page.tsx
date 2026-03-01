@@ -123,12 +123,11 @@ export default function OrderSuccessPage() {
 
             <div className="flex justify-between">
               <span className="text-gray-500">Order ID</span>
-              <span className="font-medium">{order._id}</span>
+              <span data-testid="order-id" className="font-medium">{order._id}</span>
             </div>
-
-            <div className="flex justify-between">
+           <div className="flex justify-between">
               <span className="text-gray-500">Total Paid</span>
-              <span className="font-semibold text-lg">
+              <span data-testid="order-total" className="font-semibold text-lg">
                 ₹{order.totalAmount}
               </span>
             </div>
@@ -140,7 +139,7 @@ export default function OrderSuccessPage() {
 
             <div className="flex justify-between">
               <span className="text-gray-500">Order Status</span>
-              <span className="text-green-600 font-medium">
+              <span data-testid="order-status" className="text-green-600 font-medium">
                 {order.orderStatus}
               </span>
             </div>
@@ -174,22 +173,27 @@ export default function OrderSuccessPage() {
 
           <div className="mt-10 space-y-4">
             <button
+             data-testid="order-continue"
   onClick={() => router.push("/dashboard")}
+   
   className="w-full py-3 border border-gray-300 font-medium hover:bg-gray-100 transition"
 >
   Continue Shopping
 </button>
 
             <button
+             data-testid="order-receipt"
               onClick={() =>
                 router.push(`/receipt?id=${order._id}`)
               }
+              
               className="w-full py-3 bg-black text-white font-medium hover:bg-gray-800 transition"
             >
               View / Download Receipt
             </button>
 
             <button
+             data-testid="order-track"
               onClick={() =>
                 router.push(`/track-order?id=${order._id}`)
               }

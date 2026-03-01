@@ -98,6 +98,7 @@ export default function CreateProductPage() {
                 Product Name
               </label>
               <input
+               data-testid="product-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -110,6 +111,7 @@ export default function CreateProductPage() {
                 Description
               </label>
               <textarea
+               data-testid="product-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
@@ -123,6 +125,7 @@ export default function CreateProductPage() {
                   Price
                 </label>
                 <input
+                 data-testid="product-price"
                   type="number"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
@@ -136,6 +139,7 @@ export default function CreateProductPage() {
                   Stock
                 </label>
                 <input
+                 data-testid="product-stock"
                   type="number"
                   value={stock}
                   onChange={(e) => setStock(e.target.value)}

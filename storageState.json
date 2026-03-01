@@ -1,0 +1,38 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "theme",
+          "value": "light"
+        },
+        {
+          "name": "token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YTI2YWEyY2UzZmE1ZWZmZjJkOThiMiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzcyMzcwMjU0LCJleHAiOjE3NzI0NTY2NTR9.yhiQmYL5-En4tmNL6ix9Umvts6rM2qHqxTrqtspTHtk"
+        },
+        {
+          "name": "cart",
+          "value": "[]"
+        },
+        {
+          "name": "favorites",
+          "value": "[]"
+        },
+        {
+          "name": "role",
+          "value": "user"
+        },
+        {
+          "name": "userId",
+          "value": "undefined"
+        },
+        {
+          "name": "user",
+          "value": "{\"id\":\"69a26aa2ce3fa5efff2d98b2\",\"role\":\"user\",\"email\":\"ayushathapa425@gmail.com\",\"name\":\"Ayusha Thapa\"}"
+        }
+      ]
+    }
+  ]
+}

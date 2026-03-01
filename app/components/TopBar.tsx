@@ -395,22 +395,23 @@ useEffect(() => {
       </div>
   )}
 </div>
+<Link
+  href="/favorites"
+  data-testid="nav-favorites"
+  className="flex flex-col items-center hover:text-pink-500 transition"
+>
+  <span className="text-xl">♡</span>
+  <span>Wishlist</span>
+</Link>
 
-            <Link
-              href="/favorites"
-              className="flex flex-col items-center hover:text-pink-500 transition"
-            >
-              <span className="text-xl">♡</span>
-              <span>Wishlist</span>
-            </Link>
-
-            <Link
-              href="/cart"
-              className="flex flex-col items-center hover:text-pink-500 transition"
-            >
-              <span className="text-xl">🛍️</span>
-              <span>Bag</span>
-            </Link>
+<Link
+  href="/cart"
+  data-testid="nav-cart"
+  className="flex flex-col items-center hover:text-pink-500 transition"
+>
+  <span className="text-xl">🛍️</span>
+  <span>Bag</span>
+</Link>
           </div>
         </div>
       </header>

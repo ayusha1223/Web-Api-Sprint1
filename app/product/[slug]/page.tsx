@@ -154,6 +154,7 @@ const product =
               </button>
 
               <button
+              data-testid="favorite-toggle"
                 onClick={() => toggleFavorite(product.image)}
                 className="w-40 h-14 border border-gray-300 
                            rounded-md font-medium 

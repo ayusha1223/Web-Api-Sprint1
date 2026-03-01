@@ -163,7 +163,9 @@ const validateDeliveryForm = () => {
       <div className="space-y-6">
 
         {cart.length === 0 ? (
-          <div className="bg-white p-16 rounded-xl shadow-sm text-center">
+          <div 
+          data-testid="cart-empty"
+          className="bg-white p-16 rounded-xl shadow-sm text-center">
             <p className="text-gray-500 text-lg">
               Your cart is empty 🛒
             </p>
@@ -171,6 +173,7 @@ const validateDeliveryForm = () => {
         ) : (
           cart.map((item) => (
             <div
+             data-testid="cart-item"
               key={`${item.img}-${item.size}`}
               className="bg-white rounded-xl shadow-sm p-6 flex gap-6 hover:shadow-md transition"
             >
@@ -204,6 +207,7 @@ const validateDeliveryForm = () => {
                   <div className="flex items-center border rounded-md overflow-hidden">
 
                     <button
+                     data-testid="cart-decrease"
                       onClick={() =>
                         updateQty(item.img, item.size, item.qty - 1)
                       }
@@ -212,11 +216,14 @@ const validateDeliveryForm = () => {
                       -
                     </button>
 
-                    <span className="px-4 py-1 font-medium">
+                    <span 
+                    data-testid="cart-quantity"
+                    className="px-4 py-1 font-medium">
                       {item.qty}
                     </span>
 
                     <button
+                    data-testid="cart-increase"
                       onClick={() =>
                         updateQty(item.img, item.size, item.qty + 1)
                       }
@@ -228,6 +235,7 @@ const validateDeliveryForm = () => {
 
                   {/* REMOVE */}
                   <button
+                  data-testid="cart-remove"
                     onClick={() =>
                       removeFromCart(item.img, item.size)
                     }
@@ -273,7 +281,7 @@ const validateDeliveryForm = () => {
 
           <div className="flex justify-between font-bold text-lg">
             <span>Total Payable</span>
-            <span>₹{total}</span>
+            <span data-testid="cart-total">₹{total}</span>
           </div>
 
         </div>
@@ -357,6 +365,7 @@ const validateDeliveryForm = () => {
   
 
   <input
+  data-testid="delivery-fullname"
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
       <input data-testid="delivery-fullname" ... />
       ${formErrors.fullName 
@@ -380,6 +389,7 @@ const validateDeliveryForm = () => {
   </span>
 
   <input
+  data-testid="delivery-phone"
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
       <input data-testid="delivery-phone" ... />
       ${formErrors.phone 
@@ -403,6 +413,7 @@ const validateDeliveryForm = () => {
   </span>
 
   <input
+  data-testid="delivery-email"
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
       <input data-testid="delivery-email" ... />
       ${formErrors.email 
@@ -427,6 +438,7 @@ const validateDeliveryForm = () => {
   </span>
 
   <textarea
+  data-testid="delivery-address"
     rows={2}
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition resize-none
       <textarea data-testid="delivery-address" ... />
@@ -460,6 +472,7 @@ const validateDeliveryForm = () => {
   </span>
 
   <input
+    data-testid="delivery-city"
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
       <input data-testid="delivery-city" ... />
       ${formErrors.city 
@@ -608,6 +621,11 @@ const validateDeliveryForm = () => {
       });
 
       const data = await res.json();
+      // E2E test mode
+if (process.env.NEXT_PUBLIC_E2E === "true") {
+  router.push(`/payment?id=${orderId}`);
+  return;
+}
 
       const form = document.createElement("form");
       form.method = "POST";
