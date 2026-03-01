@@ -213,6 +213,7 @@ h-fit
     {sortedProducts.map((p) => (
       <div
         key={p.id}
+        data-testid="product-card"
 className="
 group
 bg-white
@@ -228,6 +229,7 @@ relative
         
       {/* IMAGE */}
         <div
+        data-testid="open-product"
           onClick={() => router.push(`/product/${p.slug}`)}
           className="relative cursor-pointer"
         >
@@ -278,6 +280,7 @@ className="absolute top-3 right-3 z-10 w-8 h-8 bg-white dark:bg-[#2a2a2a] rounde
 
           {/* ADD TO BAG BUTTON */}
          <button
+         data-testid="dashboard-add-btn"
   onClick={(e) => {
     e.stopPropagation();
     setSelectedProduct(p);
@@ -346,6 +349,7 @@ className="absolute top-3 right-3 z-10 w-8 h-8 bg-white dark:bg-[#2a2a2a] rounde
         <div className="flex gap-3">
           {["S", "M", "L", "XL"].map((size) => (
             <button
+            data-testid={`size-${size}`}
               key={size}
               onClick={() => setSelectedSize(size)}
               className={`px-4 py-2 border rounded ${
@@ -362,6 +366,7 @@ className="absolute top-3 right-3 z-10 w-8 h-8 bg-white dark:bg-[#2a2a2a] rounde
 
       {/* Add to Cart */}
 <button
+ data-testid="modal-add-to-cart"
   onClick={() => {
     if (!selectedSize) {
       alert("Please select size");

@@ -29,6 +29,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   return (
     <div
+      data-testid="product-card"
       className="
         bg-white dark:bg-[#1a1a1a]
         text-black dark:text-white
@@ -40,6 +41,7 @@ export default function ProductCard({
     >
       {/* IMAGE */}
       <div
+        data-testid="open-product"
         className="relative cursor-pointer bg-white dark:bg-[#1a1a1a]"
         onClick={onOpenDetails}
       >
@@ -90,6 +92,7 @@ export default function ProductCard({
         {/* ACTIONS */}
         <div className="flex justify-between items-center pt-2">
           <button
+            data-testid="toggle-fav"
             onClick={onToggleFav}
             className="text-lg"
           >
@@ -97,6 +100,7 @@ export default function ProductCard({
           </button>
 
           <button
+            data-testid="add-to-cart"
             onClick={onAddToCart}
             className="
               bg-[#ff3f6c]

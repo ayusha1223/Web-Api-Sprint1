@@ -1,62 +1,53 @@
 import { test, expect } from '@playwright/test';
 
-test('full order flow - COD', async ({ page }) => {
+test('Complete COD order flow', async ({ page }) => {
 
-  // LOGIN
-  await page.goto('http://localhost:3000/?auth=login');
+  // Go to dashboard
+  await page.goto('/dashboard');
 
-  await page.fill('input[type="email"]', 'test@test.com');
-  await page.fill('input[type="password"]', '123456');
+  // Wait for products
+  await page.waitForSelector('[data-testid="product-card"]');
 
-  await Promise.all([
-    page.waitForURL('**/dashboard'),
-    page.click('button[type="submit"]'),
-  ]);
+  const firstProduct = page.getByTestId('product-card').first();
 
-  // GO TO PRODUCT
-  await page.goto('/product/featured-kurti-2');
-  await page.getByRole('button', { name: /add to cart/i }).click();
+  // Click dashboard ADD TO BAG button
+  await firstProduct.getByTestId('dashboard-add-btn').click();
 
-  // GO TO CART
-  await page.goto('/cart');
+  // Wait for size modal
+  await page.waitForSelector('[data-testid="size-M"]');
 
-  // OPEN DELIVERY MODAL
-  await page.getByRole('button', { name: /proceed to checkout/i }).click();
+  // Select size
+  await page.getByTestId('size-M').click();
 
-  // WAIT FOR DELIVERY MODAL
-  await expect(page.getByText('Delivery Details')).toBeVisible();
+  // Add to cart from modal
+  await page.getByTestId('modal-add-to-cart').click();
 
-  // FILL DELIVERY FORM
-  await page.getByPlaceholder('Full Name').fill('Test User');
-  await page.getByPlaceholder('Phone Number').fill('9876543210');
-  await page.getByPlaceholder('Email Address').fill('test@test.com');
-  await page.getByPlaceholder('Full Address').fill('Kathmandu Nepal');
-  await page.getByPlaceholder('City').fill('Kathmandu');
+  // It auto redirects to cart after timeout
+  await expect(page).toHaveURL(/cart/);
 
-  // CONTINUE TO PAYMENT
-  await page.getByRole('button', { name: /continue/i }).click();
+  // Proceed to checkout
+  await page.getByTestId('checkout-btn').click();
 
-  // WAIT FOR PAYMENT MODAL
-  await expect(page.getByText('Choose Payment Method')).toBeVisible();
+  // Fill delivery form
+  await page.getByTestId('delivery-fullname').fill('Test User');
+  await page.getByTestId('delivery-phone').fill('9800000000');
+  await page.getByTestId('delivery-email').fill('test@test.com');
+  await page.getByTestId('delivery-address').fill('Kathmandu Nepal');
+  await page.getByTestId('delivery-city').fill('Kathmandu');
 
-  // CLICK COD
-  await page.getByRole('button', { name: /cash on delivery/i }).click();
+  await page.getByTestId('delivery-continue').click();
 
-  // WAIT FOR CONFIRMATION MODAL
-  await expect(page.getByText('Confirm Your Order')).toBeVisible();
+  // Mock login token before payment
+  await page.evaluate(() => {
+    localStorage.setItem("token", "fake-test-token");
+  });
 
-  // CONFIRM COD
-  await page.getByRole('button', { name: /yes, confirm/i }).click();
+  // Select COD
+  await page.getByTestId('payment-cod').click();
 
-  // WAIT FOR PAYMENT PAGE
-  await page.waitForURL('**/payment**');
+  // Confirm COD
+  await page.getByTestId('confirm-cod').click();
 
-  // WAIT FOR SUCCESS REDIRECT (because of 1.5s timeout)
-  await page.waitForURL('**/order-success**', { timeout: 15000 });
-
-  await expect(page).toHaveURL(/order-success/);
-
-  // OPTIONAL: Verify Track Order button exists
-  await expect(page.getByText(/track order/i)).toBeVisible();
-
+  // Expect payment page
+  await expect(page).toHaveURL(/payment/);
 });

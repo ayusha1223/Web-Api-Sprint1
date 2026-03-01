@@ -280,6 +280,7 @@ const validateDeliveryForm = () => {
 
         {/* CHECKOUT BUTTON */}
         <button
+        data-testid="checkout-btn"
           onClick={() => {
             if (cart.length === 0) {
               alert("Your cart is empty");
@@ -311,6 +312,36 @@ const validateDeliveryForm = () => {
 
       <div className="p-7">
 
+        {/* STEP INDICATOR */}
+<div className="flex items-center justify-center mb-6">
+
+  {/* Step 1 */}
+  <div className="flex items-center">
+    <div className="w-8 h-8 flex items-center justify-center rounded-full 
+      bg-pink-500 text-white text-sm font-semibold">
+      1
+    </div>
+    <span className="ml-2 text-sm font-medium text-pink-600">
+      Delivery Details
+    </span>
+  </div>
+
+  {/* Line */}
+  <div className="w-12 h-[2px] bg-gray-300 mx-4"></div>
+
+  {/* Step 2 */}
+  <div className="flex items-center">
+    <div className="w-8 h-8 flex items-center justify-center rounded-full 
+      bg-gray-300 text-gray-600 text-sm font-semibold">
+      2
+    </div>
+    <span className="ml-2 text-sm font-medium text-gray-500">
+      Payment Method
+    </span>
+  </div>
+
+</div>
+
         {/* HEADER */}
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Delivery Details
@@ -323,8 +354,11 @@ const validateDeliveryForm = () => {
     👤
   </span>
 
+  
+
   <input
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      <input data-testid="delivery-fullname" ... />
       ${formErrors.fullName 
         ? "border-red-500 focus:ring-red-400" 
         : "border-gray-300 focus:ring-pink-400"}
@@ -347,6 +381,7 @@ const validateDeliveryForm = () => {
 
   <input
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      <input data-testid="delivery-phone" ... />
       ${formErrors.phone 
         ? "border-red-500 focus:ring-red-400" 
         : "border-gray-300 focus:ring-pink-400"}
@@ -369,6 +404,7 @@ const validateDeliveryForm = () => {
 
   <input
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      <input data-testid="delivery-email" ... />
       ${formErrors.email 
         ? "border-red-500 focus:ring-red-400" 
         : "border-gray-300 focus:ring-pink-400"}
@@ -393,6 +429,7 @@ const validateDeliveryForm = () => {
   <textarea
     rows={2}
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition resize-none
+      <textarea data-testid="delivery-address" ... />
       ${formErrors.address 
         ? "border-red-500 focus:ring-red-400" 
         : "border-gray-300 focus:ring-pink-400"}
@@ -424,6 +461,7 @@ const validateDeliveryForm = () => {
 
   <input
     className={`w-full pl-10 pr-3 py-2 border rounded-xl text-sm focus:ring-2 outline-none transition
+      <input data-testid="delivery-city" ... />
       ${formErrors.city 
         ? "border-red-500 focus:ring-red-400" 
         : "border-gray-300 focus:ring-pink-400"}
@@ -453,7 +491,9 @@ const validateDeliveryForm = () => {
           </button>
 
           <button
+           data-testid="delivery-continue"
             onClick={() => {
+              
               if (validateDeliveryForm()) {
                 setCheckoutStep("payment");
               }
@@ -479,6 +519,36 @@ const validateDeliveryForm = () => {
       <div className="h-2 bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500"></div>
 
       <div className="p-8">
+
+        {/* STEP INDICATOR */}
+<div className="flex items-center justify-center mb-6">
+
+  {/* Step 1 */}
+  <div className="flex items-center">
+    <div className="w-8 h-8 flex items-center justify-center rounded-full 
+      bg-gray-300 text-gray-600 text-sm font-semibold">
+      1
+    </div>
+    <span className="ml-2 text-sm font-medium text-gray-500">
+      Delivery Details
+    </span>
+  </div>
+
+  {/* Line */}
+  <div className="w-12 h-[2px] bg-gray-300 mx-4"></div>
+
+  {/* Step 2 */}
+  <div className="flex items-center">
+    <div className="w-8 h-8 flex items-center justify-center rounded-full 
+      bg-pink-500 text-white text-sm font-semibold">
+      2
+    </div>
+    <span className="ml-2 text-sm font-medium text-pink-600">
+      Payment Method
+    </span>
+  </div>
+
+</div>
 
         {/* Title */}
         <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
@@ -607,6 +677,7 @@ const validateDeliveryForm = () => {
 
      {/* COD */}
 <button
+ data-testid="payment-cod"
   onClick={async () => {
     if (!validateDeliveryForm()) return;
 
@@ -680,6 +751,7 @@ const validateDeliveryForm = () => {
       <div className="flex justify-center gap-4">
 
         <button
+        
           onClick={() => {
             setShowCodConfirm(false);
           }}
@@ -689,6 +761,7 @@ const validateDeliveryForm = () => {
         </button>
 
         <button
+         data-testid="confirm-cod"
           onClick={() => {
             setShowCodConfirm(false);
             router.push(`/payment?id=${createdOrderId}&method=cod`);
